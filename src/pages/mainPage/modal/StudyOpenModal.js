@@ -1,9 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa6";
 import { LuRefreshCcw } from "react-icons/lu";
+import { MdVisibility } from "react-icons/md";
 
 const StudyOpenModal = () => {
+  const days = {
+    월: "Mon",
+    화: "Tue",
+    수: "Wed",
+    목: "Thu",
+    금: "Fri",
+    토: "Sat",
+    일: "Sun",
+  };
+  const [isButtonPressed, setIsButtonPressed] = useState({
+    selectedDay: {
+      Mon: false,
+      Tue: false,
+      Wed: false,
+      Thu: false,
+      Fri: false,
+      Sat: false,
+      Sun: false,
+    },
+    visibility: "",
+    // pulbic -> 전체 공개
+    // private -> 비공개
+    joinType: "",
+    // free -> 자유 가입제
+    // approval -> 승인 가입제
+  });
+
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-45 flex justify-center items-center">
       <div className="rounded-2xl bg-white shadow-lg shadow-[#575757] h-[38rem] w-[55rem] flex flex-col">
@@ -39,27 +67,26 @@ const StudyOpenModal = () => {
                   요일
                 </div>
                 <div className="flex justify-between mr-7">
-                  <button className="font-semibold p-2 rounded-full w-10 h-10">
-                    <div>월</div>
-                  </button>
-                  <button className="font-semibold p-2 rounded-full w-10 h-10">
-                    <div>화</div>
-                  </button>
-                  <button className="font-semibold p-2 rounded-full w-10 h-10">
-                    <div>수</div>
-                  </button>
-                  <button className="font-semibold p-2 rounded-full w-10 h-10">
-                    <div>목</div>
-                  </button>
-                  <button className="font-semibold p-2 rounded-full w-10 h-10">
-                    <div>금</div>
-                  </button>
-                  <button className="font-semibold p-2 rounded-full w-10 h-10">
-                    <div>토</div>
-                  </button>
-                  <button className="font-semibold p-2 rounded-full w-10 h-10">
-                    <div>일</div>
-                  </button>
+                  {Object.keys(days).map((day) => (
+                    <button
+                      className={`font-semibold p-2 rounded-full w-10 h-10 ${
+                        isButtonPressed.selectedDay[days[day]] &&
+                        "bg-lightMint text-white"
+                      }`}
+                      onClick={() =>
+                        setIsButtonPressed({
+                          ...isButtonPressed,
+                          selectedDay: {
+                            ...isButtonPressed.selectedDay,
+                            [days[day]]:
+                              !isButtonPressed.selectedDay[days[day]],
+                          },
+                        })
+                      }
+                    >
+                      <div>{day}</div>
+                    </button>
+                  ))}
                 </div>
               </div>
               <div>
@@ -87,10 +114,36 @@ const StudyOpenModal = () => {
                     가입 방식
                   </div>
                   <div className="flex justify-evenly mr-[1rem]">
-                    <button className="py-2 px-5 font-semibold">
+                    <button
+                      className={`py-2 px-5 font-semibold rounded-full border-4 ${
+                        isButtonPressed.visibility === "public"
+                          ? "border-lightMint"
+                          : "border-transparent"
+                      }`}
+                      onClick={() =>
+                        setIsButtonPressed({
+                          ...isButtonPressed,
+                          visibility: "public",
+                        })
+                      }
+                    >
                       전체 공개
                     </button>
-                    <button className="py-2 px-5 font-semibold">비공개</button>
+                    <button
+                      className={`py-2 px-5 font-semibold rounded-full border-4 ${
+                        isButtonPressed.visibility === "private"
+                          ? "border-lightMint"
+                          : "border-transparent"
+                      }`}
+                      onClick={() =>
+                        setIsButtonPressed({
+                          ...isButtonPressed,
+                          visibility: "private",
+                        })
+                      }
+                    >
+                      비공개
+                    </button>
                   </div>
                 </div>
                 <div>
@@ -98,10 +151,34 @@ const StudyOpenModal = () => {
                     가입 방식
                   </div>
                   <div className="flex justify-evenly">
-                    <button className="py-2 px-5 font-semibold">
+                    <button
+                      className={`py-2 px-5 font-semibold rounded-full border-4 ${
+                        isButtonPressed.joinType === "free"
+                          ? "border-lightMint"
+                          : "border-transparent"
+                      }`}
+                      onClick={() =>
+                        setIsButtonPressed({
+                          ...isButtonPressed,
+                          joinType: "free",
+                        })
+                      }
+                    >
                       자유 가입제
                     </button>
-                    <button className="py-2 px-5 font-semibold">
+                    <button
+                      className={`py-2 px-5 font-semibold rounded-full border-4 ${
+                        isButtonPressed.joinType === "approval"
+                          ? "border-lightMint"
+                          : "border-transparent"
+                      }`}
+                      onClick={() =>
+                        setIsButtonPressed({
+                          ...isButtonPressed,
+                          joinType: "approval",
+                        })
+                      }
+                    >
                       승인 가입제
                     </button>
                   </div>
@@ -110,7 +187,7 @@ const StudyOpenModal = () => {
                   <div className="text-lightBlack font-semibold text-sm mb-2">
                     채팅방 링크
                   </div>
-                  <input className="bg-inputPlaceholder rounded-xl w-full py-1" />
+                  <input className="bg-inputPlaceholder rounded-xl w-full py-1 px-3 " />
                 </div>
               </div>
             </div>
