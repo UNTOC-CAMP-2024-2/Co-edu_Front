@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logoImg from "../../images/logoImg.png";
 import mainImg from "../../images/mainImg.png";
 import { FaCheck } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import { PiHashBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
+import StudyOpenModal from "./modal/StudyOpenModal";
 
 // Link 태그들 to 속성 값에 맞게 경로 설정 필요
 
 const Main = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className="mx-20">
       <div className="pt-6 mx-2">
@@ -35,7 +38,7 @@ const Main = () => {
           </div>
           <div className="flex space-x-12 mb-1 font-semibold text-[#686868]">
             <Link>공지사항</Link>
-            <Link>스터디 개설</Link>
+            <button onClick={() => setIsModalOpen(true)}>스터디 개설</button>
             <Link>나의 스터디룸</Link>
           </div>
         </div>
@@ -56,7 +59,7 @@ const Main = () => {
           <div>
             <form className="flex items-center rounded-full py-[0.4rem] pr-[0.6rem] pl-[0.9rem] justify-between border-2 border-darkMint shadow-md w-[26rem]">
               <PiHashBold color="#54CEA6" size="25" />
-              <input className="flex-grow outline-none ml-2 mr-3 text-[1.5rem] font-semibold text-[#525252] italic tracking-wide" />
+              <input className="flex-grow outline-none ml-2 mr-3 text-[1.5rem] font-semibold text-lightBlack italic tracking-wide" />
               <button className="bg-darkMint rounded-full p-[0.4rem]">
                 <FaCheck color="white" size="18" />
               </button>
@@ -76,6 +79,7 @@ const Main = () => {
         </div>
         <div>스터디들</div>
       </div>
+      {isModalOpen && <StudyOpenModal />}
     </div>
   );
 };
