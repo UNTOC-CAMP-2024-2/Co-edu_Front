@@ -3,6 +3,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa6";
 import { LuRefreshCcw } from "react-icons/lu";
 import { IoCaretDownOutline } from "react-icons/io5";
+import { CTimePicker } from "@coreui/react-pro";
 
 const StudyOpenModal = ({ setIsModalOpen }) => {
   const [studentNumDropdown, setStudentNumDropdown] = useState(false);
@@ -34,8 +35,8 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
   });
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-45 flex justify-center items-center">
-      <div className="rounded-2xl bg-white shadow-lg shadow-[#575757] h-[38rem] w-[55rem] flex flex-col">
+    <div className="bg-black bg-opacity-45 fixed top-0 left-0 w-full h-full flex justify-center items-center">
+      <div className="rounded-2xl bg-white shadow-lg shadow-[#575757] h-[38rem] w-[59rem] flex flex-col">
         <div className="rounded-t-2xl h-[2.5rem] bg-lightMint flex justify-start items-center px-2 gap-1 mb-[1rem]">
           <button
             className="bg-[#FF9780] rounded-full flex justify-center items-center p-1"
@@ -98,21 +99,18 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
                   <div className="text-lightBlack text-[0.9rem] font-semibold mb-3">
                     수업시간
                   </div>
-                  <div className="flex justify-between mr-[3rem] ml-[2rem]">
-                    {/* 드롭다운 기능 구현 필요 */}
-                    <div className="flex gap-3">
-                      <button>
-                        <IoCaretDownOutline color="#A8E6CF" />
-                      </button>
-                      <div className="font-semibold text-lg">16 : 30</div>
-                    </div>
-                    <div className="font-semibold text-lg">~</div>
-                    <div className="flex gap-3">
-                      <button>
-                        <IoCaretDownOutline color="#A8E6CF" />
-                      </button>
-                      <div className="font-semibold text-lg">16 : 30</div>
-                    </div>
+                  <div className="flex justify-between">
+                    <CTimePicker
+                      className="w-[10rem]"
+                      placeholder="시간 선택"
+                      locale="ko"
+                    />
+                    <div className="font-semibold text-xl">~</div>
+                    <CTimePicker
+                      className="w-[10rem]"
+                      placeholder="시간 선택"
+                      locale="ko"
+                    />
                   </div>
                 </div>
               </div>
