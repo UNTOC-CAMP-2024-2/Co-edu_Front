@@ -99,6 +99,7 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
                     수업시간
                   </div>
                   <div className="flex justify-between mr-[3rem] ml-[2rem]">
+                    {/* 드롭다운 기능 구현 필요 */}
                     <div className="flex gap-3">
                       <button>
                         <IoCaretDownOutline color="#A8E6CF" />
