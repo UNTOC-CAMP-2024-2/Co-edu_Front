@@ -5,7 +5,7 @@ import { FaCheck } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import { PiHashBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
-import StudyOpenModal from "./modal/StudyOpenModal";
+import StudyOpenModal from "./Components/StudyOpenModal";
 
 // Link 태그들 to 속성 값에 맞게 경로 설정 필요
 
@@ -16,7 +16,10 @@ const Main = () => {
     <div className="mx-20">
       <div className="pt-6 mx-2">
         <div className="flex justify-end">
-          <Link to = "/login" className="text-[0.8rem] text-[#C4C4C4] font-semibold">
+          <Link
+            to="/login"
+            className="text-[0.8rem] text-[#C4C4C4] font-semibold"
+          >
             로그인 / 회원가입
           </Link>
         </div>
@@ -79,7 +82,7 @@ const Main = () => {
         </div>
         <div>스터디들</div>
       </div>
-      {isModalOpen && <StudyOpenModal />}
+      {isModalOpen && <StudyOpenModal setIsModalOpen={setIsModalOpen} />}
     </div>
   );
 };

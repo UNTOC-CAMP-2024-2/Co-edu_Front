@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa6";
 import { LuRefreshCcw } from "react-icons/lu";
-import { MdVisibility } from "react-icons/md";
+import { IoCaretDownOutline } from "react-icons/io5";
 
-const StudyOpenModal = () => {
+const StudyOpenModal = ({ setIsModalOpen }) => {
+  const [studentNumDropdown, setStudentNumDropdown] = useState(false);
   const days = {
     월: "Mon",
     화: "Tue",
@@ -36,7 +37,10 @@ const StudyOpenModal = () => {
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-45 flex justify-center items-center">
       <div className="rounded-2xl bg-white shadow-lg shadow-[#575757] h-[38rem] w-[55rem] flex flex-col">
         <div className="rounded-t-2xl h-[2.5rem] bg-lightMint flex justify-start items-center px-2 gap-1 mb-[1rem]">
-          <button className="bg-[#FF9780] rounded-full flex justify-center items-center p-1">
+          <button
+            className="bg-[#FF9780] rounded-full flex justify-center items-center p-1"
+            onClick={() => setIsModalOpen(false)}
+          >
             <IoCloseSharp color="white" size="16" />
           </button>
           <button className="bg-[#FBFFAA] rounded-full flex justify-center items-center p-1">
@@ -91,10 +95,24 @@ const StudyOpenModal = () => {
               </div>
               <div>
                 <div>
-                  <div className="text-lightBlack text-[0.9rem] font-semibold">
+                  <div className="text-lightBlack text-[0.9rem] font-semibold mb-3">
                     수업시간
                   </div>
-                  <div>{/* 시간 드롭다운 만들어야 함 */}</div>
+                  <div className="flex justify-between mr-[3rem] ml-[2rem]">
+                    <div className="flex gap-3">
+                      <button>
+                        <IoCaretDownOutline color="#A8E6CF" />
+                      </button>
+                      <div className="font-semibold text-lg">16 : 30</div>
+                    </div>
+                    <div className="font-semibold text-lg">~</div>
+                    <div className="flex gap-3">
+                      <button>
+                        <IoCaretDownOutline color="#A8E6CF" />
+                      </button>
+                      <div className="font-semibold text-lg">16 : 30</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -103,11 +121,31 @@ const StudyOpenModal = () => {
             </div>
             <div className="flex-[4.4]">
               <div className="flex flex-col gap-[1rem] mx-7 h-full justify-center">
-                <div className="flex">
+                <div className="flex gap-[10rem]">
                   <div className="text-lightBlack font-semibold text-sm">
                     스터디 인원
                   </div>
-                  <div>{/* 인원 수 드롭다운 만들어야 함 */}</div>
+                  <div className="flex font-semibold gap-[1rem]">
+                    <button
+                      className="relative"
+                      onClick={() => setStudentNumDropdown((prev) => !prev)}
+                    >
+                      <IoCaretDownOutline color="#A8E6CF" />
+                      {studentNumDropdown && (
+                        <ul className="absolute bg-white border rounded-md mt-1 shadow-lg z-10 w-20 right-0">
+                          {[2, 3, 4, 5, 6, 7].map((num) => (
+                            <li
+                              key={num}
+                              className="px-4 py-2 hover:bg-lightMint hover:text-white cursor-pointer"
+                            >
+                              {num} 명
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </button>
+                    <div>5 명</div>
+                  </div>
                 </div>
                 <div>
                   <div className="text-lightBlack font-semibold text-sm">
@@ -115,7 +153,7 @@ const StudyOpenModal = () => {
                   </div>
                   <div className="flex justify-evenly mr-[1rem]">
                     <button
-                      className={`py-2 px-5 font-semibold rounded-full border-4 ${
+                      className={`py-2 px-5 rounded-full border-4 ${
                         isButtonPressed.visibility === "public"
                           ? "border-lightMint"
                           : "border-transparent"
@@ -130,7 +168,7 @@ const StudyOpenModal = () => {
                       전체 공개
                     </button>
                     <button
-                      className={`py-2 px-5 font-semibold rounded-full border-4 ${
+                      className={`py-2 px-5 rounded-full border-4 ${
                         isButtonPressed.visibility === "private"
                           ? "border-lightMint"
                           : "border-transparent"
@@ -152,7 +190,7 @@ const StudyOpenModal = () => {
                   </div>
                   <div className="flex justify-evenly">
                     <button
-                      className={`py-2 px-5 font-semibold rounded-full border-4 ${
+                      className={`py-2 px-5 rounded-full border-4 ${
                         isButtonPressed.joinType === "free"
                           ? "border-lightMint"
                           : "border-transparent"
@@ -167,7 +205,7 @@ const StudyOpenModal = () => {
                       자유 가입제
                     </button>
                     <button
-                      className={`py-2 px-5 font-semibold rounded-full border-4 ${
+                      className={`py-2 px-5 rounded-full border-4 ${
                         isButtonPressed.joinType === "approval"
                           ? "border-lightMint"
                           : "border-transparent"
