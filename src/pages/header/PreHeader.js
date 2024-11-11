@@ -13,16 +13,15 @@ const PreHeader = () => {
       <div className="mx-20">
         <div className="pt-6 mx-2">
           <div className="flex justify-end">
-            <Link
-              to="/login"
-              className="text-[0.8rem] text-[#C4C4C4] font-semibold"
-            >
-              로그인 / 회원가입
-            </Link>
+            <div className="text-[0.8rem] text-[#C4C4C4] font-semibold">
+              <Link to="login">로그인</Link> / <Link to="signup">회원가입</Link>
+            </div>
           </div>
           <div className="flex justify-between items-end">
             <div className="flex space-x-5">
-              <img src={logoImg} alt="로고이미지" />
+              <Link to="/">
+                <img src={logoImg} alt="로고이미지" />
+              </Link>
               <form
                 className="flex items-center bg-inputPlaceholder rounded-full h-[2.7rem] p-[0.3rem]"
                 onSubmit={(e) => e.preventDefault()}

@@ -7,6 +7,7 @@ import Error from "./pages/errorPage/Error";
 import Login from "./pages/loginPage/Login";
 import Signup from "./pages/loginPage/Signup";
 import PreHeader from "./pages/header/PreHeader";
+import PostHeader from "./pages/header/PostHeader";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
     element: <PreHeader />,
     errorElement: <Error />,
     children: [
+      {
+        path: "",
+        element: <Main />,
+      },
       {
         path: "login",
         element: <Login />,
@@ -23,6 +28,12 @@ const router = createBrowserRouter([
         element: <Signup />,
       },
     ],
+  },
+  {
+    path: "/study",
+    element: <PostHeader />,
+    errorElement: <Error />,
+    children: [{}],
   },
 ]);
 
