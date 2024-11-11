@@ -16,7 +16,7 @@ const Main = () => {
     <div className="mx-20">
       <div className="pt-6 mx-2">
         <div className="flex justify-end">
-          <Link className="text-[0.8rem] text-[#C4C4C4] font-semibold">
+          <Link to = "/login" className="text-[0.8rem] text-[#C4C4C4] font-semibold">
             로그인 / 회원가입
           </Link>
         </div>
