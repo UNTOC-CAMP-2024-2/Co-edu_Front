@@ -6,21 +6,24 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Error from "./pages/errorPage/Error";
 import Login from "./pages/loginPage/Login";
 import Signup from "./pages/loginPage/Signup";
+import PreHeader from "./pages/header/PreHeader";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Main />,
+    element: <PreHeader />,
     errorElement: <Error />,
+    children: [
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "signup",
+        element: <Signup />,
+      },
+    ],
   },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/signup",
-    element: <Signup />,
-  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
