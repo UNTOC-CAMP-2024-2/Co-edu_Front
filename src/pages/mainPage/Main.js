@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import mainImg from "../../images/mainImg.png";
 import { FaCheck } from "react-icons/fa";
 import { PiHashBold } from "react-icons/pi";
-import StudyOpenModal from "./Components/StudyOpenModal";
+import StudyOpenModal from "../modals/StudyOpenModal";
 import StudyComponent from "./Components/StudyComponent";
+import { useOutletContext } from "react-router-dom";
 
 // Link 태그들 to 속성 값에 맞게 경로 설정 필요
 
 const Main = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isModalOpen, setIsModalOpen] = useOutletContext();
   // 고정된 헤더바와 isModalOpen 상태를 공유할 방법 찾아야 함
   return (
     <div className="mx-20 min-h-[calc(100vh-110px)] flex flex-col">
