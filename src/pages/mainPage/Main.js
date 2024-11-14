@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import mainImg from "../../images/mainImg.png";
 import { FaCheck } from "react-icons/fa";
 import { PiHashBold } from "react-icons/pi";
-import StudyOpenModal from "../modals/StudyOpenModal";
+import StudyOpenModal from "./Components/StudyOpenModal";
 import StudyComponent from "./Components/StudyComponent";
 import { useOutletContext } from "react-router-dom";
 
