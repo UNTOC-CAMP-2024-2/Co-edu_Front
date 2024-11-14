@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import mainImg from "../../images/mainImg.png";
 import { FaCheck } from "react-icons/fa";
 import { PiHashBold } from "react-icons/pi";
-import StudyComponent from "./StudyComponent";
+import StudyOpenModal from "../modals/StudyOpenModal";
+import StudyComponent from "./Components/StudyComponent";
+import { useOutletContext } from "react-router-dom";
 
 // Link 태그들 to 속성 값에 맞게 경로 설정 필요
 
 const Main = () => {
+  const [isModalOpen, setIsModalOpen] = useOutletContext();
+  // 고정된 헤더바와 isModalOpen 상태를 공유할 방법 찾아야 함
   return (
     <div className="mx-20 min-h-[calc(100vh-110px)] flex flex-col">
       <div className="flex gap-14 mx-1">
@@ -24,7 +28,7 @@ const Main = () => {
           <div>
             <form className="flex items-center rounded-full py-[0.4rem] pr-[0.6rem] pl-[0.9rem] justify-between border-2 border-darkMint shadow-md w-[26rem]">
               <PiHashBold color="#54CEA6" size="25" />
-              <input className="flex-grow outline-none ml-2 mr-3 text-[1.5rem] font-semibold text-[#525252] italic tracking-wide" />
+              <input className="flex-grow outline-none ml-2 mr-3 text-[1.5rem] font-semibold text-lightBlack italic tracking-wide" />
               <button className="bg-darkMint rounded-full p-[0.4rem]">
                 <FaCheck color="white" size="18" />
               </button>
@@ -57,6 +61,7 @@ const Main = () => {
           <StudyComponent />
         </div>
       </div>
+      {isModalOpen && <StudyOpenModal setIsModalOpen={setIsModalOpen} />}
     </div>
   );
 };

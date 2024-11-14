@@ -1,3 +1,4 @@
+@import "@coreui/coreui-pro/dist/css/coreui.min.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
