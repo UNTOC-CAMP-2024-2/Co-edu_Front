@@ -3,6 +3,7 @@ import mainImg from "../../images/mainImg.png";
 import { FaCheck } from "react-icons/fa";
 import { PiHashBold } from "react-icons/pi";
 import StudyOpenModal from "./Components/StudyOpenModal";
+import StudyComponent from "./Components/StudyComponent";
 
 // Link 태그들 to 속성 값에 맞게 경로 설정 필요
 
@@ -11,7 +12,7 @@ const Main = () => {
 
   // 고정된 헤더바와 isModalOpen 상태를 공유할 방법 찾아야 함
   return (
-    <div className="mx-20">
+    <div className="mx-20 min-h-[calc(100vh-110px)] flex flex-col">
       <div className="flex gap-14 mx-1">
         <div className="w-[34rem] ml-10">
           <img
@@ -36,7 +37,7 @@ const Main = () => {
         </div>
       </div>
       <hr className="my-2 bg-hrColor h-[1px] border-0" />
-      <div className="mx-7 mt-5">
+      <div className="flex flex-col mx-7 mt-2 flex-grow">
         <div className="flex gap-[1.6rem]">
           <button className="flex text-center text-sm font-semibold border-2 border-[#CED4DA] text-[#495057] px-[0.8rem] py-[0.5rem] rounded-full">
             🍀전체 스터디 룸
@@ -45,7 +46,20 @@ const Main = () => {
             👑나의 스터디 룸
           </button>
         </div>
-        <div>스터디들</div>
+        <div className="flex-grow items-center flex gap-[2rem] overflow-x-scroll">
+          <StudyComponent />
+          <StudyComponent />
+          <StudyComponent />
+          <StudyComponent />
+          <StudyComponent />
+          <StudyComponent />
+          <StudyComponent />
+          <StudyComponent />
+          <StudyComponent />
+          <StudyComponent />
+          <StudyComponent />
+          <StudyComponent />
+        </div>
       </div>
       {isModalOpen && <StudyOpenModal setIsModalOpen={setIsModalOpen} />}
     </div>
