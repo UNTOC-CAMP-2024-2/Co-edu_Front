@@ -10,7 +10,7 @@ import { useOutletContext } from "react-router-dom";
 
 const Main = () => {
   const [isModalOpen, setIsModalOpen] = useOutletContext();
-  // 고정된 헤더바와 isModalOpen 상태를 공유할 방법 찾아야 함
+
   return (
     <div className="mx-20 min-h-[calc(100vh-110px)] flex flex-col">
       <div className="flex gap-14 mx-1">
