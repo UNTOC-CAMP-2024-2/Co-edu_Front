@@ -1,9 +1,9 @@
 import React from "react";
 import CommonMainComponent from "../../components/CommonManTitle";
-import Assignment from "./components/Assignment";
 import CommonComponent from "../../components/CommonComponent";
+import Assignment from "../../mentorPage/mentorMainPage/components/Assignment";
 
-const MentorMainPage = () => {
+const MenteeMainPage = () => {
   return (
     <div className="mx-14 mb-10">
       <CommonMainComponent />
@@ -13,7 +13,7 @@ const MentorMainPage = () => {
           <Assignment />
           <Assignment />
         </CommonComponent>
-        <CommonComponent componentTitle={"과제 생성"}>
+        <CommonComponent componentTitle={"내가 제출한 과제"}>
           <Assignment />
           <Assignment />
           <Assignment />
@@ -28,4 +28,4 @@ const MentorMainPage = () => {
   );
 };
 
-export default MentorMainPage;
+export default MenteeMainPage;

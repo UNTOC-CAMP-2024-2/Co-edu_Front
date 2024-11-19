@@ -6,6 +6,7 @@ import Signup from "../pages/signUpPage/Signup";
 import Error from "../pages/errorPage/Error";
 import PostHeader from "../pages/headers/PostHeader";
 import MentorMainPage from "../pages/mentor&menteePage/mentorPage/mentorMainPage/MentorMainPage";
+import MenteeMainPage from "../pages/mentor&menteePage/menteePage/menteeMainPage/MenteeMainPage";
 
 const AppRouter = () => {
   const router = createBrowserRouter([
@@ -43,7 +44,12 @@ const AppRouter = () => {
       path: "/mentee",
       element: <PostHeader />,
       errorElement: <Error />,
-      children: [{}],
+      children: [
+        {
+          path: "",
+          element: <MenteeMainPage />,
+        },
+      ],
     },
   ]);
 
