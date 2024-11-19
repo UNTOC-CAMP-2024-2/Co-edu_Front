@@ -15,6 +15,8 @@ module.exports = {
         studyComponentBlack: "#686868",
         realLightMint: "#8DE5E6",
         gray: "#C4C4C4",
+        darkRed: "#FF8B8B",
+        lightRed: "#FFF4F4",
       },
     },
   },

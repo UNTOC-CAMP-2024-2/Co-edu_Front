@@ -21,7 +21,7 @@ const Assignment = ({ type }) => {
 
   return (
     <div className="flex items-center gap-3 border-2 border-gray rounded-xl bg-[#F5F5F5] w-[18rem] py-[0.7rem] px-3 cursor-pointer">
-      {icon}
+      <div className="w-8 flex justify-center">{icon}</div>
       <div className="text-lightBlack font-semibold text-lg">별 찍기 과제</div>
       <div className="flex-grow flex justify-end items-center">
         <VscTriangleRight color="#c4c4c4" size={25} />
