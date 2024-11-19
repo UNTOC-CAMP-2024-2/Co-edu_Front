@@ -1,6 +1,6 @@
 import React from "react";
 import CommonMainComponent from "../../components/CommonMainTitle";
-import Assignment from "../../components/MainPageAssignment";
+import MainPageAssignment from "../../components/MainPageAssignment";
 import CommonComponent from "../../components/CommonComponent";
 
 // 멘토 페이지에서의 Assignment컴포넌트의 type
@@ -13,15 +13,15 @@ const MentorMainPage = () => {
       <CommonMainComponent />
       <div className="flex gap-5 mt-3">
         <CommonComponent componentTitle={"전체 과제"}>
-          <Assignment type={"done"} />
-          <Assignment type={"undone"} />
-          <Assignment type={"halfDone"} />
+          <MainPageAssignment type={"done"} />
+          <MainPageAssignment type={"undone"} />
+          <MainPageAssignment type={"halfDone"} />
         </CommonComponent>
         <CommonComponent componentTitle={"과제 생성"} />
         <CommonComponent componentTitle={"과제 피드백하기"}>
-          <Assignment type={"gaveFeedbackAll"} />
-          <Assignment type={"notGaveFeedbackAll"} />
-          <Assignment type={"gaveFeedbackFew"} />
+          <MainPageAssignment type={"gaveFeedbackAll"} />
+          <MainPageAssignment type={"notGaveFeedbackAll"} />
+          <MainPageAssignment type={"gaveFeedbackFew"} />
         </CommonComponent>
       </div>
     </div>

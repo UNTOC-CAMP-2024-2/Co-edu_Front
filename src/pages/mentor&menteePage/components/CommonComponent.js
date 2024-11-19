@@ -4,16 +4,18 @@ import studyIcon2_1 from "../../../images/studyIcon2-1.png";
 import studyIcon2_2 from "../../../images/studyIcon2-2.png";
 import studyIcon3 from "../../../images/studyIcon3.png";
 import { FaChevronRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const CommonComponent = ({ children, componentTitle }) => {
+  const pathname = useLocation().pathname;
   const dct = {
-    "전체 과제": studyIcon1,
-    "과제 생성": studyIcon2_1,
-    "내가 제출한 과제": studyIcon2_2,
-    "과제 피드백하기": studyIcon3,
+    "전체 과제": [studyIcon1, `${pathname}/assignments`],
+    "과제 생성": [studyIcon2_1],
+    "내가 제출한 과제": [studyIcon2_2],
+    "과제 피드백하기": [studyIcon3],
   };
-  const studyIcon = dct[componentTitle];
+  const studyIcon = dct[componentTitle][0];
+  const linkAddress = dct[componentTitle][1];
 
   return (
     <div className="rounded-2xl border-2 border-darkMint flex-1 flex flex-col items-center py-8">
@@ -32,7 +34,10 @@ const CommonComponent = ({ children, componentTitle }) => {
         </div>
       ) : (
         <div>
-          <Link className="flex items-center justify-end px-3 mb-2">
+          <Link
+            to={linkAddress}
+            className="flex items-center justify-end px-3 mb-2"
+          >
             <div className="text-studyComponentBlack font-semibold">더보기</div>
             <FaChevronRight size={15} color="#686868" />
           </Link>
