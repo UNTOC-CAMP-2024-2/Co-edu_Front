@@ -14,6 +14,7 @@ const Assignment = ({ type }) => {
     gotFeedback: <FaBookmark color="#FF6E6E" size={25} />,
     gaveFeedbackAll: <FaCheck color="#54CEA6" size={23} />,
     notGaveFeedbackAll: <PiTriangleBold color="#FF6E6E" size={23} />,
+    gaveFeedbackFew: <IoClose color="#FF6E6E" size={28} />,
   };
 
   const icon = dct[type];
