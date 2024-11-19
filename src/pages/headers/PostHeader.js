@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { FaEllipsisH } from "react-icons/fa";
 import logoImg from "../../images/logoImg.png";
@@ -7,6 +7,14 @@ import { IoClose } from "react-icons/io5";
 const PostHeader = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const pathname = useLocation().pathname;
+
+  useEffect(() => {
+    if (isSideBarOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [isSideBarOpen]);
 
   return (
     <>
@@ -18,7 +26,7 @@ const PostHeader = () => {
         <button onClick={() => setIsSideBarOpen((prev) => !prev)}>
           <FaEllipsisH color="white" size="35" />
         </button>
-        <img src={logoImg} width="110" />
+        <img src={logoImg} width="110" alt="logo" />
         <Link to="/">
           <IoClose color="white" size="40" />
         </Link>
@@ -56,7 +64,7 @@ const PostHeader = () => {
                 )}
               </div>
               <div>
-                {pathname == "/mentor" ? (
+                {pathname === "/mentor" ? (
                   <button className="text-[#525252] font-semibold text-[1.2rem]">
                     🔖피드백 모아보기
                   </button>
