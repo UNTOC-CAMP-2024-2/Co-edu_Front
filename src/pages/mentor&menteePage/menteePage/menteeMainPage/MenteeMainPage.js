@@ -1,5 +1,5 @@
 import React from "react";
-import CommonMainComponent from "../../components/CommonManTitle";
+import CommonMainComponent from "../../components/CommonMainTitle";
 import CommonComponent from "../../components/CommonComponent";
 import Assignment from "../../components/MainPageAssignment";
 
