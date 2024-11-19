@@ -1,6 +1,6 @@
 import React from "react";
 import CommonMainComponent from "../../components/CommonManTitle";
-import Assignment from "./components/Assignment";
+import Assignment from "../../components/MainPageAssignment";
 import CommonComponent from "../../components/CommonComponent";
 
 const MentorMainPage = () => {

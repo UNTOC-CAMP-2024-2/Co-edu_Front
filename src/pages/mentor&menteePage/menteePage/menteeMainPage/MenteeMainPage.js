@@ -1,7 +1,7 @@
 import React from "react";
 import CommonMainComponent from "../../components/CommonManTitle";
 import CommonComponent from "../../components/CommonComponent";
-import Assignment from "../../mentorPage/mentorMainPage/components/Assignment";
+import Assignment from "../../components/MainPageAssignment";
 
 const MenteeMainPage = () => {
   return (
