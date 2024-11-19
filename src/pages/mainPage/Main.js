@@ -36,7 +36,7 @@ const Main = () => {
           </div>
         </div>
       </div>
-      <hr className="my-2 bg-hrColor h-[1px] border-0" />
+      <hr className="my-2 bg-hrColor h-[2px] border-0" />
       <div className="flex flex-col mx-7 mt-2 flex-grow">
         <div className="flex gap-[1.6rem]">
           <button className="flex text-center text-sm font-semibold border-2 border-[#CED4DA] text-[#495057] px-[0.8rem] py-[0.5rem] rounded-full">
