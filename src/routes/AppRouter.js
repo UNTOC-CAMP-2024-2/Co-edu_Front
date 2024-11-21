@@ -8,6 +8,7 @@ import PostHeader from "../pages/headers/PostHeader";
 import MentorMainPage from "../pages/mentor&menteePage/mentorPage/mentorMainPage/MentorMainPage";
 import MenteeMainPage from "../pages/mentor&menteePage/menteePage/menteeMainPage/MenteeMainPage";
 import MenteeAssignmentsListPage from "../pages/mentor&menteePage/menteePage/menteeAssignmentsListPage/MenteeAssignmentsListPage";
+import MentorAssignmentsListPage from "../pages/mentor&menteePage/mentorPage/mentorAssignmentsListPage/MentorAssignmentsListPage";
 
 const AppRouter = () => {
   const router = createBrowserRouter([
@@ -38,6 +39,10 @@ const AppRouter = () => {
         {
           path: "",
           element: <MentorMainPage />,
+        },
+        {
+          path: "assignments",
+          element: <MentorAssignmentsListPage />,
         },
       ],
     },
