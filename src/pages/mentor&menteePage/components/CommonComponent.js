@@ -12,7 +12,7 @@ const CommonComponent = ({ children, componentTitle }) => {
     "전체 과제": [studyIcon1, `${pathname}/assignments`],
     "과제 생성": [studyIcon2_1],
     "내가 제출한 과제": [studyIcon2_2],
-    "과제 피드백하기": [studyIcon3],
+    "과제 피드백하기": [studyIcon3, `${pathname}/feedback`],
   };
   const studyIcon = dct[componentTitle][0];
   const linkAddress = dct[componentTitle][1];
