@@ -10,7 +10,7 @@ import MenteeMainPage from "../pages/mentor&menteePage/menteePage/menteeMainPage
 import MenteeAssignmentsListPage from "../pages/mentor&menteePage/menteePage/menteeAssignmentsListPage/MenteeAssignmentsListPage";
 import MentorAssignmentsListPage from "../pages/mentor&menteePage/mentorPage/mentorAssignmentsListPage/MentorAssignmentsListPage";
 import MenteeFeedbackPage from "../pages/mentor&menteePage/menteePage/menteeFeedbackPage/MenteeFeedbackPage";
-import MentorMakingAssignmentsPage from "../pages/mentor&menteePage/mentorPage/mentorReadingAssignmentsPage/MentorReadingAssignmentsPage";
+import MentorReadingAssignmentsPage from "../pages/mentor&menteePage/mentorPage/mentorReadingAssignmentsPage/MentorReadingAssignmentsPage";
 
 const AppRouter = () => {
   const router = createBrowserRouter([
@@ -48,8 +48,8 @@ const AppRouter = () => {
         },
         {
           path: "read",
-          element: <MentorMakingAssignmentsPage />,
-        }
+          element: <MentorReadingAssignmentsPage />,
+        },
       ],
     },
     {

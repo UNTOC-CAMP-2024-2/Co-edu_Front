@@ -11,7 +11,7 @@ const defaultProblem = {
   ],
 };
 
-const MentorMakingAssignmentsPage = ({ initialProblem = defaultProblem }) => {
+const MentorReadingAssignmentsPage = ({ initialProblem = defaultProblem }) => {
   const [problem, setProblem] = useState(initialProblem);
 
   return (
@@ -64,4 +64,4 @@ const MentorMakingAssignmentsPage = ({ initialProblem = defaultProblem }) => {
   );
 };
 
-export default MentorMakingAssignmentsPage;
+export default MentorReadingAssignmentsPage;
