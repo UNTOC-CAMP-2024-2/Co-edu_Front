@@ -6,6 +6,8 @@ import { PiTriangleBold } from "react-icons/pi";
 import { IoClose } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
+import { GiCheckMark } from "react-icons/gi";
+import MenteeSubmitList from "./MenteeSubmitList";
 
 const FeedbackAssignment = ({ type }) => {
   const [showDescription, setShowDescription] = useState(false);
@@ -52,21 +54,11 @@ const FeedbackAssignment = ({ type }) => {
             Answer the frequently asked question in s simple sentences, a
             longish aragraph, or even in a list.asdf asdfasd fasdf fadds
           </div>
-          <div className="flex flex-col gap-3 items-center">
-            <div className="flex gap-10">
-              <div className="text-feedbackTextColor font-semibold text-sm">
-                김효정
-              </div>
-              <div className="text-feedbackTextColor font-semibold text-sm">
-                2024.01.09
-              </div>
-              <div className="text-feedbackTextColor font-semibold text-sm">
-                제출완료
-              </div>
-              <div className="text-feedbackTextColor font-semibold text-sm">
-                피드백 하기
-              </div>
-            </div>
+          <div className="flex flex-col gap-3 pt-3 pb-6">
+            <MenteeSubmitList />
+            <MenteeSubmitList />
+            <MenteeSubmitList />
+            <MenteeSubmitList />
           </div>
         </>
       )}
