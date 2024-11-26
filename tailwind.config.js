@@ -17,6 +17,7 @@ module.exports = {
         gray: "#C4C4C4",
         darkRed: "#FF8B8B",
         lightRed: "#FFF4F4",
+        feedbackTextColor: "#767676",
       },
     },
   },

@@ -10,6 +10,7 @@ import MenteeMainPage from "../pages/mentor&menteePage/menteePage/menteeMainPage
 import MenteeAssignmentsListPage from "../pages/mentor&menteePage/menteePage/menteeAssignmentsListPage/MenteeAssignmentsListPage";
 import MentorAssignmentsListPage from "../pages/mentor&menteePage/mentorPage/mentorAssignmentsListPage/MentorAssignmentsListPage";
 import MenteeFeedbackPage from "../pages/mentor&menteePage/menteePage/menteeFeedbackPage/MenteeFeedbackPage";
+import MentorFeedbackPage from "../pages/mentor&menteePage/mentorPage/mentorFeedbackPage/MentorFeedbackPage";
 
 const AppRouter = () => {
   const router = createBrowserRouter([
@@ -44,6 +45,10 @@ const AppRouter = () => {
         {
           path: "assignments",
           element: <MentorAssignmentsListPage />,
+        },
+        {
+          path: "feedback",
+          element: <MentorFeedbackPage />,
         },
       ],
     },
