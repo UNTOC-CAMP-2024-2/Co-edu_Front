@@ -18,6 +18,8 @@ module.exports = {
         darkRed: "#FF8B8B",
         lightRed: "#FFF4F4",
         feedbackTextColor: "#767676",
+        notSubmittedRed: "#FF6E6E",
+        cantClickGray: "#E3E3E3",
       },
     },
   },
