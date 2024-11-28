@@ -134,7 +134,7 @@ const MentorEditAssignmentPage = () => {
                 style={{
                   lineHeight: "30px",
                 }}
-                rows={example.output.split("\n").length}
+                rows={example.output.trimEnd().split("\n").length}
                 onInput={(e) => {
                   e.target.style.height = "auto";
                   e.target.style.height = `${e.target.scrollHeight}px`;
