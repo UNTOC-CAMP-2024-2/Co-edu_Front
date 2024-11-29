@@ -10,6 +10,7 @@ const Login = () => {
   const loginMutation = useLogin();
 
   const handleLogin = (e) => {
+    console.log({ user_id: id, password: password });
     e.preventDefault();
     loginMutation.mutate({ user_id: id, password: password });
   };
