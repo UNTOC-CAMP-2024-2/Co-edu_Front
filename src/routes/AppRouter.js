@@ -10,7 +10,10 @@ import MenteeMainPage from "../pages/mentor&menteePage/menteePage/menteeMainPage
 import MenteeAssignmentsListPage from "../pages/mentor&menteePage/menteePage/menteeAssignmentsListPage/MenteeAssignmentsListPage";
 import MentorAssignmentsListPage from "../pages/mentor&menteePage/mentorPage/mentorAssignmentsListPage/MentorAssignmentsListPage";
 import MenteeFeedbackPage from "../pages/mentor&menteePage/menteePage/menteeFeedbackPage/MenteeFeedbackPage";
+import MentorFeedbackPage from "../pages/mentor&menteePage/mentorPage/mentorFeedbackPage/MentorFeedbackPage";
+import MentorMakingAssignmentPage from "../pages/mentor&menteePage/mentorPage/mentorMakingAssignmentPage/MentorMakingAssignmentPage";
 import MentorReadingAssignmentsPage from "../pages/mentor&menteePage/mentorPage/mentorReadingAssignmentsPage/MentorReadingAssignmentsPage";
+import MenteeSubmitAssignmentPage from "../pages/mentor&menteePage/menteePage/menteeSubmitAssignmentPage/MenteeSubmitAssignmentPage";
 
 const AppRouter = () => {
   const router = createBrowserRouter([
@@ -47,6 +50,14 @@ const AppRouter = () => {
           element: <MentorAssignmentsListPage />,
         },
         {
+          path: "make",
+          element: <MentorMakingAssignmentPage />,
+        },
+        {
+          path: "feedback",
+          element: <MentorFeedbackPage />,
+        },
+        {
           path: "read",
           element: <MentorReadingAssignmentsPage />,
         },
@@ -68,6 +79,10 @@ const AppRouter = () => {
         {
           path: "feedback",
           element: <MenteeFeedbackPage />,
+        },
+        {
+          path: "submit",
+          element: <MenteeSubmitAssignmentPage />,
         },
       ],
     },
