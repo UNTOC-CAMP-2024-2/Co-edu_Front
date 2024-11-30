@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import logoImg from "../../images/logoImg.png";
 import { IoEyeOff, IoEye } from "react-icons/io5";
 import { useForm } from "react-hook-form";
+import { useSendEmailVertificationCode } from "../../hooks/useAuth";
 
 const Signup = () => {
   const {
@@ -22,9 +23,15 @@ const Signup = () => {
   const watchName = watch("name");
   const watchEmail = watch("email");
 
-  useEffect(() => {
-    console.log(watchEmail);
-  }, [watchEmail]);
+  const sendEmailVertificationCodeMutation = useSendEmailVertificationCode();
+
+  const handleSendEmailVertificationCode = (e) => {
+    e.preventDefault();
+    sendEmailVertificationCodeMutation.mutate({
+      user_id: watchId,
+      email: watchEmail,
+    });
+  };
 
   const [selectedRole, setSelectedRole] = useState("멘토");
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -178,7 +185,10 @@ const Signup = () => {
                   className="text-[16px] px-[10px] w-full py-[8px] border-[1.7px] border-[#CED4DA] rounded-lg focus:outline-none focus:border-lightMint"
                   {...register("email")}
                 />
-                <button className="absolute right-[6px] top-1/2 transform -translate-y-1/2 px-4 py-1 bg-lightMint text-white font-semibold rounded-lg">
+                <button
+                  onClick={handleSendEmailVertificationCode}
+                  className="hover:bg-darkMint absolute right-[6px] top-1/2 transform -translate-y-1/2 px-4 py-1 bg-lightMint text-white font-semibold rounded-lg"
+                >
                   인증
                 </button>
               </div>
@@ -198,7 +208,7 @@ const Signup = () => {
                   className="text-[16px] px-[10px] w-full py-[8px] border-[1.7px] border-[#CED4DA] rounded-lg focus:outline-none focus:border-lightMint"
                   {...register("emailVerification")}
                 />
-                <button className="absolute right-[6px] top-1/2 transform -translate-y-1/2 px-4 py-1 bg-lightMint text-white font-semibold rounded-lg">
+                <button className="hover:bg-darkMint absolute right-[6px] top-1/2 transform -translate-y-1/2 px-4 py-1 bg-lightMint text-white font-semibold rounded-lg">
                   확인
                 </button>
               </div>

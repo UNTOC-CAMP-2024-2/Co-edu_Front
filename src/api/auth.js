@@ -8,7 +8,7 @@ export const login = async ({ user_id, password }) => {
   return response.data;
 };
 
-export const sendEmailVertificationCode = async ({ user_id, email, code }) => {
+export const sendEmailVertificationCode = async ({ user_id, email }) => {
   const response = await axiosInstance.post("/user/email/send", {
     user_id,
     email,
