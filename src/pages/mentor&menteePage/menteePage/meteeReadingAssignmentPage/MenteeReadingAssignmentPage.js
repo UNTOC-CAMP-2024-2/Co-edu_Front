@@ -11,7 +11,7 @@ const defaultProblem = {
   ],
 };
 
-const MenteeSubmitAssignmentPage = ({ initialProblem = defaultProblem }) => {
+const MenteeReadingAssignmentPage = ({ initialProblem = defaultProblem }) => {
   return (
     <div className="px-20 pt-[60px] pb-[30px]">
       <div className="flex items-center justify-between mb-[35px]">
@@ -20,9 +20,9 @@ const MenteeSubmitAssignmentPage = ({ initialProblem = defaultProblem }) => {
         </h1>
         <button
           className="px-[15px] py-[12px] bg-[#54CEA6] mr-[35px] text-[22px] font-semibold text-white rounded-xl hover:bg-[#43A484]"
-          onClick={() => alert("제출 페이지로 이동")}
+          onClick={() => alert("코드 수정 페이지로 이동")}
         >
-          제출 하기
+          바로 가기
         </button>
       </div>
 
@@ -81,4 +81,4 @@ const MenteeSubmitAssignmentPage = ({ initialProblem = defaultProblem }) => {
   );
 };
 
-export default MenteeSubmitAssignmentPage;
+export default MenteeReadingAssignmentPage;

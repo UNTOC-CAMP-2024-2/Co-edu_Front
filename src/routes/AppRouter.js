@@ -12,7 +12,7 @@ import MentorAssignmentsListPage from "../pages/mentor&menteePage/mentorPage/men
 import MenteeFeedbackPage from "../pages/mentor&menteePage/menteePage/menteeFeedbackPage/MenteeFeedbackPage";
 import MentorFeedbackPage from "../pages/mentor&menteePage/mentorPage/mentorFeedbackPage/MentorFeedbackPage";
 import MentorMakingAssignmentPage from "../pages/mentor&menteePage/mentorPage/mentorMakingAssignmentPage/MentorMakingAssignmentPage";
-import MenteeSubmitAssignmentPage from "../pages/mentor&menteePage/menteePage/meteeSubmitAssignmentPage/MenteeSubmintAssignmentPage";
+import MenteeReadingAssignmentPage from "../pages/mentor&menteePage/menteePage/meteeReadingAssignmentPage/MenteeReadingAssignmentPage";
 import MentorEditAssignmentPage from "../pages/mentor&menteePage/mentorPage/mentorEditAssignmentPage/MentorEditAssignmentPage";
 import MentorReadingAssignmentsPage from "../pages/mentor&menteePage/mentorPage/mentorReadingAssignmentsPage/MentorReadingAssignmentsPage";
 
@@ -86,8 +86,8 @@ const AppRouter = () => {
           element: <MenteeFeedbackPage />,
         },
         {
-          path: "submit",
-          element: <MenteeSubmitAssignmentPage />,
+          path: "read",
+          element: <MenteeReadingAssignmentPage />,
         },
       ],
     },
