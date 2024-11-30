@@ -1,17 +1,68 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import logoImg from "../../images/logoImg.png";
 import { IoEyeOff, IoEye } from "react-icons/io5";
+import { useForm } from "react-hook-form";
+import {
+  useCheckEmailVertificationCode,
+  useRegister,
+  useSendEmailVertificationCode,
+} from "../../hooks/useAuth";
 
 const Signup = () => {
-  const [selectedRole, setSelectedRole] = useState("멘토");
+  const {
+    register,
+    handleSubmit,
+    watch,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+  });
+
+  const watchId = watch("id");
+  const watchPassword = watch("password");
+  const watchConfirmPassword = watch("confirmPassword");
+  const watchName = watch("name");
+  const watchEmail = watch("email");
+  const watchEmailVerification = watch("emailVerification");
+  const [selectedRole, setSelectedRole] = useState(true);
+
+  const sendEmailVertificationCodeMutation = useSendEmailVertificationCode();
+  const checkEmailVertificationCodeMutation = useCheckEmailVertificationCode();
+  const registerMutation = useRegister();
+
+  const handleSendEmailVertificationCode = (e) => {
+    e.preventDefault();
+    sendEmailVertificationCodeMutation.mutate({
+      user_id: watchId,
+      email: watchEmail,
+    });
+  };
+
+  const handleCheckEmailVertificationCode = (e) => {
+    e.preventDefault();
+    checkEmailVertificationCodeMutation.mutate({
+      user_id: watchId,
+      email: watchEmail,
+      code: watchEmailVerification,
+    });
+  };
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    registerMutation.mutate({
+      user_id: watchId,
+      password: watchPassword,
+      name: watchName,
+      email: watchEmail,
+      is_mentor: selectedRole,
+    });
+  };
+
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [repasswordVisible, setRePasswordVisible] = useState(false);
-
-  const handleRoleSelect = (role) => {
-    setSelectedRole(role);
-  };
 
   const PasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -37,8 +88,17 @@ const Signup = () => {
                 id="id"
                 placeholder="6~16자/영문 소문자, 숫자 사용가능"
                 className="text-[16px] w-[450px] px-[10px] py-[8px] border-[1.7px] border-[#CED4DA] rounded-lg focus:outline-none focus:border-lightMint"
+                {...register("id", {
+                  pattern: {
+                    value: /^[a-zA-Z0-9]{6,16}$/,
+                    message: "6~16자의 아이디로 입력해주세요",
+                  },
+                })}
               />
             </div>
+            <span className="text-notSubmittedRed">
+              {errors.id && errors.id.message}
+            </span>
             <div className="flex justify-between items-center">
               <label htmlFor="password" className="text-[18px] w-[115px]">
                 비밀번호
@@ -49,6 +109,12 @@ const Signup = () => {
                   id="password"
                   placeholder="8~16자/문자,숫자,특수 문자 모두 혼용 가능"
                   className="text-[16px] w-full px-[10px] py-[8px] border-[1.7px] border-[#CED4DA] rounded-lg focus:outline-none focus:border-lightMint"
+                  {...register("password", {
+                    pattern: {
+                      value: /^(?=.*[a-zA-Z])[a-zA-Z\d!@#$%^&*]{8,16}$/,
+                      message: "8~16자의 비밀번호로 입력해주세요",
+                    },
+                  })}
                 />
                 <button
                   type="button"
@@ -63,6 +129,9 @@ const Signup = () => {
                 </button>
               </div>
             </div>
+            <span className="text-notSubmittedRed">
+              {errors.password && errors.password.message}
+            </span>
             <div className="flex justify-between items-center">
               <label
                 htmlFor="confirmPassword"
@@ -73,9 +142,18 @@ const Signup = () => {
               <div className="relative w-[450px]">
                 <input
                   type={repasswordVisible ? "text" : "password"}
-                  id="password"
+                  id="confirmPassword"
                   placeholder="비밀번호를 다시 입력해주세요"
                   className="text-[16px] w-full px-[10px] py-[8px] border-[1.7px] border-[#CED4DA] rounded-lg focus:outline-none focus:border-lightMint"
+                  {...register("confirmPassword", {
+                    validate: {
+                      check: (val) => {
+                        if (getValues("password") !== val) {
+                          return "비밀번호가 일치하지 않습니다";
+                        }
+                      },
+                    },
+                  })}
                 />
                 <button
                   type="button"
@@ -90,6 +168,9 @@ const Signup = () => {
                 </button>
               </div>
             </div>
+            <span className="text-notSubmittedRed">
+              {errors.confirmPassword && errors.confirmPassword.message}
+            </span>
           </div>
         </div>
         <div>
@@ -104,8 +185,17 @@ const Signup = () => {
                 id="name"
                 placeholder="실명을 입력해주세요"
                 className="text-[16px] w-[450px] px-[10px] py-[8px] border-[1.7px] border-[#CED4DA] rounded-lg focus:outline-none focus:border-lightMint"
+                {...register("name", {
+                  pattern: {
+                    value: /^[가-힣]+$/,
+                    message: "한글로 입력해주세요",
+                  },
+                })}
               />
             </div>
+            <span className="text-notSubmittedRed">
+              {errors.name && errors.name.message}
+            </span>
             <div className="flex justify-between items-center">
               <label htmlFor="emil" className="text-[18px] w-[115px]">
                 이메일
@@ -116,8 +206,12 @@ const Signup = () => {
                   id="email"
                   placeholder="이메일을 입력해주세요 ex) coedu@gmail.com"
                   className="text-[16px] px-[10px] w-full py-[8px] border-[1.7px] border-[#CED4DA] rounded-lg focus:outline-none focus:border-lightMint"
+                  {...register("email")}
                 />
-                <button className="absolute right-[6px] top-1/2 transform -translate-y-1/2 px-4 py-1 bg-lightMint text-white font-semibold rounded-lg">
+                <button
+                  onClick={handleSendEmailVertificationCode}
+                  className="hover:bg-darkMint absolute right-[6px] top-1/2 transform -translate-y-1/2 px-4 py-1 bg-lightMint text-white font-semibold rounded-lg"
+                >
                   인증
                 </button>
               </div>
@@ -135,8 +229,12 @@ const Signup = () => {
                   id="emailVerification"
                   placeholder="이메일에 전송된 인증 코드를 입력해주세요"
                   className="text-[16px] px-[10px] w-full py-[8px] border-[1.7px] border-[#CED4DA] rounded-lg focus:outline-none focus:border-lightMint"
+                  {...register("emailVerification")}
                 />
-                <button className="absolute right-[6px] top-1/2 transform -translate-y-1/2 px-4 py-1 bg-lightMint text-white font-semibold rounded-lg">
+                <button
+                  onClick={handleCheckEmailVertificationCode}
+                  className="hover:bg-darkMint absolute right-[6px] top-1/2 transform -translate-y-1/2 px-4 py-1 bg-lightMint text-white font-semibold rounded-lg"
+                >
                   확인
                 </button>
               </div>
@@ -146,9 +244,9 @@ const Signup = () => {
               <div className="flex w-[450px] justify-center space-x-[100px]">
                 <button
                   type="button"
-                  onClick={() => handleRoleSelect("멘토")}
+                  onClick={() => setSelectedRole(true)}
                   className={`px-[28px] py-[6px] text-[17px] ${
-                    selectedRole === "멘토"
+                    selectedRole
                       ? "bg-white border-[4px] border-lightMint rounded-full"
                       : ""
                   }`}
@@ -157,9 +255,9 @@ const Signup = () => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleRoleSelect("멘티")}
+                  onClick={() => setSelectedRole(false)}
                   className={`px-[28px] py-[6px] text-[17px] ${
-                    selectedRole === "멘티"
+                    !selectedRole
                       ? "bg-white border-[4px] border-lightMint rounded-full"
                       : ""
                   }`}
@@ -170,10 +268,11 @@ const Signup = () => {
             </div>
           </div>
         </div>
-        <Link to="/login" className="block w-full">
+        <Link className="block w-full">
           <button
             type="button"
             className="w-full py-[13px] bg-lightMint text-white font-bold text-[18px] rounded-lg hover:bg-darkMint"
+            onClick={handleRegister}
           >
             가입하기
           </button>
