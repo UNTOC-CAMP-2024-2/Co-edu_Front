@@ -12,6 +12,7 @@ import MentorAssignmentsListPage from "../pages/mentor&menteePage/mentorPage/men
 import MenteeFeedbackPage from "../pages/mentor&menteePage/menteePage/menteeFeedbackPage/MenteeFeedbackPage";
 import MentorFeedbackPage from "../pages/mentor&menteePage/mentorPage/mentorFeedbackPage/MentorFeedbackPage";
 import MentorMakingAssignmentPage from "../pages/mentor&menteePage/mentorPage/mentorMakingAssignmentPage/MentorMakingAssignmentPage";
+import MentorEditAssignmentPage from "../pages/mentor&menteePage/mentorPage/mentorEditAssignmentPage/MentorEditAssignmentPage";
 import MentorReadingAssignmentsPage from "../pages/mentor&menteePage/mentorPage/mentorReadingAssignmentsPage/MentorReadingAssignmentsPage";
 
 const AppRouter = () => {
@@ -59,6 +60,10 @@ const AppRouter = () => {
         {
           path: "read",
           element: <MentorReadingAssignmentsPage />,
+        },
+        {
+          path: "edit",
+          element: <MentorEditAssignmentPage />,
         },
       ],
     },
