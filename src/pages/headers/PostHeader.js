@@ -75,9 +75,15 @@ const PostHeader = () => {
                 )}
               </div>
               <div>
-                <button className="text-[#525252] font-semibold text-[1.2rem]">
-                  ⚙️설정
-                </button>
+                {pathname === "/mentor" ? (
+                  <button className="text-[#525252] font-semibold text-[1.2rem]">
+                    ⚙️설정
+                  </button>
+                ) : (
+                  <button className="text-[#525252] font-semibold text-[1.2rem]">
+                    🚪탈퇴하기
+                  </button>
+                )}
               </div>
             </div>
           </div>
