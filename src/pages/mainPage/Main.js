@@ -5,11 +5,13 @@ import { PiHashBold } from "react-icons/pi";
 import StudyOpenModal from "./Components/StudyOpenModal";
 import StudyComponent from "./Components/StudyComponent";
 import { useOutletContext } from "react-router-dom";
+import StudyDetailModal from "./Components/StudyDetailModal";
 
 // Link 태그들 to 속성 값에 맞게 경로 설정 필요
 
 const Main = () => {
   const [isModalOpen, setIsModalOpen] = useOutletContext();
+  const [isStudyDetailModalOpen, setIsStudyDetailModalOpen] = useState(null);
 
   return (
     <div className="mx-20 min-h-[calc(100vh-110px)] flex flex-col">
@@ -47,21 +49,30 @@ const Main = () => {
           </button>
         </div>
         <div className="flex-grow items-center flex gap-[2rem] overflow-x-scroll">
-          <StudyComponent />
-          <StudyComponent />
-          <StudyComponent />
-          <StudyComponent />
-          <StudyComponent />
-          <StudyComponent />
-          <StudyComponent />
-          <StudyComponent />
-          <StudyComponent />
-          <StudyComponent />
-          <StudyComponent />
-          <StudyComponent />
+          <StudyComponent
+            detail={{
+              title: "이것은 스터디인가 토크쇼인가 C++ 이해하기",
+              name: "김태우",
+              day: "월, 화, 수",
+              time: "16 : 30 ~ 18 : 30",
+            }}
+            onClick={() =>
+              setIsStudyDetailModalOpen({
+                title: "이것은 스터디인가 토크쇼인가 C++ 이해하기",
+                name: "김태우",
+                day: "월, 화, 수",
+                time: "16 : 30 ~ 18 : 30",
+              })
+            }
+          />
         </div>
       </div>
       {isModalOpen && <StudyOpenModal setIsModalOpen={setIsModalOpen} />}
+      {isStudyDetailModalOpen && (
+        <StudyDetailModal
+          setIsStudyDetailModalOpen={setIsStudyDetailModalOpen}
+        />
+      )}
     </div>
   );
 };
