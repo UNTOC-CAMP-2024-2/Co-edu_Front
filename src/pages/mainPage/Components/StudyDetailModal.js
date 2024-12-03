@@ -27,19 +27,45 @@ const StudyDetailModal = ({ setIsStudyDetailModalOpen }) => {
             </div>
           </div>
           <div className="flex-[5.5] flex mb-3">
-            <div className="flex-[4.4] flex flex-col gap-8 mx-3 justify-center">
+            <div className="flex-[4.4] flex flex-col gap-8 mx-3 justify-center pb-10">
               <div>
                 <div className="text-lightBlack text-[0.9rem] font-semibold">
                   요일
                 </div>
-                <div className="flex justify-between mr-7">요일들</div>
+                <div className="flex justify-between mr-7">
+                  <div className="flex justify-center font-semibold p-2 rounded-full w-10 h-10">
+                    월
+                  </div>
+                  <div className="flex justify-center font-semibold p-2 rounded-full w-10 h-10">
+                    화
+                  </div>
+                  <div className="flex justify-center font-semibold p-2 rounded-full w-10 h-10 bg-lightMint text-white">
+                    수
+                  </div>
+                  <div className="flex justify-center font-semibold p-2 rounded-full w-10 h-10">
+                    목
+                  </div>
+                  <div className="flex justify-center font-semibold p-2 rounded-full w-10 h-10">
+                    금
+                  </div>
+                  <div className="flex justify-center font-semibold p-2 rounded-full w-10 h-10">
+                    토
+                  </div>
+                  <div className="flex justify-center font-semibold p-2 rounded-full w-10 h-10 bg-lightMint text-white">
+                    일
+                  </div>
+                </div>
               </div>
               <div>
                 <div>
                   <div className="text-lightBlack text-[0.9rem] font-semibold mb-3">
                     수업시간
                   </div>
-                  <div className="flex justify-between">시간</div>
+                  <div className="flex justify-evenly">
+                    <div className="text-black text-lg">16 : 30</div>
+                    <div className="font-semibold text-xl">~</div>
+                    <div className="text-black text-lg">16 : 30</div>
+                  </div>
                 </div>
               </div>
             </div>
