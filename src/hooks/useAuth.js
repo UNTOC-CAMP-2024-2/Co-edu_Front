@@ -5,12 +5,16 @@ import {
   register,
   sendEmailVertificationCode,
 } from "../api/auth";
+import { useContext } from "react";
+import { Context } from "../AppProvider";
 
 export const useLogin = () => {
+  const { setToken } = useContext(Context);
   return useMutation({
     mutationFn: login,
     onSuccess: (data) => {
       console.log("로그인 성공", data);
+      setToken(data.access_token);
     },
     onError: (error) => {
       console.log("로그인 실패", error);

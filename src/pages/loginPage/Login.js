@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import logoImg from "../../images/logoImg.png";
 import { useLogin } from "../../hooks/useAuth";
+import { Context } from "../../AppProvider";
 
 const Login = () => {
   const [id, setId] = useState("");

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import mainImg from "../../images/mainImg.png";
 import { FaCheck } from "react-icons/fa";
 import { PiHashBold } from "react-icons/pi";
@@ -6,12 +6,18 @@ import StudyOpenModal from "./Components/StudyOpenModal";
 import StudyComponent from "./Components/StudyComponent";
 import { useOutletContext } from "react-router-dom";
 import StudyDetailModal from "./Components/StudyDetailModal";
+import { Context } from "../../AppProvider";
 
 // Link 태그들 to 속성 값에 맞게 경로 설정 필요
 
 const Main = () => {
   const [isModalOpen, setIsModalOpen] = useOutletContext();
   const [isStudyDetailModalOpen, setIsStudyDetailModalOpen] = useState(null);
+  const { token } = useContext(Context);
+
+  useEffect(() => {
+    console.log(token);
+  }, [token]);
 
   return (
     <div className="mx-20 min-h-[calc(100vh-110px)] flex flex-col">

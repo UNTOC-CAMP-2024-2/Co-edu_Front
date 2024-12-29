@@ -18,7 +18,7 @@ const MentorMainPage = () => {
           <MainPageAssignment type={"halfDone"} />
         </CommonComponent>
         <CommonComponent componentTitle={"과제 생성"} />
-        <CommonComponent componentTitle={"과제 피드백하기"}>
+        <CommonComponent componentTitle={"과제 피드백"}>
           <MainPageAssignment type={"gaveFeedbackAll"} />
           <MainPageAssignment type={"notGaveFeedbackAll"} />
           <MainPageAssignment type={"gaveFeedbackFew"} />

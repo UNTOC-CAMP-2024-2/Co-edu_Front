@@ -23,7 +23,7 @@ const MenteeMainPage = () => {
           <MainPageAssignment type={"done"} />
           <MainPageAssignment type={"done"} />
         </CommonComponent>
-        <CommonComponent componentTitle={"과제 피드백하기"}>
+        <CommonComponent componentTitle={"과제 피드백"}>
           <MainPageAssignment type={"gotFeedback"} />
           <MainPageAssignment type={"gotFeedback"} />
           <MainPageAssignment type={"gotFeedback"} />
