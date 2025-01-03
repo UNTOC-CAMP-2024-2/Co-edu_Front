@@ -7,14 +7,17 @@ import {
 } from "../api/auth";
 import { useContext } from "react";
 import { Context } from "../AppProvider";
+import { useNavigate } from "react-router-dom";
 
 export const useLogin = () => {
   const { setToken } = useContext(Context);
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: login,
     onSuccess: (data) => {
       console.log("로그인 성공", data);
       setToken(data.access_token);
+      navigate("/");
     },
     onError: (error) => {
       console.log("로그인 실패", error);
@@ -47,10 +50,12 @@ export const useCheckEmailVertificationCode = () => {
 };
 
 export const useRegister = () => {
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: register,
     onSuccess: (data) => {
       console.log("회원가입 성공", data);
+      navigate("/login");
     },
     onError: (error) => {
       console.log("회원가입 실패", error);

@@ -1,22 +1,20 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa6";
 import { LuRefreshCcw } from "react-icons/lu";
 import { IoCaretDownOutline } from "react-icons/io5";
 import { CTimePicker } from "@coreui/react-pro";
+import { useCreateClassroom } from "../../../hooks/useClassroom";
+import { Context } from "../../../AppProvider";
+import { useNavigate } from "react-router-dom";
 
 const StudyOpenModal = ({ setIsModalOpen }) => {
+  const { token } = useContext(Context);
+  const navigate = useNavigate();
   const [studentNumDropdown, setStudentNumDropdown] = useState(false);
-  const days = {
-    월: "Mon",
-    화: "Tue",
-    수: "Wed",
-    목: "Thu",
-    금: "Fri",
-    토: "Sat",
-    일: "Sun",
-  };
-  const [isButtonPressed, setIsButtonPressed] = useState({
+  const initialState = {
+    studyName: "",
+    introduction: "",
     selectedDay: {
       Mon: false,
       Tue: false,
@@ -26,13 +24,34 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
       Sat: false,
       Sun: false,
     },
+    time: {
+      start: "",
+      end: "",
+    },
+    studyNumber: "",
     visibility: "",
     // pulbic -> 전체 공개
     // private -> 비공개
     joinType: "",
     // free -> 자유 가입제
     // approval -> 승인 가입제
-  });
+    link: "",
+  };
+  const days = {
+    월: "Mon",
+    화: "Tue",
+    수: "Wed",
+    목: "Thu",
+    금: "Fri",
+    토: "Sat",
+    일: "Sun",
+  };
+  const [isButtonPressed, setIsButtonPressed] = useState(initialState);
+  const createClassroomMutation = useCreateClassroom();
+  const handleCreateClassroom = () => {
+    createClassroomMutation.mutate({ token, isButtonPressed });
+    navigate("/mentor");
+  };
 
   return (
     <div className="bg-black bg-opacity-45 fixed top-0 left-0 w-full h-full flex justify-center items-center">
@@ -44,10 +63,16 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
           >
             <IoCloseSharp color="white" size="16" />
           </button>
-          <button className="bg-[#FBFFAA] rounded-full flex justify-center items-center p-1">
+          <button
+            className="bg-[#FBFFAA] rounded-full flex justify-center items-center p-1"
+            onClick={() => setIsButtonPressed(initialState)}
+          >
             <LuRefreshCcw color="#9C9C9C" size="16" />
           </button>
-          <button className="bg-[#54CEA6] rounded-full flex justify-center items-center p-1">
+          <button
+            className="bg-[#54CEA6] rounded-full flex justify-center items-center p-1"
+            onClick={handleCreateClassroom}
+          >
             <FaCheck color="white" size="16" />
           </button>
         </div>
@@ -57,11 +82,29 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
             <div className="flex-[6] bg-white flex flex-col gap-3">
               <div className="flex flex-col gap-1">
                 <div className="text-lightBlack font-semibold">스터디 명</div>
-                <input className="border-lightLightMint border-2 rounded-2xl w-full py-1 px-3" />
+                <input
+                  className="border-lightLightMint border-2 rounded-2xl w-full py-1 px-3"
+                  value={isButtonPressed.studyName}
+                  onChange={(e) =>
+                    setIsButtonPressed({
+                      ...isButtonPressed,
+                      studyName: e.target.value,
+                    })
+                  }
+                />
               </div>
               <div className="flex flex-col gap-1 flex-grow">
                 <div className="text-lightBlack font-semibold">한줄 소개</div>
-                <textarea className="bg-lightLightMint rounded-xl flex-grow resize-none px-3 py-2" />
+                <textarea
+                  className="bg-lightLightMint rounded-xl flex-grow resize-none px-3 py-2"
+                  value={isButtonPressed.introduction}
+                  onChange={(e) =>
+                    setIsButtonPressed({
+                      ...isButtonPressed,
+                      introduction: e.target.value,
+                    })
+                  }
+                />
               </div>
             </div>
           </div>
@@ -104,12 +147,36 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
                       className="w-[10rem]"
                       placeholder="시간 선택"
                       locale="ko"
+                      seconds={false}
+                      time={isButtonPressed.time.start}
+                      onTimeChange={(time) =>
+                        time &&
+                        setIsButtonPressed({
+                          ...isButtonPressed,
+                          time: {
+                            ...isButtonPressed.time,
+                            start: time.slice(0, 5),
+                          },
+                        })
+                      }
                     />
                     <div className="font-semibold text-xl">~</div>
                     <CTimePicker
                       className="w-[10rem]"
                       placeholder="시간 선택"
                       locale="ko"
+                      seconds={false}
+                      time={isButtonPressed.time.end}
+                      onTimeChange={(time) =>
+                        time &&
+                        setIsButtonPressed({
+                          ...isButtonPressed,
+                          time: {
+                            ...isButtonPressed.time,
+                            end: time.slice(0, 5),
+                          },
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -127,6 +194,7 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
                   <div className="flex font-semibold gap-[1rem]">
                     <button
                       className="relative"
+                      value={isButtonPressed.studyNumber}
                       onClick={() => setStudentNumDropdown((prev) => !prev)}
                     >
                       <IoCaretDownOutline color="#A8E6CF" />
@@ -135,6 +203,12 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
                           {[2, 3, 4, 5, 6, 7].map((num) => (
                             <li
                               key={num}
+                              onClick={() =>
+                                setIsButtonPressed({
+                                  ...isButtonPressed,
+                                  studyNumber: num,
+                                })
+                              }
                               className="px-4 py-2 hover:bg-lightMint hover:text-white cursor-pointer"
                             >
                               {num} 명
@@ -143,7 +217,7 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
                         </ul>
                       )}
                     </button>
-                    <div>5 명</div>
+                    <div>{isButtonPressed.studyNumber} 명</div>
                   </div>
                 </div>
                 <div>
@@ -224,7 +298,16 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
                   <div className="text-lightBlack font-semibold text-sm mb-2">
                     채팅방 링크
                   </div>
-                  <input className="bg-inputPlaceholder rounded-xl w-full py-1 px-3 " />
+                  <input
+                    className="bg-inputPlaceholder rounded-xl w-full py-1 px-3"
+                    value={isButtonPressed.link}
+                    onChange={(e) =>
+                      setIsButtonPressed({
+                        ...isButtonPressed,
+                        link: e.target.value,
+                      })
+                    }
+                  />
                 </div>
               </div>
             </div>

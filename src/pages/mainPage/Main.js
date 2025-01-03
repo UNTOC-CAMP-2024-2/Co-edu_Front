@@ -7,17 +7,44 @@ import StudyComponent from "./Components/StudyComponent";
 import { useOutletContext } from "react-router-dom";
 import StudyDetailModal from "./Components/StudyDetailModal";
 import { Context } from "../../AppProvider";
+import {
+  useGetMyClassroom,
+  useSearchClassroom,
+  useSubmitClassroomCode,
+} from "../../hooks/useClassroom";
 
 // Link 태그들 to 속성 값에 맞게 경로 설정 필요
 
 const Main = () => {
   const [isModalOpen, setIsModalOpen] = useOutletContext();
   const [isStudyDetailModalOpen, setIsStudyDetailModalOpen] = useState(null);
+  const [classroomCode, setClassroomCode] = useState("");
+  const [wannaAllClassroom, setWannaAllClassroom] = useState(true);
   const { token } = useContext(Context);
+  const submitClassroomCodeMutation = useSubmitClassroomCode();
+  const searchClassroomMutation = useSearchClassroom();
+  const getMyClassroomMutation = useGetMyClassroom();
+
+  const handleSubmitClassroomCode = (e) => {
+    e.preventDefault();
+    submitClassroomCodeMutation.mutate({ token, class_code: classroomCode });
+  };
+
+  const handleSearchAllClassroom = () => {
+    searchClassroomMutation.mutate({ search: "" });
+  };
+
+  const handleGetMyClassroom = () => {
+    getMyClassroomMutation.mutate({ token });
+  };
 
   useEffect(() => {
     console.log(token);
   }, [token]);
+
+  useEffect(() => {
+    wannaAllClassroom ? handleSearchAllClassroom() : handleGetMyClassroom();
+  }, [wannaAllClassroom]);
 
   return (
     <div className="mx-20 min-h-[calc(100vh-110px)] flex flex-col">
@@ -36,8 +63,15 @@ const Main = () => {
           <div>
             <form className="flex items-center rounded-full py-[0.4rem] pr-[0.6rem] pl-[0.9rem] justify-between border-2 border-darkMint shadow-md w-[26rem]">
               <PiHashBold color="#54CEA6" size="25" />
-              <input className="flex-grow outline-none ml-2 mr-3 text-[1.5rem] font-semibold text-lightBlack italic tracking-wide" />
-              <button className="bg-darkMint rounded-full p-[0.4rem]">
+              <input
+                className="flex-grow outline-none ml-2 mr-3 text-[1.5rem] font-semibold text-lightBlack italic tracking-wide"
+                value={classroomCode}
+                onChange={(e) => setClassroomCode(e.target.value)}
+              />
+              <button
+                className="bg-darkMint rounded-full p-[0.4rem]"
+                onClick={handleSubmitClassroomCode}
+              >
                 <FaCheck color="white" size="18" />
               </button>
             </form>
@@ -47,10 +81,28 @@ const Main = () => {
       <hr className="my-2 bg-hrColor h-[2px] border-0" />
       <div className="flex flex-col mx-7 mt-2 flex-grow">
         <div className="flex gap-[1.6rem]">
-          <button className="flex text-center text-sm font-semibold border-2 border-[#CED4DA] text-[#495057] px-[0.8rem] py-[0.5rem] rounded-full">
+          <button
+            className={`flex text-center text-sm font-semibold border-2 px-[0.8rem] py-[0.5rem] rounded-full ${
+              wannaAllClassroom
+                ? "border-darkMint text-darkMint"
+                : "border-[#CED4DA] text-[#495057]"
+            }`}
+            onClick={() => {
+              setWannaAllClassroom(true);
+            }}
+          >
             🍀전체 스터디 룸
           </button>
-          <button className="flex text-center text-sm font-semibold border-2 border-[#CED4DA] text-[#495057] px-[0.8rem] py-[0.5rem] rounded-full">
+          <button
+            className={`flex text-center text-sm font-semibold border-2 px-[0.8rem] py-[0.5rem] rounded-full ${
+              !wannaAllClassroom
+                ? "border-darkMint text-darkMint"
+                : "border-[#CED4DA] text-[#495057]"
+            }`}
+            onClick={() => {
+              setWannaAllClassroom(false);
+            }}
+          >
             👑나의 스터디 룸
           </button>
         </div>
