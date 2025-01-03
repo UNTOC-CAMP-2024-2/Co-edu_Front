@@ -99,7 +99,7 @@ const StudyDetailModal = ({ setIsStudyDetailModalOpen }) => {
                 <div className="flex justify-center">
                   <button className="flex justify-center items-center gap-[1rem] border-2 border-darkMint rounded-full px-5 py-3">
                     <div className="text-darkMint text-xl font-semibold">
-                      참여하기
+                      가입 신청하기
                     </div>
                     <FaCircleArrowRight color="#54CEA6" size={35} />
                   </button>

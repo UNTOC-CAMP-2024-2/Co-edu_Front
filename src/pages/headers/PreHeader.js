@@ -4,7 +4,7 @@ import mainImg from "../../images/mainImg.png";
 import { FaCheck } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import { PiHashBold } from "react-icons/pi";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Context } from "../../AppProvider";
 import { useSearchClassroom } from "../../hooks/useClassroom";
 
@@ -13,12 +13,20 @@ const PreHeader = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const { token } = useContext(Context);
+  const navigate = useNavigate();
 
   const searchClassroomMutation = useSearchClassroom();
 
   const handleSearchClassroom = (e) => {
     e.preventDefault();
-    searchClassroomMutation.mutate({ search: searchKeyword });
+    const data = searchClassroomMutation.mutate(
+      { search: searchKeyword },
+      {
+        onSuccess: (data) => {
+          navigate("/search", { state: { data } });
+        },
+      }
+    );
   };
 
   return (

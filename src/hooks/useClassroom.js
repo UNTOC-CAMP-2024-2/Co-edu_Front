@@ -35,6 +35,7 @@ export const useSearchClassroom = () => {
     mutationFn: searchClassroom,
     onSuccess: (data) => {
       console.log("스터디룸 검색 성공", data);
+      return data;
     },
     onError: (error) => {
       console.log("스터디룸 검색 실패", error);
