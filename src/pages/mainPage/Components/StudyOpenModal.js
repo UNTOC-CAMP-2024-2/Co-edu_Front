@@ -6,9 +6,11 @@ import { IoCaretDownOutline } from "react-icons/io5";
 import { CTimePicker } from "@coreui/react-pro";
 import { useCreateClassroom } from "../../../hooks/useClassroom";
 import { Context } from "../../../AppProvider";
+import { useNavigate } from "react-router-dom";
 
 const StudyOpenModal = ({ setIsModalOpen }) => {
   const { token } = useContext(Context);
+  const navigate = useNavigate();
   const [studentNumDropdown, setStudentNumDropdown] = useState(false);
   const initialState = {
     studyName: "",
@@ -48,6 +50,7 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
   const createClassroomMutation = useCreateClassroom();
   const handleCreateClassroom = () => {
     createClassroomMutation.mutate({ token, isButtonPressed });
+    navigate("/mentor");
   };
 
   return (

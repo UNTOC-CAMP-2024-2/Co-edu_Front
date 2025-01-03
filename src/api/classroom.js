@@ -11,7 +11,6 @@ export const createClassroom = async ({ token, isButtonPressed }) => {
     joinType,
     link,
   } = isButtonPressed;
-  console.log(isButtonPressed);
   const dayInKorean = {
     Mon: "월",
     Tue: "화",
