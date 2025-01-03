@@ -73,6 +73,10 @@ export const searchClassroom = async ({ search }) => {
 };
 
 export const getMyClassroom = async ({ token }) => {
+  if (!token) {
+    throw new Error("토큰이 필요합니다.");
+  }
+
   const response = await axiosInstance.get("/classroom/myclassroom", {
     headers: {
       Authorization: `Bearer ${token}`,
