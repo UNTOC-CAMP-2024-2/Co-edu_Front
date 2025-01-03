@@ -7,7 +7,10 @@ import StudyComponent from "./Components/StudyComponent";
 import { useOutletContext } from "react-router-dom";
 import StudyDetailModal from "./Components/StudyDetailModal";
 import { Context } from "../../AppProvider";
-import { useSubmitClassroomCode } from "../../hooks/useClassroom";
+import {
+  useSearchClassroom,
+  useSubmitClassroomCode,
+} from "../../hooks/useClassroom";
 
 // Link 태그들 to 속성 값에 맞게 경로 설정 필요
 
@@ -15,12 +18,18 @@ const Main = () => {
   const [isModalOpen, setIsModalOpen] = useOutletContext();
   const [isStudyDetailModalOpen, setIsStudyDetailModalOpen] = useState(null);
   const [classroomCode, setClassroomCode] = useState("");
+  const [wannaAllClassroom, setWannaAllClassroom] = useState(true);
   const { token } = useContext(Context);
   const submitClassroomCodeMutation = useSubmitClassroomCode();
+  const searchClassroomMutation = useSearchClassroom();
 
   const handleSubmitClassroomCode = (e) => {
     e.preventDefault();
     submitClassroomCodeMutation.mutate({ token, class_code: classroomCode });
+  };
+
+  const handleSearchAllClassroom = () => {
+    searchClassroomMutation.mutate({ search: "" });
   };
 
   useEffect(() => {
@@ -62,10 +71,27 @@ const Main = () => {
       <hr className="my-2 bg-hrColor h-[2px] border-0" />
       <div className="flex flex-col mx-7 mt-2 flex-grow">
         <div className="flex gap-[1.6rem]">
-          <button className="flex text-center text-sm font-semibold border-2 border-[#CED4DA] text-[#495057] px-[0.8rem] py-[0.5rem] rounded-full">
+          <button
+            className={`flex text-center text-sm font-semibold border-2 px-[0.8rem] py-[0.5rem] rounded-full ${
+              wannaAllClassroom
+                ? "border-darkMint text-darkMint"
+                : "border-[#CED4DA] text-[#495057]"
+            }`}
+            onClick={() => {
+              setWannaAllClassroom(true);
+              handleSearchAllClassroom();
+            }}
+          >
             🍀전체 스터디 룸
           </button>
-          <button className="flex text-center text-sm font-semibold border-2 border-[#CED4DA] text-[#495057] px-[0.8rem] py-[0.5rem] rounded-full">
+          <button
+            className={`flex text-center text-sm font-semibold border-2 px-[0.8rem] py-[0.5rem] rounded-full ${
+              !wannaAllClassroom
+                ? "border-darkMint text-darkMint"
+                : "border-[#CED4DA] text-[#495057]"
+            }`}
+            onClick={() => setWannaAllClassroom(false)}
+          >
             👑나의 스터디 룸
           </button>
         </div>

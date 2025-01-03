@@ -6,11 +6,20 @@ import { IoSearch } from "react-icons/io5";
 import { PiHashBold } from "react-icons/pi";
 import { Link, Outlet } from "react-router-dom";
 import { Context } from "../../AppProvider";
+import { useSearchClassroom } from "../../hooks/useClassroom";
 
 // 스터디 참여 전 헤더
 const PreHeader = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState("");
   const { token } = useContext(Context);
+
+  const searchClassroomMutation = useSearchClassroom();
+
+  const handleSearchClassroom = (e) => {
+    e.preventDefault();
+    searchClassroomMutation.mutate({ search: searchKeyword });
+  };
 
   return (
     <>
@@ -30,9 +39,14 @@ const PreHeader = () => {
                 className="flex items-center bg-inputPlaceholder rounded-full h-[2.7rem] p-[0.3rem]"
                 onSubmit={(e) => e.preventDefault()}
               >
-                <input className="outline-none w-[25rem] mx-3 bg-transparent" />
+                <input
+                  className="outline-none w-[25rem] mx-3 bg-transparent"
+                  value={searchKeyword}
+                  onChange={(e) => setSearchKeyword(e.target.value)}
+                />
                 <button
                   type="submit"
+                  onClick={handleSearchClassroom}
                   className="bg-lightMint rounded-full p-[0.4rem]"
                 >
                   <IoSearch color="white" size="18" />

@@ -1,5 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import { createClassroom, submitClassroomCode } from "../api/classroom";
+import {
+  createClassroom,
+  searchClassroom,
+  submitClassroomCode,
+} from "../api/classroom";
 
 export const useCreateClassroom = () => {
   return useMutation({
@@ -21,6 +25,18 @@ export const useSubmitClassroomCode = () => {
     },
     onError: (error) => {
       console.log("스터디룸 입장 실패", error);
+    },
+  });
+};
+
+export const useSearchClassroom = () => {
+  return useMutation({
+    mutationFn: searchClassroom,
+    onSuccess: (data) => {
+      console.log("스터디룸 검색 성공", data);
+    },
+    onError: (error) => {
+      console.log("스터디룸 검색 실패", error);
     },
   });
 };

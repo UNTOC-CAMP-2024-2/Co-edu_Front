@@ -62,3 +62,12 @@ export const submitClassroomCode = async ({ token, class_code }) => {
   );
   return response.data;
 };
+
+export const searchClassroom = async ({ search }) => {
+  const response = await axiosInstance.get("/classroom/search_classroom", {
+    params: {
+      search,
+    },
+  });
+  return response.data;
+};
