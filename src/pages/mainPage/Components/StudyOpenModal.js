@@ -1,11 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa6";
 import { LuRefreshCcw } from "react-icons/lu";
 import { IoCaretDownOutline } from "react-icons/io5";
 import { CTimePicker } from "@coreui/react-pro";
+import { useCreateClassroom } from "../../../hooks/useClassroom";
+import { Context } from "../../../AppProvider";
 
 const StudyOpenModal = ({ setIsModalOpen }) => {
+  const { token } = useContext(Context);
   const [studentNumDropdown, setStudentNumDropdown] = useState(false);
   const initialState = {
     studyName: "",
@@ -42,6 +45,10 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
     일: "Sun",
   };
   const [isButtonPressed, setIsButtonPressed] = useState(initialState);
+  const createClassroomMutation = useCreateClassroom();
+  const handleCreateClassroom = () => {
+    createClassroomMutation.mutate({ token, isButtonPressed });
+  };
 
   return (
     <div className="bg-black bg-opacity-45 fixed top-0 left-0 w-full h-full flex justify-center items-center">
@@ -61,7 +68,7 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
           </button>
           <button
             className="bg-[#54CEA6] rounded-full flex justify-center items-center p-1"
-            onClick={() => console.log(isButtonPressed)}
+            onClick={handleCreateClassroom}
           >
             <FaCheck color="white" size="16" />
           </button>
