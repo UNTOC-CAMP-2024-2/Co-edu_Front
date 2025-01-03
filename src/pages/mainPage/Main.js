@@ -7,13 +7,21 @@ import StudyComponent from "./Components/StudyComponent";
 import { useOutletContext } from "react-router-dom";
 import StudyDetailModal from "./Components/StudyDetailModal";
 import { Context } from "../../AppProvider";
+import { useSubmitClassroomCode } from "../../hooks/useClassroom";
 
 // Link 태그들 to 속성 값에 맞게 경로 설정 필요
 
 const Main = () => {
   const [isModalOpen, setIsModalOpen] = useOutletContext();
   const [isStudyDetailModalOpen, setIsStudyDetailModalOpen] = useState(null);
+  const [classroomCode, setClassroomCode] = useState("");
   const { token } = useContext(Context);
+  const submitClassroomCodeMutation = useSubmitClassroomCode();
+
+  const handleSubmitClassroomCode = (e) => {
+    e.preventDefault();
+    submitClassroomCodeMutation.mutate({ token, class_code: classroomCode });
+  };
 
   useEffect(() => {
     console.log(token);
@@ -36,8 +44,15 @@ const Main = () => {
           <div>
             <form className="flex items-center rounded-full py-[0.4rem] pr-[0.6rem] pl-[0.9rem] justify-between border-2 border-darkMint shadow-md w-[26rem]">
               <PiHashBold color="#54CEA6" size="25" />
-              <input className="flex-grow outline-none ml-2 mr-3 text-[1.5rem] font-semibold text-lightBlack italic tracking-wide" />
-              <button className="bg-darkMint rounded-full p-[0.4rem]">
+              <input
+                className="flex-grow outline-none ml-2 mr-3 text-[1.5rem] font-semibold text-lightBlack italic tracking-wide"
+                value={classroomCode}
+                onChange={(e) => setClassroomCode(e.target.value)}
+              />
+              <button
+                className="bg-darkMint rounded-full p-[0.4rem]"
+                onClick={handleSubmitClassroomCode}
+              >
                 <FaCheck color="white" size="18" />
               </button>
             </form>

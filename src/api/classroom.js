@@ -35,8 +35,24 @@ export const createClassroom = async ({ token, isButtonPressed }) => {
       start_time: time.start,
       end_time: time.end,
       link,
-      is_access: joinType === "public",
-      is_free: visibility === "free",
+      is_access: visibility === "public",
+      is_free: joinType === "free",
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const submitClassroomCode = async ({ token, class_code }) => {
+  console.log(class_code);
+  const response = await axiosInstance.put(
+    "/classroom/join",
+    {
+      class_code,
     },
     {
       headers: {
