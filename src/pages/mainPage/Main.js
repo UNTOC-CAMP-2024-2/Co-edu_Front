@@ -8,6 +8,7 @@ import { useOutletContext } from "react-router-dom";
 import StudyDetailModal from "./Components/StudyDetailModal";
 import { Context } from "../../AppProvider";
 import {
+  useGetMyClassroom,
   useSearchClassroom,
   useSubmitClassroomCode,
 } from "../../hooks/useClassroom";
@@ -22,6 +23,7 @@ const Main = () => {
   const { token } = useContext(Context);
   const submitClassroomCodeMutation = useSubmitClassroomCode();
   const searchClassroomMutation = useSearchClassroom();
+  const getMyClassroomMutation = useGetMyClassroom();
 
   const handleSubmitClassroomCode = (e) => {
     e.preventDefault();
@@ -30,6 +32,10 @@ const Main = () => {
 
   const handleSearchAllClassroom = () => {
     searchClassroomMutation.mutate({ search: "" });
+  };
+
+  const handleGetMyClassroom = () => {
+    getMyClassroomMutation.mutate({ token });
   };
 
   useEffect(() => {
@@ -90,7 +96,10 @@ const Main = () => {
                 ? "border-darkMint text-darkMint"
                 : "border-[#CED4DA] text-[#495057]"
             }`}
-            onClick={() => setWannaAllClassroom(false)}
+            onClick={() => {
+              setWannaAllClassroom(false);
+              handleGetMyClassroom();
+            }}
           >
             👑나의 스터디 룸
           </button>

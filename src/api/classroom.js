@@ -71,3 +71,12 @@ export const searchClassroom = async ({ search }) => {
   });
   return response.data;
 };
+
+export const getMyClassroom = async ({ token }) => {
+  const response = await axiosInstance.get("/classroom/myclassroom", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
