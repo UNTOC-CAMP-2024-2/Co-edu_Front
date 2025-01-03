@@ -42,6 +42,10 @@ const Main = () => {
     console.log(token);
   }, [token]);
 
+  useEffect(() => {
+    wannaAllClassroom ? handleSearchAllClassroom() : handleGetMyClassroom();
+  }, [wannaAllClassroom]);
+
   return (
     <div className="mx-20 min-h-[calc(100vh-110px)] flex flex-col">
       <div className="flex gap-14 mx-1">
@@ -85,7 +89,6 @@ const Main = () => {
             }`}
             onClick={() => {
               setWannaAllClassroom(true);
-              handleSearchAllClassroom();
             }}
           >
             🍀전체 스터디 룸
@@ -98,7 +101,6 @@ const Main = () => {
             }`}
             onClick={() => {
               setWannaAllClassroom(false);
-              handleGetMyClassroom();
             }}
           >
             👑나의 스터디 룸
