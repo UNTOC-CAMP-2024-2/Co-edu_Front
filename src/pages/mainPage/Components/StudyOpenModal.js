@@ -74,6 +74,7 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
                 <div className="text-lightBlack font-semibold">스터디 명</div>
                 <input
                   className="border-lightLightMint border-2 rounded-2xl w-full py-1 px-3"
+                  value={isButtonPressed.studyName}
                   onChange={(e) =>
                     setIsButtonPressed({
                       ...isButtonPressed,
@@ -86,6 +87,7 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
                 <div className="text-lightBlack font-semibold">한줄 소개</div>
                 <textarea
                   className="bg-lightLightMint rounded-xl flex-grow resize-none px-3 py-2"
+                  value={isButtonPressed.introduction}
                   onChange={(e) =>
                     setIsButtonPressed({
                       ...isButtonPressed,
@@ -136,6 +138,7 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
                       placeholder="시간 선택"
                       locale="ko"
                       seconds={false}
+                      time={isButtonPressed.time.start}
                       onTimeChange={(time) =>
                         time &&
                         setIsButtonPressed({
@@ -153,6 +156,7 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
                       placeholder="시간 선택"
                       locale="ko"
                       seconds={false}
+                      time={isButtonPressed.time.end}
                       onTimeChange={(time) =>
                         time &&
                         setIsButtonPressed({
@@ -180,6 +184,7 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
                   <div className="flex font-semibold gap-[1rem]">
                     <button
                       className="relative"
+                      value={isButtonPressed.studyNumber}
                       onClick={() => setStudentNumDropdown((prev) => !prev)}
                     >
                       <IoCaretDownOutline color="#A8E6CF" />
@@ -285,6 +290,7 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
                   </div>
                   <input
                     className="bg-inputPlaceholder rounded-xl w-full py-1 px-3"
+                    value={isButtonPressed.link}
                     onChange={(e) =>
                       setIsButtonPressed({
                         ...isButtonPressed,
