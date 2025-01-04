@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import {
+  AmIbelongtoClassroom,
   createClassroom,
   getMyClassroom,
   searchClassroom,
@@ -51,6 +52,19 @@ export const useGetMyClassroom = () => {
     },
     onError: (error) => {
       console.log("내 스터디룸 조회 실패", error);
+    },
+  });
+};
+
+export const useAmIbelongtoClassroom = () => {
+  return useMutation({
+    mutationFn: AmIbelongtoClassroom,
+    onSuccess: (data) => {
+      console.log("스터디룸 소속 확인 혹은 가입신청 성공", data);
+      return data;
+    },
+    onError: (error) => {
+      console.log("스터디룸 소속 확인 혹은 가입신청 실패", error);
     },
   });
 };

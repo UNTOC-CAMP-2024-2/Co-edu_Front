@@ -132,25 +132,35 @@ const Main = () => {
             ) : isAllError ? (
               <p>전체 스터디룸 로드 실패</p>
             ) : (
-              allClassrooms.map((classroom, index) => (
-                <StudyComponent
-                  key={index}
-                  detail={{
-                    title: classroom.class_name, // API 응답의 'class_name' -> 제목
-                    name: classroom.description, // API 응답의 'description' -> 스터디장 이름
-                    day: classroom.day, // API 응답의 'day' -> 요일
-                    time: `${classroom.start_time} ~ ${classroom.end_time}`, // 시작~종료 시간
-                  }}
-                  onClick={() =>
-                    setIsStudyDetailModalOpen({
-                      title: "이것은 스터디인가 토크쇼인가 C++ 이해하기",
-                      name: "김태우",
-                      day: "월, 화, 수",
-                      time: "16 : 30 ~ 18 : 30",
-                    })
-                  }
-                />
-              ))
+              allClassrooms.map((classroom, index) => {
+                return (
+                  <StudyComponent
+                    key={index}
+                    detail={{
+                      title: classroom.class_name, // API 응답의 'class_name' -> 제목
+                      name: classroom.description, // API 응답의 'description' -> 스터디장 이름
+                      day: classroom.day, // API 응답의 'day' -> 요일
+                      time: `${classroom.start_time} ~ ${classroom.end_time}`, // 시작~종료 시간
+                    }}
+                    onClick={() =>
+                      setIsStudyDetailModalOpen({
+                        title: classroom.class_name,
+                        name: classroom.description,
+                        day: classroom.day,
+                        startTime: classroom.start_time,
+                        endTime: classroom.end_time,
+                        mentor: classroom.created_by,
+                        studyNumber: classroom.max_member,
+                        joiningMethod: classroom.is_free
+                          ? "자유 가입제"
+                          : "승인 가입제",
+                        classcode: classroom.class_code,
+                        token,
+                      })
+                    }
+                  />
+                );
+              })
             )
           ) : isMyLoading ? (
             <p>나의 스터디룸을 불러오는 중...</p>
@@ -168,10 +178,18 @@ const Main = () => {
                 }}
                 onClick={() =>
                   setIsStudyDetailModalOpen({
-                    title: "이것은 스터디인가 토크쇼인가 C++ 이해하기",
-                    name: "김태우",
-                    day: "월, 화, 수",
-                    time: "16 : 30 ~ 18 : 30",
+                    title: classroom.class_name,
+                    name: classroom.description,
+                    day: classroom.day,
+                    startTime: classroom.start_time,
+                    endTime: classroom.end_time,
+                    mentor: classroom.created_by,
+                    studyNumber: classroom.max_member,
+                    joiningMethod: classroom.is_free
+                      ? "자유 가입제"
+                      : "승인 가입제",
+                    classcode: classroom.class_code,
+                    token,
                   })
                 }
               />
@@ -183,6 +201,7 @@ const Main = () => {
       {isModalOpen && <StudyOpenModal setIsModalOpen={setIsModalOpen} />}
       {isStudyDetailModalOpen && (
         <StudyDetailModal
+          isStudyDetailModalOpen={isStudyDetailModalOpen}
           setIsStudyDetailModalOpen={setIsStudyDetailModalOpen}
         />
       )}

@@ -84,3 +84,15 @@ export const getMyClassroom = async ({ token }) => {
   });
   return response.data;
 };
+
+export const AmIbelongtoClassroom = async ({ token, class_code }) => {
+  const response = await axiosInstance.get("/classroom/class_info", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      class_code,
+    },
+  });
+  return response.data;
+};
