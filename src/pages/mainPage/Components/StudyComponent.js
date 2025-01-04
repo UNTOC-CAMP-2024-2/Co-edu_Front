@@ -7,14 +7,15 @@ const StudyComponent = ({ detail, onClick }) => {
       onClick={onClick}
     >
       <div className="bg-black h-[9rem] rounded-lg"></div>
-      <div className="text-sm">이것은 스터디인가 토크쇼인가 C++ 이해하기</div>
-      <div className="flex gap-2 text-[#525252] text-sm">
-        <div className="min-w-[3rem]">김태우</div>
-        <div>|</div>
+      <div className="text-[13px] text-black mb-[2px]">
+        {detail.title || "제목 없음"}
+      </div>
+      <div className="flex justify-center items-center text-[12px] text-[#525252]">
+        <div className="mx-[1px]">{detail.name || "스터디장 없음"}</div>
+        <span className="mx-[2px] ">|</span>
         <div className="flex flex-wrap">
-          <div>월, 화, 수</div>
-          <div>&nbsp;</div>
-          <div>16 : 30 ~ 18 : 30</div>
+          <div className="mr-[4px] ">{detail.day || "요일 정보 없음"}</div>
+          <div>{detail.time || "시간 정보 없음"}</div>
         </div>
       </div>
     </div>
