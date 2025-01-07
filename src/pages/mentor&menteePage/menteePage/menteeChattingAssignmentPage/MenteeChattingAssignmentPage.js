@@ -13,6 +13,12 @@ const ChattingPage = () => {
     { type: "mentor", text: "시간 날 때마다 꾸준히 해" },
     { type: "mentor", text: "시간 날 때마다 꾸준히 해" },
     { type: "mentor", text: "시간 날 때마다 꾸준히 해" },
+    { type: "mentor", text: "시간 날 때마다 꾸준히 해" },
+    { type: "mentor", text: "시간 날 때마다 꾸준히 해" },
+    { type: "mentor", text: "시간 날 때마다 꾸준히 해" },
+    { type: "mentor", text: "시간 날 때마다 꾸준히 해" },
+    { type: "mentor", text: "시간 날 때마다 꾸준히 해" },
+    { type: "mentor", text: "시간 날 때마다 꾸준히 해" },
   ]);
 
   const [input, setInput] = useState("");
@@ -29,16 +35,16 @@ const ChattingPage = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-[calc(100vh-65px)]">
       {/* Left Section: Code Input */}
-      <div className="flex-grow bg-gray-50 p-4">
+      <div className="flex-grow bg-gray-50 p-4 ">
         <h2 className="text-lg font-bold mb-4">코드 입력 섹션</h2>
       </div>
 
       {/* Right Section: Chat */}
-      <div className="w-[400px] flex flex-col border-l border-[#D9D9D9] relative">
+      <div className="w-[400px] flex flex-col border-l border-[#D9D9D9]">
         {/* Title Section */}
-        <div className="h-[40px] border-b border-[#D9D9D9] bg-white flex items-center justify-center top-0 sticky z-5">
+        <div className="flex items-center justify-center flex-shrink-0 h-[40px] border-b border-[#D9D9D9] bg-white">
           <h2 className="text-[16px] font-bold text-[#525252]">스터디 채팅</h2>
         </div>
 
@@ -77,7 +83,7 @@ const ChattingPage = () => {
         </div>
 
         {/* Input Section */}
-        <div className="absolute bottom-0 left-0 right-0 p-2 border-t border-[#D9D9D9] bg-white flex items-center">
+        <div className="sticky bottom-0 left-0 right-0 p-[2px] border-t border-[#D9D9D9] bg-white flex items-center">
           <input
             type="text"
             value={input}
