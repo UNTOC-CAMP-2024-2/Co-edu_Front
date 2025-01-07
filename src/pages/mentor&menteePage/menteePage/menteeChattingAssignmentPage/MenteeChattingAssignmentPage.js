@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { BsSend } from "react-icons/bs";
 
 const ChattingPage = () => {
@@ -23,6 +23,7 @@ const ChattingPage = () => {
 
   const [input, setInput] = useState("");
   const [currentUser, setCurrentUser] = useState("mentee"); // 현재 사용자를 멘티로 설정
+  const chatRef = useRef(null);
 
   const sendMessage = () => {
     if (input.trim()) {
@@ -31,6 +32,13 @@ const ChattingPage = () => {
       setInput("");
 
       setCurrentUser((prev) => (prev === "mentee" ? "mentee" : "mentor"));
+    }
+  };
+
+  const handleWheel = (event) => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop += event.deltaY;
+      event.preventDefault();
     }
   };
 
@@ -49,7 +57,12 @@ const ChattingPage = () => {
         </div>
 
         {/* Chat Section */}
-        <div className="flex-grow px-[15px] pt-[10px] pb-[60px] overflow-y-auto">
+        <div
+          ref={chatRef}
+          onWheel={handleWheel}
+          className="flex-grow px-[15px] pt-[10px] pb-[10px] overflow-hidden"
+          style={{ scrollBehavior: "smooth" }}
+        >
           {messages.map((msg, index) => {
             const showName =
               msg.type === "mentor" &&
