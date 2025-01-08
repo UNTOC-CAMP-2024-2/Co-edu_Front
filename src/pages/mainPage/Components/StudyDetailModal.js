@@ -42,7 +42,9 @@ const StudyDetailModal = ({
       },
       {
         onSuccess: (data) => {
-          data[1] ? navigate("/mentor") : navigate("/mentee");
+          data[1]
+            ? navigate("/mentor", { state: data[0] })
+            : navigate("/mentee", { state: data[0] });
         },
         onError: () => {
           subtmitClassroomCode.mutate({
