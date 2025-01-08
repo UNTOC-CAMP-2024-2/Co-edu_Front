@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import StudyComponent from "./Components/StudyComponent";
 import StudyDetailModal from "./Components/StudyDetailModal";
 import { useLocation } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Context } from "../../AppProvider";
 
 const SearchClassroom = () => {
+  const { token } = useContext(Context);
   const searchedData = useLocation().state; // API로부터 받은 데이터
   const queryClient = useQueryClient();
   const [isStudyDetailModalOpen, setIsStudyDetailModalOpen] = useState(null);
@@ -32,21 +34,23 @@ const SearchClassroom = () => {
             <StudyComponent
               key={index}
               detail={{
-                title: study.class_name || "제목 없음", // 클래스 이름
-                name: study.description || "스터디장 없음", // 설명
-                day: study.day || "요일 정보 없음", // 요일
-                time: `${study.start_time || "00:00"} ~ ${
-                  study.end_time || "00:00"
-                }`, // 시간
+                title: study.class_name, // 클래스 이름
+                name: study.description, // 설명
+                day: study.day, // 요일
+                time: `${study.start_time} ~ ${study.end_time}`, // 시간
               }}
               onClick={() =>
                 setIsStudyDetailModalOpen({
-                  title: study.class_name || "제목 없음",
-                  name: study.description || "스터디장 없음",
-                  day: study.day || "요일 정보 없음",
-                  time: `${study.start_time || "00:00"} ~ ${
-                    study.end_time || "00:00"
-                  }`,
+                  title: study.class_name,
+                  name: study.description,
+                  day: study.day,
+                  startTime: study.start_time,
+                  endTime: study.end_time,
+                  mentor: study.created_by,
+                  studyNumber: study.max_member,
+                  joiningMethod: study.is_free ? "자유 가입제" : "승인 가입제",
+                  classcode: study.class_code,
+                  token,
                 })
               }
             />
@@ -57,8 +61,8 @@ const SearchClassroom = () => {
       </div>
       {isStudyDetailModalOpen && (
         <StudyDetailModal
+          isStudyDetailModalOpen={isStudyDetailModalOpen}
           setIsStudyDetailModalOpen={setIsStudyDetailModalOpen}
-          details={isStudyDetailModalOpen}
         />
       )}
     </div>

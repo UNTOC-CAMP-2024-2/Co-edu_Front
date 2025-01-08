@@ -50,7 +50,6 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
   const createClassroomMutation = useCreateClassroom();
   const handleCreateClassroom = () => {
     createClassroomMutation.mutate({ token, isButtonPressed });
-    navigate("/mentor");
   };
 
   return (

@@ -27,24 +27,6 @@ const Main = () => {
   const searchClassroomMutation = useSearchClassroom();
   const getMyClassroomMutation = useGetMyClassroom();
 
-  const StudyComponent = ({ detail }) => (
-    <div className="flex flex-col items-center px-[10px] w-[200px]">
-      {/* 이미지 영역 */}
-      <div className="w-[200px] h-[120px] bg-[#D9D9D9] rounded-[10px] mb-[3px]"></div>
-
-      {/* 제목 */}
-      <h3 className="text-[13px] text-black mb-[2px]">{detail.title}</h3>
-
-      <div className="flex justify-center items-center text-[12px] text-[#525252[">
-        <p className="mx-[1px]">{detail.name}</p>
-        <span className="mx-[1px] ">|</span>
-        <p>
-          {detail.day} {detail.time}
-        </p>
-      </div>
-    </div>
-  );
-
   const {
     data: allClassrooms = [],
     isLoading: isAllLoading,
@@ -150,17 +132,35 @@ const Main = () => {
             ) : isAllError ? (
               <p>전체 스터디룸 로드 실패</p>
             ) : (
-              allClassrooms.map((classroom, index) => (
-                <StudyComponent
-                  key={index}
-                  detail={{
-                    title: classroom.class_name, // API 응답의 'class_name' -> 제목
-                    name: classroom.description, // API 응답의 'description' -> 스터디장 이름
-                    day: classroom.day, // API 응답의 'day' -> 요일
-                    time: `${classroom.start_time} ~ ${classroom.end_time}`, // 시작~종료 시간
-                  }}
-                />
-              ))
+              allClassrooms.map((classroom, index) => {
+                return (
+                  <StudyComponent
+                    key={index}
+                    detail={{
+                      title: classroom.class_name, // API 응답의 'class_name' -> 제목
+                      name: classroom.description, // API 응답의 'description' -> 스터디장 이름
+                      day: classroom.day, // API 응답의 'day' -> 요일
+                      time: `${classroom.start_time} ~ ${classroom.end_time}`, // 시작~종료 시간
+                    }}
+                    onClick={() =>
+                      setIsStudyDetailModalOpen({
+                        title: classroom.class_name,
+                        name: classroom.description,
+                        day: classroom.day,
+                        startTime: classroom.start_time,
+                        endTime: classroom.end_time,
+                        mentor: classroom.created_by,
+                        studyNumber: classroom.max_member,
+                        joiningMethod: classroom.is_free
+                          ? "자유 가입제"
+                          : "승인 가입제",
+                        classcode: classroom.class_code,
+                        token,
+                      })
+                    }
+                  />
+                );
+              })
             )
           ) : isMyLoading ? (
             <p>나의 스터디룸을 불러오는 중...</p>
@@ -176,6 +176,22 @@ const Main = () => {
                   day: classroom.day,
                   time: `${classroom.start_time} ~ ${classroom.end_time}`,
                 }}
+                onClick={() =>
+                  setIsStudyDetailModalOpen({
+                    title: classroom.class_name,
+                    name: classroom.description,
+                    day: classroom.day,
+                    startTime: classroom.start_time,
+                    endTime: classroom.end_time,
+                    mentor: classroom.created_by,
+                    studyNumber: classroom.max_member,
+                    joiningMethod: classroom.is_free
+                      ? "자유 가입제"
+                      : "승인 가입제",
+                    classcode: classroom.class_code,
+                    token,
+                  })
+                }
               />
             ))
           )}
@@ -185,6 +201,7 @@ const Main = () => {
       {isModalOpen && <StudyOpenModal setIsModalOpen={setIsModalOpen} />}
       {isStudyDetailModalOpen && (
         <StudyDetailModal
+          isStudyDetailModalOpen={isStudyDetailModalOpen}
           setIsStudyDetailModalOpen={setIsStudyDetailModalOpen}
         />
       )}
