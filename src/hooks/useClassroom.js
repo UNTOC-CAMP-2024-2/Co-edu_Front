@@ -6,12 +6,15 @@ import {
   searchClassroom,
   submitClassroomCode,
 } from "../api/classroom";
+import { useNavigate } from "react-router-dom";
 
 export const useCreateClassroom = () => {
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: createClassroom,
     onSuccess: (data) => {
       console.log("스터디룸 생성 성공", data);
+      navigate("/mentor");
     },
     onError: (error) => {
       console.log("스터디룸 생성 실패", error);

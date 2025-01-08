@@ -1,7 +1,11 @@
 import React, { useRef, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaCircleArrowRight } from "react-icons/fa6";
-import { useAmIbelongtoClassroom } from "../../../hooks/useClassroom";
+import {
+  useAmIbelongtoClassroom,
+  useSubmitClassroomCode,
+} from "../../../hooks/useClassroom";
+import { useNavigate } from "react-router-dom";
 
 const StudyDetailModal = ({
   isStudyDetailModalOpen,
@@ -22,17 +26,32 @@ const StudyDetailModal = ({
 
   const days = ["월", "화", "수", "목", "금", "토", "일"];
   const when = day.split(",").map((day) => day.trim());
+  const subtmitClassroomCode = useSubmitClassroomCode();
   const whenIsTheStudy = days.map((day) => {
     return when.includes(day);
   });
 
+  const navigate = useNavigate();
   const AmIbelongtoClassroomMutation = useAmIbelongtoClassroom();
 
   const handleAmIbelongtoClassroom = () => {
-    AmIbelongtoClassroomMutation.mutate({
-      token,
-      class_code: classcode,
-    });
+    AmIbelongtoClassroomMutation.mutate(
+      {
+        token,
+        class_code: classcode,
+      },
+      {
+        onSuccess: (data) => {
+          data[1] ? navigate("/mentor") : navigate("/mentee");
+        },
+        onError: () => {
+          subtmitClassroomCode.mutate({
+            token,
+            class_code: classcode,
+          });
+        },
+      }
+    );
   };
 
   return (
