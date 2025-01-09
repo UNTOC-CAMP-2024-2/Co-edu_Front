@@ -7,14 +7,14 @@ const StudyComponent = ({ detail, onClick }) => {
       onClick={onClick}
     >
       <div className="bg-black h-[9rem] rounded-lg"></div>
-      <div className="text-sm">이것은 스터디인가 토크쇼인가 C++ 이해하기</div>
+      <div className="text-sm">{detail.title}</div>
       <div className="flex gap-2 text-[#525252] text-sm">
-        <div className="min-w-[3rem]">김태우</div>
+        <div className="min-w-[3rem]">{detail.name}</div>
         <div>|</div>
         <div className="flex flex-wrap">
-          <div>월, 화, 수</div>
+          <div>{detail.day}</div>
           <div>&nbsp;</div>
-          <div>16 : 30 ~ 18 : 30</div>
+          <div>{detail.time}</div>
         </div>
       </div>
     </div>
