@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const defaultProblem = {
   title: "별 찍기",
@@ -12,6 +13,9 @@ const defaultProblem = {
 };
 
 const MenteeReadingAssignmentPage = ({ initialProblem = defaultProblem }) => {
+  const assignmentId = useLocation().state.assignmentId;
+  console.log(assignmentId);
+
   return (
     <div className="px-20 pt-[60px] pb-[30px]">
       <div className="flex items-center justify-between mb-[35px]">

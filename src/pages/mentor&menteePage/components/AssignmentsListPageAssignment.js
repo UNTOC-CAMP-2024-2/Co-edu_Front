@@ -6,9 +6,17 @@ import { PiTriangleBold } from "react-icons/pi";
 import { IoClose } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const AssignmentsListPageAssignment = ({ type }) => {
+const AssignmentsListPageAssignment = ({
+  type,
+  assignmentTitle = "별 찍기 과제",
+  description = "Answer the frequently asked question in s simple sentences, a longish aragraph, or even in a list.asdf asdfasd fasdf fadds",
+  assignmentId,
+}) => {
   const [showDescription, setShowDescription] = useState(false);
+  const navigate = useNavigate();
+  const pathname = useLocation().pathname.split("/")[1];
 
   const dct = {
     done: <FaRegCircle color="#54CEA6" size={20} />,
@@ -31,11 +39,12 @@ const AssignmentsListPageAssignment = ({ type }) => {
           ? "border-lightMint bg-white"
           : "border-gray bg-[#F5F5F5]"
       }`}
+      onClick={() => navigate(`/${pathname}/read`, { state: { assignmentId } })}
     >
       <div className="flex items-center gap-3">
         <div className="w-8 flex justify-center">{icon}</div>
         <div className="text-lightBlack font-semibold text-lg">
-          별 찍기 과제
+          {assignmentTitle}
         </div>
         <div className="flex-grow flex justify-end items-center">
           <button
@@ -59,10 +68,7 @@ const AssignmentsListPageAssignment = ({ type }) => {
         </div>
       </div>
       {showDescription && (
-        <div className="text-lightBlack pt-3 pb-1 px-3">
-          Answer the frequently asked question in s simple sentences, a longish
-          aragraph, or even in a list.asdf asdfasd fasdf fadds
-        </div>
+        <div className="text-lightBlack pt-3 pb-1 px-3">{description}</div>
       )}
     </div>
   );
