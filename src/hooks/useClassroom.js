@@ -23,10 +23,13 @@ export const useCreateClassroom = () => {
 };
 
 export const useSubmitClassroomCode = () => {
+  const navigate = useNavigate();
+
   return useMutation({
     mutationFn: submitClassroomCode,
     onSuccess: (data) => {
       console.log("스터디룸 입장하고 싶어요", data);
+      data && navigate("/mentee");
     },
     onError: (error) => {
       console.log("스터디룸 입장 실패", error);
