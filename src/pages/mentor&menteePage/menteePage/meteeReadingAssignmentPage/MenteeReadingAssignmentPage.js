@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useGetAssignmentDetail } from "../../../../hooks/useMentee";
 
 const MenteeReadingAssignmentPage = () => {
@@ -26,12 +26,13 @@ const MenteeReadingAssignmentPage = () => {
         <h1 className="text-[35px] font-bold ml-[30px] text-[#525252]">
           {problem && problem.title}
         </h1>
-        <button
-          className="px-[15px] py-[12px] bg-[#54CEA6] mr-[35px] text-[22px] font-semibold text-white rounded-xl hover:bg-[#43A484]"
-          onClick={() => alert("코드 수정 페이지로 이동")}
+        <Link
+          to="/mentee/detail"
+          state={{ problem }}
+          className="px-[15px] py-[12px] bg-[#54CEA6] mr-[35px] text-[22px] font-semibold text-white rounded-xl hover:bg-[#43A484] cursor-pointer"
         >
           바로 가기
-        </button>
+        </Link>
       </div>
 
       <p className="text-[#525252] mx-[5px] mb-[70px] text-[21px]">
