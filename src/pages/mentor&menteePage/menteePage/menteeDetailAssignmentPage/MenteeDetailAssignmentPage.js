@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { HiSpeakerphone } from "react-icons/hi";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { useLocation } from "react-router-dom";
 
 const assignmentData = {
   title: "별 찍기",
@@ -21,7 +22,9 @@ const feedbackData = {
 };
 
 const MenteeDetailAssignmentPage = () => {
-  const { title, description, examples } = assignmentData;
+  const data = useLocation().state.problem;
+
+  const { title, description, testcases } = data;
   const { feedback } = feedbackData;
 
   const [showResult, setShowResult] = useState(false);
@@ -123,7 +126,7 @@ const MenteeDetailAssignmentPage = () => {
           </div>
         ) : (
           /* Examples Section */
-          examples.map((example, index) => (
+          testcases.map((example, index) => (
             <div key={index} className="mb-3">
               <div className="mb-4 mx-[28px]">
                 <h2 className="mx-[5px] text-[20px] text-black mb-2 pl-[5px]">
@@ -156,13 +159,13 @@ const MenteeDetailAssignmentPage = () => {
               <div className="mx-[30px] mb-[10px] flex items-center space-x-[10px]">
                 <h3 className="text-[18px] text-[#525252]">출력</h3>
                 <textarea
-                  value={example.output}
+                  value={example.expected_output}
                   readOnly
                   className="flex-1 px-[20px] py-[5px] border-[2px] border-[#969696] rounded-[10px] text-[#525252] resize-none text-[18px] overflow-hidden focus:outline-none focus:ring-0"
                   style={{
                     lineHeight: "30px",
                     height: `${Math.max(
-                      30 * example.output.split("\n").length + 10,
+                      30 * example.expected_output.split("\n").length + 10,
                       45
                     )}px`,
                   }}
