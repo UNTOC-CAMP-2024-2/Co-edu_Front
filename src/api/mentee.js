@@ -52,3 +52,16 @@ export const testCode = async ({ token, assignmentId, code, language }) => {
 
   return response.data;
 };
+
+export const getFeedback = async ({ token, assignmentId }) => {
+  const response = await axiosInstance.get("/assign/status/mentee", {
+    params: {
+      assignment_id: assignmentId,
+    },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};

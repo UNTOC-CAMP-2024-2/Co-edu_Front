@@ -4,31 +4,47 @@ import { HiSpeakerphone } from "react-icons/hi";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useLocation } from "react-router-dom";
 import "../../../../../node_modules/highlight.js/styles/a11y-dark.css";
-import { useSubmitCode, useTestCode } from "../../../../hooks/useMentee";
+import {
+  useGetFeedback,
+  useSubmitCode,
+  useTestCode,
+} from "../../../../hooks/useMentee";
 import { Context } from "../../../../AppProvider";
-
-const feedbackData = {
-  feedback: `impordddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddt pandas as sns 난 sns에 pandas를 올려버릴 거야 라는 말은 안되겠지 하지만 총평으로 뭘 적어야할 지 모르겠단 말이야 일단 아무말이나 적고 검토 받아야지 지금 시각은 3시 16분 어 배고파 진짜 짜증의 김치찌개 스트레스 모두가 벗어났으면 그럼 나만 이렇게 배고프진 않았겠지 ㅠㅠ 이번 주 다음 주 너무 바쁘고요 ,, 나는 아무것도 몰라 하지만 벌써 2학년 인걸 힘내야지 뭐 어쩌겠어 내년엔 또 뭐하지 ? 어 배고파 진짜 야 바보가 지피티한테 총평 써달라 할걸 ,,,`,
-};
 
 const MenteeDetailAssignmentPage = () => {
   const data = useLocation().state.problem;
   console.log(data);
 
   const { title, description, testcases } = data;
-  const { feedback } = feedbackData;
 
   const textareaRef = useRef(null);
   const highlightRef = useRef(null);
-  const { token, assignmentId } = useContext(Context);
+  const { token } = useContext(Context);
 
   const [code, setCode] = useState('print("hello world")');
   const [showResult, setShowResult] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [testResult, setTestResult] = useState();
+  const [feedbackData, setFeedbackData] = useState({ feedback: "" });
+  const { feedback } = feedbackData;
 
   const submitCodeMutatation = useSubmitCode();
   const testCodeMutation = useTestCode();
+  const getFeedbackMutation = useGetFeedback();
+
+  const handleGetFeedback = () => {
+    getFeedbackMutation.mutate(
+      {
+        token,
+        assignmentId: data.assignment_id,
+      },
+      {
+        onSuccess: (data) => {
+          setFeedbackData(data.feedback);
+        },
+      }
+    );
+  };
 
   const handleSubmitCode = () => {
     submitCodeMutatation.mutate({
@@ -62,8 +78,8 @@ const MenteeDetailAssignmentPage = () => {
   };
 
   useEffect(() => {
-    console.log(testResult);
-  }, [testResult]);
+    console.log(feedbackData);
+  }, [feedbackData]);
 
   // Ref for the left panel
   const leftPanelRef = useRef(null);
@@ -239,7 +255,10 @@ const MenteeDetailAssignmentPage = () => {
           {/* 확성기 아이콘 */}
           <button
             className=" rounded-full focus:outline-none"
-            onClick={() => setShowFeedback(!showFeedback)}
+            onClick={() => {
+              !showFeedback && handleGetFeedback();
+              setShowFeedback(!showFeedback);
+            }}
           >
             <HiSpeakerphone
               style={{ width: "30px", height: "30px", color: "#FF6E6E" }}
