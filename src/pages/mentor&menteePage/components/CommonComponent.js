@@ -7,6 +7,7 @@ import { FaChevronRight } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 
 const CommonComponent = ({ children, componentTitle }) => {
+  const location = useLocation();
   const pathname = useLocation().pathname;
   const dct = {
     "전체 과제": [studyIcon1, `${pathname}/assignments`],
@@ -27,7 +28,13 @@ const CommonComponent = ({ children, componentTitle }) => {
       </div>
       {studyIcon === studyIcon2_1 ? (
         <div className="flex-grow flex items-center">
-          <Link className="flex gap-3 justify-center items-center px-10 py-7 border-3 bg-[rgba(141,229,230,0.3)] border-realLightMint rounded-2xl ">
+          <Link
+            to={{
+              pathname: linkAddress,
+              state: { class_code: location.state?.class_code || null },
+            }}
+            className="flex gap-3 justify-center items-center px-10 py-7 border-3 bg-[rgba(141,229,230,0.3)] border-realLightMint rounded-2xl "
+          >
             <div className="text-3xl text-lightBlack font-bold">바로 가기</div>
             <FaChevronRight size={25} />
           </Link>
