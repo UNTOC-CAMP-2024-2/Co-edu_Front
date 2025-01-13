@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import {
   getAssignmentDetail,
   getAssignmentList,
+  getFeedback,
   submitCode,
   testCode,
 } from "../api/mentee";
@@ -50,6 +51,18 @@ export const useTestCode = () => {
     },
     onError: (error) => {
       console.log("코드 테스트 실패", error);
+    },
+  });
+};
+
+export const useGetFeedback = () => {
+  return useMutation({
+    mutationFn: getFeedback,
+    onSuccess: (data) => {
+      console.log("피드백 조회 성공", data);
+    },
+    onError: (error) => {
+      console.log("피드백 조회 실패", error);
     },
   });
 };
