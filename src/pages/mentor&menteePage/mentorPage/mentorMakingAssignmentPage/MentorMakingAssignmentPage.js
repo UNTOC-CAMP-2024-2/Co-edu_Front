@@ -4,8 +4,10 @@ import { FiPlus } from "react-icons/fi";
 import { FiMinus } from "react-icons/fi";
 import { Context } from "../../../../AppProvider";
 import { useCreateAssignment } from "../../../../hooks/useMentor";
+import { useNavigate } from "react-router-dom";
 
 const MentorMakingAssignmentPage = () => {
+  const navigate = useNavigate();
   const { token, classCode } = useContext(Context);
   const createAssignmentMutations = useCreateAssignment();
 
@@ -99,7 +101,10 @@ const MentorMakingAssignmentPage = () => {
           {/* 업로드하기 버튼 */}
           <button
             className="h-[45px] px-[25px] bg-[#54CEA6] text-white text-[20px] font-bold rounded-lg hover:bg-[#43A484]"
-            onClick={handleUpload}
+            onClick={() => {
+              handleUpload();
+              navigate("/mentor/assignments");
+            }}
           >
             업로드 하기
           </button>
