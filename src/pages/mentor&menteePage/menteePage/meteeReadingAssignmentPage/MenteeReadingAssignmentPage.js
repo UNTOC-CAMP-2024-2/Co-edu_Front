@@ -1,24 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useGetAssignmentDetail } from "../../../../hooks/useMentee";
+import { Context } from "../../../../AppProvider";
 
 const MenteeReadingAssignmentPage = () => {
+  const { token } = useContext(Context);
   const [problem, setProblem] = useState(null);
   const assignmentId = useLocation().state.assignmentId;
-  console.log(assignmentId);
+  console.log("Assignment ID:", assignmentId);
 
   const getAssignmentDetailMutation = useGetAssignmentDetail();
 
   useEffect(() => {
     getAssignmentDetailMutation.mutate(
-      { assignmentId },
+      { assignmentId, token },
       {
         onSuccess: (data) => {
           setProblem(data);
         },
       }
     );
-  }, []);
+  }, [assignmentId]);
 
   return (
     <div className="px-20 pt-[60px] pb-[30px]">
