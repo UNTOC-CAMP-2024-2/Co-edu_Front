@@ -91,15 +91,29 @@ const MentorEditAssignmentPage = () => {
       testcase: testcases,
     });
 
-    editAssignmentMutation.mutate({
-      token,
-      assignment: {
-        assignment_id: String(assignmentId),
-        description: assignment.description,
-        title: assignment.title,
-        testcase: testcases,
+    editAssignmentMutation.mutate(
+      {
+        token,
+        assignment: {
+          assignment_id: String(assignmentId),
+          description: assignment.description,
+          title: assignment.title,
+          testcase: testcases,
+        },
       },
-    });
+      {
+        onSuccess: (updatedData) => {
+          console.log("수정 성공 데이터:", updatedData);
+
+          // 수정된 데이터와 함께 이전 페이지로 이동
+          navigate(-1, { state: { updatedAssignment: updatedData } });
+        },
+        onError: (error) => {
+          console.error("수정 실패:", error);
+          alert("수정에 실패했습니다.");
+        },
+      }
+    );
   };
 
   const addExample = () => {
@@ -160,10 +174,7 @@ const MentorEditAssignmentPage = () => {
             {/* 수정하기 버튼 */}
             <button
               className="h-[45px] px-[25px] bg-[#54CEA6] text-white text-[20px] font-bold rounded-lg hover:bg-[#43A484]"
-              onClick={() => {
-                handleSave();
-                navigate(-1);
-              }}
+              onClick={handleSave}
             >
               저장 하기
             </button>

@@ -4,6 +4,7 @@ import { useGetAssignmentDetail } from "../../../../hooks/useMentee";
 import { Context } from "../../../../AppProvider";
 
 const MenteeReadingAssignmentPage = () => {
+  const location = useLocation();
   const { token } = useContext(Context);
   const [problem, setProblem] = useState(null);
   const assignmentId = useLocation().state.assignmentId;
@@ -12,14 +13,20 @@ const MenteeReadingAssignmentPage = () => {
   const getAssignmentDetailMutation = useGetAssignmentDetail();
 
   useEffect(() => {
-    getAssignmentDetailMutation.mutate(
-      { assignmentId, token },
-      {
-        onSuccess: (data) => {
-          setProblem(data);
-        },
-      }
-    );
+    if (location.state?.updatedAssignment) {
+      // 수정된 데이터가 있다면 바로 반영
+      setProblem(location.state.updatedAssignment);
+    } else {
+      // 수정된 데이터가 없다면 API 호출
+      getAssignmentDetailMutation.mutate(
+        { assignmentId, token },
+        {
+          onSuccess: (data) => {
+            setProblem(data);
+          },
+        }
+      );
+    }
   }, [assignmentId]);
 
   return (

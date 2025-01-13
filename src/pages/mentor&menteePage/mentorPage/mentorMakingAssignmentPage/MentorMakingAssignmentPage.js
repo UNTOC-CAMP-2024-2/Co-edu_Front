@@ -69,15 +69,22 @@ const MentorMakingAssignmentPage = () => {
       testcase: testcases,
     });
 
-    createAssignmentMutations.mutate({
-      token,
-      assignment: {
-        class_id: classCode,
-        title,
-        description,
-        testcase: testcases,
+    createAssignmentMutations.mutate(
+      {
+        token,
+        assignment: {
+          class_id: classCode,
+          title,
+          description,
+          testcase: testcases,
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          navigate("/mentor/assignments");
+        },
+      }
+    );
   };
 
   return (
@@ -101,10 +108,7 @@ const MentorMakingAssignmentPage = () => {
           {/* 업로드하기 버튼 */}
           <button
             className="h-[45px] px-[25px] bg-[#54CEA6] text-white text-[20px] font-bold rounded-lg hover:bg-[#43A484]"
-            onClick={() => {
-              handleUpload();
-              navigate("/mentor/assignments");
-            }}
+            onClick={handleUpload}
           >
             업로드 하기
           </button>
