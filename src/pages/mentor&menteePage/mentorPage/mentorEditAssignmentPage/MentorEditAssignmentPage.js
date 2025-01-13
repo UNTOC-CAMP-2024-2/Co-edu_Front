@@ -1,16 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  useEditAssignment,
+  useGetAssignmentDetail,
+} from "../../../../hooks/useMentor";
+import { Context } from "../../../../AppProvider";
+import { FiPlus, FiMinus } from "react-icons/fi";
 
 const MentorEditAssignmentPage = () => {
-  const [assignment, setAssignment] = useState({
-    title: "별 찍기",
-    description:
-      "입력은 첫째 줄에 N(1 <= N <= 100)이 주어지며, 출력은 첫째 줄부터 차례대로 별을 출력한다. 아래의 예제와 출력을 참고하여 규칙을 유추한 뒤 별을 찍어보시오.",
-    examples: [
-      { input: "안녕하세요", output: "줄바꿈\n예제\n출력" },
-      { input: "2", output: "*\n* *" },
-      { input: "3", output: "안ㅕㅇ \n 하세요*\n* * *" },
-    ],
-  });
+  const { token } = useContext(Context);
+  const { assignmentId } = useLocation().state;
+  const navigate = useNavigate();
+  const [assignment, setAssignment] = useState(null);
+  const getAssignmentDetailMutation = useGetAssignmentDetail();
+  const editAssignmentMutation = useEditAssignment();
+
+  useEffect(() => {
+    if (!assignmentId) {
+      console.error("Assignment ID가 존재하지 않습니다.");
+      alert("과제 ID가 없습니다. 다시 시도해주세요.");
+      navigate(-1); // 이전 페이지로 이동
+      return;
+    }
+
+    if (assignmentId) {
+      getAssignmentDetailMutation.mutate(
+        { assignmentId },
+        {
+          onSuccess: (data) => {
+            console.log("EditPage API 응답 데이터:", data);
+            setAssignment({
+              title: data.title,
+              description: data.description,
+              examples: data.testcases.map((testcase) => ({
+                input: testcase.input || "",
+                output: testcase.expected_output,
+              })),
+            });
+          },
+          onError: (error) => {
+            console.error("과제 데이터를 불러오는 중 오류 발생:", error);
+            alert("과제 데이터를 불러오는 데 실패했습니다.");
+          },
+        }
+      );
+    }
+  }, [assignmentId, token, navigate]);
 
   // 데이터 업데이트 핸들러
   const handleChange = (field, value) => {
@@ -24,6 +59,90 @@ const MentorEditAssignmentPage = () => {
       return { ...prev, examples: updatedExamples };
     });
   };
+
+  const handleSave = () => {
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      // navigate("/login");
+      return;
+    }
+
+    if (!assignment.title || !assignment.description) {
+      alert("과제 명과 설명을 입력해주세요.");
+      return;
+    }
+
+    if (
+      assignment.examples.some((example) => !example.input || !example.output)
+    ) {
+      alert("예제 입력과 출력을 모두 입력해주세요.");
+      return;
+    }
+
+    const testcases = assignment.examples.map((example) => ({
+      input_data: example.input,
+      expected_output: example.output,
+    }));
+
+    console.log("전송 데이터:", {
+      assignment_id: String(assignmentId),
+      description: assignment.description,
+      title: assignment.title,
+      testcase: testcases,
+    });
+
+    editAssignmentMutation.mutate(
+      {
+        token,
+        assignment: {
+          assignment_id: String(assignmentId),
+          description: assignment.description,
+          title: assignment.title,
+          testcase: testcases,
+        },
+      },
+      {
+        onSuccess: (updatedData) => {
+          console.log("수정 성공 데이터:", updatedData);
+
+          // 수정된 데이터와 함께 이전 페이지로 이동
+          navigate(-1, { state: { updatedAssignment: updatedData } });
+        },
+        onError: (error) => {
+          console.error("수정 실패:", error);
+          alert("수정에 실패했습니다.");
+        },
+      }
+    );
+  };
+
+  const addExample = () => {
+    if (assignment.examples.length >= 10) {
+      alert("최대 10개까지 추가 가능합니다.");
+      return;
+    }
+
+    setAssignment((prev) => ({
+      ...prev,
+      examples: [...prev.examples, { input: "", output: "" }],
+    }));
+  };
+
+  const removeExample = (index) => {
+    if (assignment.examples.length <= 3) {
+      alert("최소 3개의 예제가 필요합니다.");
+      return;
+    }
+
+    setAssignment((prev) => ({
+      ...prev,
+      examples: prev.examples.filter((_, i) => i !== index),
+    }));
+  };
+
+  if (!assignment) {
+    return <div>로딩 중...</div>;
+  }
 
   return (
     <div className="mx-[195px] mt-10 mb-20">
@@ -47,7 +166,7 @@ const MentorEditAssignmentPage = () => {
             {/* 취소하기 버튼 */}
             <button
               className="h-[45px] px-[25px] border-2 border-[#54CEA6] text-[#54CEA6] text-[20px] font-bold rounded-lg hover:shadow-lg hover:shadow-[#43A484]/50 transition-shadow duration-200"
-              onClick={() => alert("취소되었습니다!")}
+              onClick={() => navigate(-1)}
             >
               취소 하기
             </button>
@@ -55,9 +174,9 @@ const MentorEditAssignmentPage = () => {
             {/* 수정하기 버튼 */}
             <button
               className="h-[45px] px-[25px] bg-[#54CEA6] text-white text-[20px] font-bold rounded-lg hover:bg-[#43A484]"
-              onClick={() => alert("수정 되었습니다!")}
+              onClick={handleSave}
             >
-              수정 하기
+              저장 하기
             </button>
           </div>
         </div>
@@ -143,6 +262,31 @@ const MentorEditAssignmentPage = () => {
             </div>
           </React.Fragment>
         ))}
+      </div>
+      {/* 예제 추가/삭제 버튼 */}
+      <div className="flex justify-end mt-[20px]">
+        <button
+          onClick={() => removeExample(assignment.examples.length - 1)}
+          disabled={assignment.examples.length <= 3} // 예제 개수가 3개 이하이면 비활성화
+          className={`mr-4 h-[40px] w-[40px] ${
+            assignment.examples.length <= 3
+              ? "bg-gray-400 cursor-not-allowed" // 비활성화 상태
+              : "bg-[#FF6B6B] hover:bg-[#D64545]" // 활성화 상태
+          } text-white text-[24px] rounded-full flex items-center justify-center`}
+        >
+          <FiMinus className="w-[20px] h-[20px]" />
+        </button>
+        <button
+          onClick={addExample}
+          disabled={assignment.examples.length >= 10} // 예제 개수가 10개 이상이면 비활성화
+          className={` h-[40px] w-[40px] ${
+            assignment.examples.length >= 10
+              ? "bg-gray-400 cursor-not-allowed" // 비활성화 상태
+              : "bg-[#54CEA6] hover:bg-[#43A484]" // 활성화 상태
+          } text-white text-[24px] rounded-full flex items-center justify-center`}
+        >
+          <FiPlus className="w-[20px] h-[20px]" />
+        </button>
       </div>
     </div>
   );

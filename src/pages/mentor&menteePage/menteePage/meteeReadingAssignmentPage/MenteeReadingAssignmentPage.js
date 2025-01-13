@@ -1,24 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useGetAssignmentDetail } from "../../../../hooks/useMentee";
+import { Context } from "../../../../AppProvider";
 
 const MenteeReadingAssignmentPage = () => {
+  const location = useLocation();
+  const { token } = useContext(Context);
   const [problem, setProblem] = useState(null);
   const assignmentId = useLocation().state.assignmentId;
-  console.log(assignmentId);
+  console.log("Assignment ID:", assignmentId);
 
   const getAssignmentDetailMutation = useGetAssignmentDetail();
 
   useEffect(() => {
-    getAssignmentDetailMutation.mutate(
-      { assignmentId },
-      {
-        onSuccess: (data) => {
-          setProblem(data);
-        },
-      }
-    );
-  }, []);
+    if (location.state?.updatedAssignment) {
+      // 수정된 데이터가 있다면 바로 반영
+      setProblem(location.state.updatedAssignment);
+    } else {
+      // 수정된 데이터가 없다면 API 호출
+      getAssignmentDetailMutation.mutate(
+        { assignmentId, token },
+        {
+          onSuccess: (data) => {
+            setProblem(data);
+          },
+        }
+      );
+    }
+  }, [assignmentId]);
 
   return (
     <div className="px-20 pt-[60px] pb-[30px]">
