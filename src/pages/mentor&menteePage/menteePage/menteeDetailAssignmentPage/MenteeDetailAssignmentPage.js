@@ -1,21 +1,11 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useContext } from "react";
+import Highlight from "react-highlight";
 import { HiSpeakerphone } from "react-icons/hi";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useLocation } from "react-router-dom";
-
-const assignmentData = {
-  title: "별 찍기",
-  description:
-    "입력은 첫째 줄에 N(1 <= N <= 100)이 주어지며, 출력은 첫째 줄부터 차례대로 별을 출력한다. 아래의 예제와 출력을 참고하여 규칙을 유추한 뒤 별을 찍어보시오.",
-  examples: [
-    { input: "1", output: "*" },
-    { input: "2", output: "*\n**" },
-    {
-      input: "3",
-      output: "안녕\n안녕\n안녕\n안녕\n안녕\n안녕\n안녕\n안녕\n안녕",
-    },
-  ],
-};
+import "../../../../../node_modules/highlight.js/styles/a11y-dark.css";
+import { useSubmitCode, useTestCode } from "../../../../hooks/useMentee";
+import { Context } from "../../../../AppProvider";
 
 const feedbackData = {
   feedback: `impordddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddt pandas as sns 난 sns에 pandas를 올려버릴 거야 라는 말은 안되겠지 하지만 총평으로 뭘 적어야할 지 모르겠단 말이야 일단 아무말이나 적고 검토 받아야지 지금 시각은 3시 16분 어 배고파 진짜 짜증의 김치찌개 스트레스 모두가 벗어났으면 그럼 나만 이렇게 배고프진 않았겠지 ㅠㅠ 이번 주 다음 주 너무 바쁘고요 ,, 나는 아무것도 몰라 하지만 벌써 2학년 인걸 힘내야지 뭐 어쩌겠어 내년엔 또 뭐하지 ? 어 배고파 진짜 야 바보가 지피티한테 총평 써달라 할걸 ,,,`,
@@ -23,24 +13,87 @@ const feedbackData = {
 
 const MenteeDetailAssignmentPage = () => {
   const data = useLocation().state.problem;
+  console.log(data);
 
   const { title, description, testcases } = data;
   const { feedback } = feedbackData;
 
-  const [showResult, setShowResult] = useState(false);
+  const textareaRef = useRef(null);
+  const highlightRef = useRef(null);
+  const { token, assignmentId } = useContext(Context);
 
+  const [code, setCode] = useState('print("hello world")');
+  const [showResult, setShowResult] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [testResult, setTestResult] = useState();
+
+  const submitCodeMutatation = useSubmitCode();
+  const testCodeMutation = useTestCode();
+
+  const handleSubmitCode = () => {
+    submitCodeMutatation.mutate({
+      token,
+      assignmentId: data.assignment_id,
+      code,
+    });
+  };
+
+  const handleTestCode = () => {
+    console.log({
+      token,
+      assignmentId: data.assignment_id,
+      code,
+      language: "python",
+    });
+    testCodeMutation.mutate(
+      {
+        token,
+        assignmentId: data.assignment_id,
+        code,
+        language: "python",
+      },
+      {
+        onSuccess: (data) => {
+          setTestResult(data);
+        },
+      }
+    );
+    setShowResult(true);
+  };
+
+  useEffect(() => {
+    console.log(testResult);
+  }, [testResult]);
 
   // Ref for the left panel
   const leftPanelRef = useRef(null);
-
   const feedbackTextareaRef = useRef(null);
 
   // Custom scroll handler
   const handleWheel = (event) => {
     if (leftPanelRef.current) {
-      leftPanelRef.current.scrollTop += event.deltaY; // Scroll vertically
-      event.preventDefault(); // Prevent default scrolling behavior
+      const { scrollTop, scrollHeight, clientHeight } = leftPanelRef.current;
+
+      // 위로 스크롤하려 할 때 (deltaY < 0) 이고 이미 맨 위라면 (scrollTop === 0)
+      // 또는
+      // 아래로 스크롤하려 할 때 (deltaY > 0) 이고 이미 맨 아래라면 (scrollTop + clientHeight === scrollHeight)
+      if (
+        (event.deltaY < 0 && scrollTop === 0) ||
+        (event.deltaY > 0 && scrollTop + clientHeight >= scrollHeight)
+      ) {
+        return; // 기본 스크롤 동작 허용
+      }
+
+      leftPanelRef.current.scrollTop += event.deltaY;
+      // event.preventDefault();
+    }
+  };
+
+  // 스크롤 동기화를 위한 핸들러
+  const handleScroll = (e) => {
+    if (highlightRef.current) {
+      highlightRef.current.scrollTop = e.target.scrollTop;
+      // highlightRef.current.scrollLeft = e.target.scrollLeft;
     }
   };
 
@@ -82,7 +135,7 @@ const MenteeDetailAssignmentPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-row h-[calc(100vh-65px)]">
+    <div className="relative flex flex-row h-[calc(100vh-65px)]">
       {/* Left Panel */}
       <div
         ref={leftPanelRef}
@@ -198,13 +251,16 @@ const MenteeDetailAssignmentPage = () => {
             {/* 실행 버튼 */}
             <button
               className="px-[15px] py-[4px] border-3 border-[#54CEA6] text-[#54CEA6] rounded-full text-[16px] font-extrabold hover:bg-[#e6f8f2] hover:border-[#43A484] hover:text-[#43A484]"
-              onClick={() => setShowResult(true)}
+              onClick={handleTestCode}
             >
-              실행
+              테스트
             </button>
 
             {/* 제출 버튼 */}
-            <button className="px-[15px] py-[4px] border-3 border-[#54CEA6] text-[#54CEA6] rounded-full text-[16px] font-extrabold hover:bg-[#e6f8f2] hover:border-[#43A484] hover:text-[#43A484]">
+            <button
+              className="px-[15px] py-[4px] border-3 border-[#54CEA6] text-[#54CEA6] rounded-full text-[16px] font-extrabold hover:bg-[#e6f8f2] hover:border-[#43A484] hover:text-[#43A484]"
+              onClick={handleSubmitCode}
+            >
               제출
             </button>
           </div>
@@ -214,16 +270,47 @@ const MenteeDetailAssignmentPage = () => {
         <div className="absolute top-[50px] left-0 w-full h-[1px] bg-[#D9D9D9]"></div>
 
         {/* 코드 작성 섹션 */}
-        <div className="flex flex-col h-full">
-          <div className="flex-none h-[420px] flex items-center justify-center overflow-y-auto">
-            <p className="text-gray-500 text-lg">코드 작성 섹션</p>
+        <div className="flex flex-col h-full mt-[50px]">
+          <div className="flex-none h-full flex relative items-center justify-center overflow-y-auto">
+            <textarea
+              onKeyDown={(event) => {
+                if (event.key === "Tab") {
+                  event.preventDefault();
+                  setCode(code + "\t");
+                }
+              }}
+              value={code}
+              onScroll={handleScroll}
+              ref={textareaRef}
+              className="h-full w-full absolute inset-0 p-4 text-transparent font-mono resize-none bg-transparent z-10 focus:outline-none selection:bg-blue-500/50 leading-[1.5] text-[1rem]"
+              style={{
+                caretColor: "white",
+                fontFamily: "Monaco, Consolas, monospace", // 동일한 폰트 패밀리 사용
+              }}
+              onChange={(e) => setCode(e.target.value)}
+              spellCheck={false}
+            />
+            <div
+              ref={highlightRef}
+              className="bg-[#2B2B2B] absolute w-full h-full inset-0 overflow-auto pointer-events-none"
+            >
+              <Highlight
+                className="h-full python text-[1rem] leading-[1.5] p-4"
+                style={{
+                  fontFamily: "Monaco, Consolas, monospace",
+                  whiteSpace: "pre",
+                }}
+              >
+                {code}
+              </Highlight>
+            </div>
           </div>
 
           {/* 실행 결과 섹션 */}
           {showResult && ( // showResult가 true일 때만 렌더링
-            <div className="bg-white border-t-[1px] border-[#D9D9D9]">
+            <div className="absolute bg-white border-t-[1px] border-[#D9D9D9] z-20">
               <div className="flex items-center justify-between px-[15px] my-[8px]">
-                <h3 className="text-[16px] text-[#525252]">실행 결과</h3>
+                <h3 className="text-[16px] text-[#525252]">100점</h3>
                 <button
                   onClick={() => setShowResult(false)}
                   className="text-[#525252] hover:text-black focus:outline-none"
@@ -233,10 +320,6 @@ const MenteeDetailAssignmentPage = () => {
                   />
                 </button>
               </div>
-              <div className="border-t-[1px] border-[#D9D9D9] mb-2"></div>
-              <p className="text-gray-600 ml-[10px]">
-                실행 결과가 여기에 표시됩니다.
-              </p>
             </div>
           )}
         </div>
