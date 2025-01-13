@@ -1,9 +1,16 @@
 import { type } from "@testing-library/user-event/dist/type";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FiPlus } from "react-icons/fi";
 import { FiMinus } from "react-icons/fi";
+import { Context } from "../../../../AppProvider";
+import { useCreateAssignment } from "../../../../hooks/useMentor";
 
 const MentorMakingAssignmentPage = () => {
+  const { token, classCode } = useContext(Context);
+  const createAssignmentMutations = useCreateAssignment();
+
+  const [title, setTitle] = useState(""); //과제 제목목
+  const [description, setDescription] = useState(""); //과제 설명명
   const [examples, setsExamples] = useState([
     { input: "", output: "" },
     { input: "", output: "" },
@@ -28,8 +35,47 @@ const MentorMakingAssignmentPage = () => {
 
   const handleInputChange = (index, value, type) => {
     const newExamples = [...examples];
-    newExamples[index][type] = value;
+    newExamples[index] = { ...newExamples[index], [type]: value || "" }; // 빈 문자열로 초기화 보장
     setsExamples(newExamples);
+  };
+
+  const handleUpload = async () => {
+    if (!token) {
+      alert("로그인이 필요합니다. 다시 로그인해주세요.");
+      return;
+    }
+
+    if (!title || !description) {
+      alert("과제 명과 설명을 입력해주세요.");
+      return;
+    }
+
+    if (examples.some((example) => !example.input || !example.output)) {
+      alert("예제를 모두 입력해주세요.");
+      return;
+    }
+
+    const testcases = examples.map((example) => ({
+      input_data: example.input,
+      expected_output: example.output,
+    }));
+
+    console.log("Request Data:", {
+      class_id: classCode,
+      title,
+      description,
+      testcase: testcases,
+    });
+
+    createAssignmentMutations.mutate({
+      token,
+      assignment: {
+        class_id: classCode,
+        title,
+        description,
+        testcase: testcases,
+      },
+    });
   };
 
   return (
@@ -53,7 +99,7 @@ const MentorMakingAssignmentPage = () => {
           {/* 업로드하기 버튼 */}
           <button
             className="h-[45px] px-[25px] bg-[#54CEA6] text-white text-[20px] font-bold rounded-lg hover:bg-[#43A484]"
-            onClick={() => alert("업로드되었습니다!")}
+            onClick={handleUpload}
           >
             업로드 하기
           </button>
@@ -62,6 +108,8 @@ const MentorMakingAssignmentPage = () => {
           type="text"
           id="assignmentTitle"
           placeholder="과제 명을 여기에 입력해주세요."
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           className="w-full h-[45px] px-[20px] border-[3px] border-[#E3F7EF] rounded-full focus:outline-none focus:ring-2 focus:ring-[#A8E6CF] placeholder:font-bold placeholder:text-[14px] placeholder-[#9C9C9C] text-[#525252] text-[18px]"
         />
       </div>
@@ -77,6 +125,8 @@ const MentorMakingAssignmentPage = () => {
         <textarea
           id="assignmentDescription"
           placeholder="과제에 대하여 설명을 입력하여 주세요."
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
           className="w-full px-[15px] py-[12px] border-[3x] bg-[#E3F7EF] border-[#E3F7EF] rounded-3xl focus:outline-none focus:ring-2 focus:ring-[#A8E6CF] placeholder:font-bold placeholder:text-[14px] placeholder-[#9C9C9C] text-[#525252] text-[18px] resize-none overflow-hidden"
           style={{ lineHeight: "30px", minHeight: "120px" }}
           onInput={(e) => {
