@@ -1,5 +1,8 @@
-import React from "react";
-import { FaArrowCircleRight } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaArrowCircleRight, FaRegQuestionCircle } from "react-icons/fa";
+import MenteeModalOpen from "./ModalOpen/MenteeModalOpen";
+import MentorModalOpen from "./ModalOpen/MentorModalOpen";
+import { useLocation } from "react-router-dom";
 
 const CommonMainComponent = ({ classroomData }) => {
   const {
@@ -12,11 +15,30 @@ const CommonMainComponent = ({ classroomData }) => {
     link,
   } = classroomData;
 
+  const location = useLocation();
+  const isMentor = location.pathname.includes("/mentor");
+  const isMentee = location.pathname.includes("/mentee");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="flex flex-col gap-3">
       <div className="mx-5 mt-10 flex flex-col gap-2">
-        <div className="text-3xl text-lightBlack font-semibold">
-          {class_name} &#40; {class_code} &#41;
+        <div className="text-3xl text-lightBlack font-semibold flex items-center space-x-2">
+          <span>
+            {class_name} &#40; {class_code} &#41;{" "}
+          </span>
+          <button onClick={handleOpenModal} aria-label="Open Modal">
+            <FaRegQuestionCircle size={20} />
+          </button>
         </div>
         <div className="flex justify-between">
           <div
@@ -44,6 +66,13 @@ const CommonMainComponent = ({ classroomData }) => {
         </div>
       </div>
       <hr className="my-2 bg-darkMint h-[3px] border-0 opacity-100" />
+
+      {isMentor && (
+        <MentorModalOpen isOpen={isModalOpen} onClose={handleCloseModal} />
+      )}
+      {isMentee && (
+        <MenteeModalOpen isOpen={isModalOpen} onClose={handleCloseModal} />
+      )}
     </div>
   );
 };
