@@ -96,3 +96,76 @@ export const AmIbelongtoClassroom = async ({ token, class_code }) => {
   });
   return response.data;
 };
+
+export const getClassroomInfo = async ({ token, class_code }) => {
+  const response = await axiosInstance.get("/classroom/show_edit", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      class_code,
+    },
+  });
+  return response.data;
+};
+
+export const approveMember = async ({ user_id, class_code, token }) => {
+  const response = await axiosInstance.post(
+    "/classroom/approve",
+    { user_id, class_code },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  return response.data;
+};
+
+export const denyMember = async ({ user_id, class_code, token }) => {
+  const response = await axiosInstance.delete("/classroom/deny", {
+    data: { user_id, class_code },
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+
+export const kickMember = async ({ kick_user, class_code, token }) => {
+  const response = await axiosInstance.delete("/classroom/kick_user", {
+    data: { class_code, kick_user },
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+
+export const editClassInfo = async ({
+  class_code,
+  class_name,
+  description,
+  max_member,
+  day,
+  start_time,
+  end_time,
+  is_access,
+  is_free,
+  link,
+  token,
+}) => {
+  const response = await axiosInstance.patch(
+    "/classroom/edit_classinfo",
+    {
+      class_code,
+      class_name,
+      description,
+      max_member,
+      day,
+      start_time,
+      end_time,
+      is_access,
+      is_free,
+      link,
+    },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  return response.data;
+};
