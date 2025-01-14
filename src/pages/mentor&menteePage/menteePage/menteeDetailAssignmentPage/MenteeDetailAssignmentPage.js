@@ -10,6 +10,7 @@ import {
   useTestCode,
 } from "../../../../hooks/useMentee";
 import { Context } from "../../../../AppProvider";
+import TestResultModal from "./TestResultModal";
 
 const MenteeDetailAssignmentPage = () => {
   const data = useLocation().state.problem;
@@ -24,7 +25,12 @@ const MenteeDetailAssignmentPage = () => {
   const [code, setCode] = useState('print("hello world")');
   const [showResult, setShowResult] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
-  const [testResult, setTestResult] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [testResult, setTestResult] = useState({
+    passed: 0,
+    total: 0,
+    score: 0,
+  });
   const [feedbackData, setFeedbackData] = useState({ feedback: "" });
   const { feedback } = feedbackData;
 
@@ -69,8 +75,22 @@ const MenteeDetailAssignmentPage = () => {
         language: "python",
       },
       {
-        onSuccess: (data) => {
-          setTestResult(data);
+        onSuccess: (response) => {
+          console.log("API Response:", response);
+
+          const passedCount = response.results.filter(
+            (test) => test.result === "Pass"
+          ).length;
+          const totalCount = response.results.length;
+          const score = response.total_score;
+
+          setTestResult({
+            passed: passedCount,
+            total: totalCount,
+            score,
+          });
+
+          setIsModalOpen(true);
         },
       }
     );
@@ -324,25 +344,13 @@ const MenteeDetailAssignmentPage = () => {
               </Highlight>
             </div>
           </div>
-
-          {/* 실행 결과 섹션 */}
-          {showResult && ( // showResult가 true일 때만 렌더링
-            <div className="absolute bg-white border-t-[1px] border-[#D9D9D9] z-20">
-              <div className="flex items-center justify-between px-[15px] my-[8px]">
-                <h3 className="text-[16px] text-[#525252]">100점</h3>
-                <button
-                  onClick={() => setShowResult(false)}
-                  className="text-[#525252] hover:text-black focus:outline-none"
-                >
-                  <IoIosCloseCircleOutline
-                    style={{ width: "25px", height: "25px", color: "#969696" }}
-                  />
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       </div>
+      <TestResultModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        result={testResult}
+      />
     </div>
   );
 };
