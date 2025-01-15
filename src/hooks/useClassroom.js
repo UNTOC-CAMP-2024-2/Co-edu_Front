@@ -5,6 +5,11 @@ import {
   getMyClassroom,
   searchClassroom,
   submitClassroomCode,
+  getClassroomInfo,
+  approveMember,
+  denyMember,
+  kickMember,
+  editClassInfo,
 } from "../api/classroom";
 import { useNavigate } from "react-router-dom";
 
@@ -74,3 +79,42 @@ export const useAmIbelongtoClassroom = () => {
     },
   });
 };
+
+export const useGetClassroomInfo = () => {
+  return useMutation({
+    mutationFn: getClassroomInfo,
+    onSuccess: (data) => {
+      console.log("스터디룸 설정 정보 조회 성공", data);
+      return data;
+    },
+    onError: (error) => {
+      console.log("스터디룸 설정 정보 조회 실패", error);
+    },
+  });
+};
+
+export const useApproveMember = () =>
+  useMutation({
+    mutationFn: approveMember,
+  });
+
+export const useDenyMember = () =>
+  useMutation({
+    mutationFn: denyMember,
+  });
+
+export const useKickMember = () =>
+  useMutation({
+    mutationFn: kickMember,
+  });
+
+export const useEditClassInfo = () =>
+  useMutation({
+    mutationFn: editClassInfo,
+    onSuccess: (data) => {
+      console.log("클래스 정보 수정 성공", data);
+    },
+    onError: (error) => {
+      console.error("클래스 정보 수정 실패", error);
+    },
+  });
