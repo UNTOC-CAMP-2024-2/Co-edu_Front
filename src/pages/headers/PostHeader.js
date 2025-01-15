@@ -55,7 +55,7 @@ const PostHeader = () => {
           <div className="fixed top-[4rem] left-0 w-[28rem] h-full bg-white py-5 px-7 shadow-lg shadow-[#373737]">
             <div className="bg-slate-500 h-[13rem] rounded-lg">image</div>
             <div className="text-[#525252] font-semibold text-[1.3rem] px-3 pt-2 pb-5 max-w-[26rem] overflow-auto max-h-[6rem]">
-              이것은 스터디인가 토크쇼인가 C++ 이해하기
+              {data.class_name}
             </div>
             <hr className="bg-[#D9D9D9] h-[2px]" />
             <div className="flex flex-col gap-7 px-3 pt-8">
@@ -64,7 +64,7 @@ const PostHeader = () => {
                   className="text-[#525252] font-semibold text-[1.2rem]"
                   onClick={() =>
                     handleNavigation(
-                      `${pathname === "/mentor" ? "/mentor" : "/mentee"}`
+                      `${pathname.includes("/mentor") ? "/mentor" : "/mentee"}`
                     )
                   }
                 >
@@ -77,7 +77,7 @@ const PostHeader = () => {
                   onClick={() =>
                     handleNavigation(
                       `${
-                        pathname === "/mentor"
+                        pathname.includes("/mentor")
                           ? "/mentor/assignments"
                           : "/mentee/assignments"
                       }`
@@ -88,7 +88,7 @@ const PostHeader = () => {
                 </button>
               </div>
               <div>
-                {pathname === "/mentee" ? (
+                {pathname.includes("/mentee") ? (
                   <button
                     className="text-[#525252] font-semibold text-[1.2rem]"
                     onClick={() => handleNavigation("/mentee/read")}
@@ -105,7 +105,7 @@ const PostHeader = () => {
                 )}
               </div>
               <div>
-                {pathname === "/mentor" ? (
+                {pathname.includes("/mentor") ? (
                   <button
                     className="text-[#525252] font-semibold text-[1.2rem]"
                     onClick={() => handleNavigation("/mentor/feedback")}
@@ -122,7 +122,7 @@ const PostHeader = () => {
                 )}
               </div>
               <div>
-                {pathname === "/mentor" ? (
+                {pathname.includes("/mentor") ? (
                   <button
                     className="text-[#525252] font-semibold text-[1.2rem]"
                     onClick={() => handleNavigation("/mentor/setting")}
