@@ -4,6 +4,7 @@ import {
   getAssignmentDetail,
   getAssignmentList,
   editAssignment,
+  getMentorFeedbackList,
 } from "../api/mentor";
 
 export const useCreateAssignment = () => {
@@ -58,6 +59,18 @@ export const useEditAssignment = () => {
     onError: (error) => {
       console.log("과제 수정 실패", error);
       alert("과제 수정에 실패했습니다.");
+    },
+  });
+};
+
+export const useGetMentorFeedbackList = () => {
+  return useMutation({
+    mutationFn: getMentorFeedbackList,
+    onSuccess: (data) => {
+      console.log("멘토 피드백 리스트 조회 성공", data);
+    },
+    onError: (error) => {
+      console.log("멘토 피드백 리스트 조회 실패", error);
     },
   });
 };

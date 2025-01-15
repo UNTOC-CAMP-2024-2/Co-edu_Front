@@ -1,7 +1,24 @@
-import React from "react";
-import FeedbackPageAssignment from "../../components/FeedbackPageAssignment";
+import React, { useContext, useEffect, useState } from "react";
+import FeedbackPageAssignment from "./components/FeedbackPageAssignment";
+import { Context } from "../../../../AppProvider";
+import { useGetMentorFeedbackList } from "../../../../hooks/useMentor";
 
 const MentorFeedbackPage = () => {
+  const { token, classCode } = useContext(Context);
+  const [feedbackData, setFeedbackData] = useState();
+  const getMentorFeedbackListMutation = useGetMentorFeedbackList();
+
+  useEffect(() => {
+    getMentorFeedbackListMutation.mutate(
+      { token, classCode },
+      {
+        onSuccess: (data) => {
+          setFeedbackData(data);
+        },
+      }
+    );
+  }, []);
+
   return (
     <div className="flex flex-col items-center justify-center mt-5 mb-10">
       <div className="text-lightBlack text-3xl p-14">피드백 모아보기</div>
