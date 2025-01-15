@@ -78,6 +78,10 @@ const AppRouter = () => {
           path: "doFeedback",
           element: <MentorDoFeedbackPage />,
         },
+        {
+          path: "setting",
+          element: <MentorSettingPage />,
+        },
       ],
     },
     {
