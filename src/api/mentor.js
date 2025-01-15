@@ -58,6 +58,26 @@ export const editAssignment = async ({ token, assignment }) => {
   return response.data;
 };
 
+export const fetchMentorTopThreeAssignments = async (class_id, token) => {
+  const response = await axiosInstance.get("/assign/mentor_return_three", {
+    headers: {
+      Authorization: `Bearer ${token}`, // 토큰 추가
+    },
+    params: { class_id }, // Query parameter
+  });
+  return response.data;
+};
+
+export const fetchMenteeTopThreeAssignments = async (class_id, token) => {
+  const response = await axiosInstance.get("/assign/mentee_return_three", {
+    headers: {
+      Authorization: `Bearer ${token}`, // 토큰 추가
+    },
+    params: { class_id }, // Query parameter
+  });
+  return response.data;
+};
+
 export const getMentorFeedbackList = async ({ token, classCode }) => {
   const response = await axiosInstance.get("/assign/status/maker/all", {
     params: {

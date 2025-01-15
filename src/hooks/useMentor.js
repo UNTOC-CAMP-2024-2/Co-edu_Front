@@ -1,9 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   createAssignment,
   getAssignmentDetail,
   getAssignmentList,
   editAssignment,
+  fetchMentorTopThreeAssignments,
+  fetchMenteeTopThreeAssignments,
   getMentorFeedbackList,
 } from "../api/mentor";
 
@@ -60,6 +62,22 @@ export const useEditAssignment = () => {
       console.log("과제 수정 실패", error);
       alert("과제 수정에 실패했습니다.");
     },
+  });
+};
+
+export const useFetchMentorTopThreeAssignments = (class_id, token) => {
+  return useQuery({
+    queryKey: ["topThreeData", class_id], // Query key
+    queryFn: () => fetchMentorTopThreeAssignments(class_id, token), // API 호출 함수
+    enabled: Boolean(class_id) && Boolean(token), // class_id가 있을 때만 호출
+  });
+};
+
+export const useFetchMenteeTopThreeAssignments = (class_id, token) => {
+  return useQuery({
+    queryKey: ["topThreeData", class_id], // Query key
+    queryFn: () => fetchMenteeTopThreeAssignments(class_id, token), // API 호출 함수
+    enabled: Boolean(class_id) && Boolean(token), // class_id가 있을 때만 호출
   });
 };
 
