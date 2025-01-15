@@ -12,7 +12,7 @@ const CommonComponent = ({ children, componentTitle }) => {
   const dct = {
     "전체 과제": [studyIcon1, `${pathname}/assignments`],
     "과제 생성": [studyIcon2_1, `${pathname}/make`],
-    "내가 제출한 과제": [studyIcon2_2],
+    "내가 제출한 과제": [studyIcon2_2, `${pathname}/submitted`],
     "과제 피드백": [studyIcon3, `${pathname}/feedback`],
   };
   const studyIcon = dct[componentTitle][0];

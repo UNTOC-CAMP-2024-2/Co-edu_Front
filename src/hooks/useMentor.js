@@ -6,6 +6,7 @@ import {
   editAssignment,
   fetchMentorTopThreeAssignments,
   fetchMenteeTopThreeAssignments,
+  getMentorFeedbackList,
 } from "../api/mentor";
 
 export const useCreateAssignment = () => {
@@ -77,5 +78,17 @@ export const useFetchMenteeTopThreeAssignments = (class_id, token) => {
     queryKey: ["topThreeData", class_id], // Query key
     queryFn: () => fetchMenteeTopThreeAssignments(class_id, token), // API 호출 함수
     enabled: Boolean(class_id) && Boolean(token), // class_id가 있을 때만 호출
+  });
+};
+
+export const useGetMentorFeedbackList = () => {
+  return useMutation({
+    mutationFn: getMentorFeedbackList,
+    onSuccess: (data) => {
+      console.log("멘토 피드백 리스트 조회 성공", data);
+    },
+    onError: (error) => {
+      console.log("멘토 피드백 리스트 조회 실패", error);
+    },
   });
 };

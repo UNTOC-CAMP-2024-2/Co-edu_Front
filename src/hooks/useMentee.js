@@ -1,8 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import {
+  getAllFeedback,
   getAssignmentDetail,
   getAssignmentList,
   getFeedback,
+  getSubmittedList,
   submitCode,
   testCode,
 } from "../api/mentee";
@@ -63,6 +65,30 @@ export const useGetFeedback = () => {
     },
     onError: (error) => {
       console.log("피드백 조회 실패", error);
+    },
+  });
+};
+
+export const useGetAllFeedback = () => {
+  return useMutation({
+    mutationFn: getAllFeedback,
+    onSuccess: (data) => {
+      console.log("모든 피드백 조회 성공", data);
+    },
+    onError: (error) => {
+      console.log("모든 피드백 조회 실패", error);
+    },
+  });
+};
+
+export const useGetSubmittedList = () => {
+  return useMutation({
+    mutationFn: getSubmittedList,
+    onSuccess: (data) => {
+      console.log("제출한 과제 조회 성공", data);
+    },
+    onError: (error) => {
+      console.log("제출한 과제 조회 실패", error);
     },
   });
 };

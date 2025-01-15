@@ -77,3 +77,16 @@ export const fetchMenteeTopThreeAssignments = async (class_id, token) => {
   });
   return response.data;
 };
+
+export const getMentorFeedbackList = async ({ token, classCode }) => {
+  const response = await axiosInstance.get("/assign/status/maker/all", {
+    params: {
+      class_id: classCode,
+    },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};

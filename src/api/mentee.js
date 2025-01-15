@@ -1,9 +1,12 @@
 import axiosInstance from ".";
 
-export const getAssignmentList = async ({ classCode }) => {
-  const response = await axiosInstance.get("/assign/class_assignments", {
+export const getAssignmentList = async ({ token, classCode }) => {
+  const response = await axiosInstance.get("/assign/status/mentee/all", {
     params: {
       class_id: classCode,
+    },
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
   });
   return response.data;
@@ -57,6 +60,32 @@ export const getFeedback = async ({ token, assignmentId }) => {
   const response = await axiosInstance.get("/assign/status/mentee", {
     params: {
       assignment_id: assignmentId,
+    },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
+
+export const getAllFeedback = async ({ token, classCode }) => {
+  const response = await axiosInstance.get("/assign/myfeedbacks", {
+    params: {
+      class_id: classCode,
+    },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
+
+export const getSubmittedList = async ({ token, classCode }) => {
+  const response = await axiosInstance.get("/assign/mysubmission", {
+    params: {
+      class_id: classCode,
     },
     headers: {
       Authorization: `Bearer ${token}`,

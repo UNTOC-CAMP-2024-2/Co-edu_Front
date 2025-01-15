@@ -6,6 +6,7 @@ import { PiTriangleBold } from "react-icons/pi";
 import { IoClose } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
+import MenteeSubmitList from "./MenteeSubmitList";
 
 const FeedbackPageAssignment = ({ type }) => {
   const [showDescription, setShowDescription] = useState(false);
@@ -59,10 +60,34 @@ const FeedbackPageAssignment = ({ type }) => {
         </div>
       </div>
       {showDescription && (
-        <div className="text-lightBlack pt-3 pb-1 px-3">
-          Answer the frequently asked question in s simple sentences, a longish
-          aragraph, or even in a list.asdf asdfasd fasdf fadds
-        </div>
+        <>
+          <div className="text-lightBlack pt-3 pb-1 px-3">
+            Answer the frequently asked question in s simple sentences, a
+            longish aragraph, or even in a list.asdf asdfasd fasdf fadds
+          </div>
+          <div className="flex flex-col gap-3 pt-3 pb-6">
+            <MenteeSubmitList
+              name={"김효정"}
+              date={"2024.01.09"}
+              isSubmitted={true}
+            />
+            <MenteeSubmitList
+              name={"김효정"}
+              date={"2024.01.09"}
+              isSubmitted={false}
+            />
+            <MenteeSubmitList
+              name={"김효정"}
+              date={"2024.01.09"}
+              isSubmitted={false}
+            />
+            <MenteeSubmitList
+              name={"김효정"}
+              date={"2024.01.09"}
+              isSubmitted={true}
+            />
+          </div>
+        </>
       )}
     </div>
   );
