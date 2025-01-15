@@ -22,13 +22,13 @@ const MentorSettingPage = () => {
     studyName: "",
     introduction: "",
     selectedDay: {
-      Mon: false,
-      Tue: false,
-      Wed: false,
-      Thu: false,
-      Fri: false,
-      Sat: false,
-      Sun: false,
+      월: false,
+      화: false,
+      수: false,
+      목: false,
+      금: false,
+      토: false,
+      일: false,
     },
     time: {
       start: "",
@@ -43,15 +43,7 @@ const MentorSettingPage = () => {
     // approval -> 승인 가입제
     link: "",
   };
-  const days = {
-    월: "Mon",
-    화: "Tue",
-    수: "Wed",
-    목: "Thu",
-    금: "Fri",
-    토: "Sat",
-    일: "Sun",
-  };
+  const days = ["월", "화", "수", "목", "금", "토", "일"];
 
   const [state, setState] = useState(initialState);
   const [loading, setLoading] = useState(true);
@@ -71,31 +63,32 @@ const MentorSettingPage = () => {
           onSuccess: (data) => {
             console.log("스터디룸 설정 정보 조회 성공", data);
             const when =
-              data.class_info.day?.split(",").map((day) => day.trim()) || [];
+              data.클래스룸정보.day?.split(",").map((day) => day.trim()) || [];
 
             // 멤버와 가입 요청 데이터 설정
 
             setMembers(data.user_info || []);
             setJoinRequests(data.approval || []);
-            console.log("클래스 정보 요일 데이터:", data.class_info.day);
+            console.log("클래스 정보 요일 데이터:", data.클래스룸정보.day);
 
             // 스터디룸 설정 정보 설정
             setState({
-              studyName: data.class_info.class_name || "",
-              introduction: data.class_info.description || "",
-              selectedDay: Object.keys(days).reduce((acc, key) => {
-                acc[days[key]] = when.includes(key) || false;
+              studyName: data.클래스룸정보.class_name || "",
+              introduction: data.클래스룸정보.description || "",
+              selectedDay: days.reduce((acc, day) => {
+                acc[day] = when.includes(day); // 요일 데이터를 상태와 매핑
                 return acc;
               }, {}),
               time: {
-                start: data.class_info.start_time || "",
-                end: data.class_info.end_time || "",
+                start: data.클래스룸정보.start_time || "",
+                end: data.클래스룸정보.end_time || "",
               },
-              visibility: data.class_info.is_access ? "public" : "private",
-              joinType: data.class_info.is_free ? "free" : "approval",
-              link: data.class_info.link || "",
-              studyNumber: data.class_info.max_member || "",
-              createdBy: data.class_info.created_by || "",
+              visibility: data.클래스룸정보.is_access ? "public" : "private",
+              joinType: data.클래스룸정보.is_free ? "free" : "approval",
+              link: data.클래스룸정보.link || "",
+              studyNumber: data.클래스룸정보.max_member || "",
+              createdBy: data.클래스룸정보.created_by || "",
+              currentMember: data.클래스룸정보.current_member || 0,
             });
 
             setLoading(false);
@@ -289,17 +282,18 @@ const MentorSettingPage = () => {
               요일
             </div>
             <div className="flex justify-between mr-7">
-              {Object.keys(days).map((day) => (
+              {days.map((day) => (
                 <button
+                  key={day}
                   className={`text-[18px] text-black rounded-full w-10 h-10 ${
-                    state.selectedDay[days[day]] && "bg-lightMint text-white"
+                    state.selectedDay[day] && "bg-lightMint text-white"
                   }`}
                   onClick={() =>
                     setState({
                       ...state,
                       selectedDay: {
                         ...state.selectedDay,
-                        [days[day]]: !state.selectedDay[days[day]],
+                        [day]: !state.selectedDay[day],
                       },
                     })
                   }
@@ -452,7 +446,7 @@ const MentorSettingPage = () => {
           <div className="mb-6">
             <div className="flex items-center justify-between">
               <div className="block text-[18px] ml-[25px] mb-[6px] text-[#525252]">
-                스터디 인원
+                스터디 최대 인원
               </div>
               {/* 왼쪽 끝으로 위치 end */}
               <div className="flex itmems-center gap-4">
@@ -464,7 +458,10 @@ const MentorSettingPage = () => {
                   <IoCaretDownOutline color="#A8E6CF" />
                   {studentNumDropdown && (
                     <ul className="absolute bg-white border-[1px] border-[#D9D9D9] rounded-xl mt-[3px] z-10 w-20 right-0">
-                      {[2, 3, 4, 5, 6, 7].map((num) => (
+                      {Array.from(
+                        { length: 7 - state.currentMember + 1 }, // 7까지의 숫자를 생성
+                        (_, i) => state.currentMember + i // 시작 숫자는 currentMember
+                      ).map((num) => (
                         <li
                           key={num}
                           onClick={() =>
