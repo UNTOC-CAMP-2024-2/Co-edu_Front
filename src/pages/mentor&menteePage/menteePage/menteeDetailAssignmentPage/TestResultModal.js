@@ -5,7 +5,7 @@ const TestResultModal = ({ isOpen, onClose, result }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="bg-black bg-opacity-45 fixed top-0 left-0 w-full h-full flex justify-center items-center">
+    <div className="z-30 bg-black bg-opacity-45 fixed top-0 left-0 w-full h-full flex justify-center items-center">
       <div className="rounded-2xl bg-white shadow-lg shadow-[#575757] h-[12rem] w-[30rem] flex flex-col">
         <div className="rounded-t-2xl h-[2.5rem] bg-lightMint flex justify-start items-center px-2 gap-1 mb-[1rem]">
           <button

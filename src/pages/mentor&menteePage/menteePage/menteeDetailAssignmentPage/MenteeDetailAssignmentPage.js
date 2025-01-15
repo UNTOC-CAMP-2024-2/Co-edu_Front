@@ -13,6 +13,7 @@ import { Context } from "../../../../AppProvider";
 import TestResultModal from "./TestResultModal";
 
 const MenteeDetailAssignmentPage = () => {
+  const [language, setLanguage] = useState("python");
   const data = useLocation().state.problem;
   console.log(data);
 
@@ -23,6 +24,16 @@ const MenteeDetailAssignmentPage = () => {
   const { token } = useContext(Context);
 
   const [code, setCode] = useState('print("hello world")');
+
+  useEffect(() => {
+    const helloWorldExamples = {
+      python: 'print("Hello, World!")',
+      java: `public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}`,
+      c: `#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}`,
+    };
+    setCode(helloWorldExamples[language]);
+  }, [language]);
+
   const [showResult, setShowResult] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -65,14 +76,14 @@ const MenteeDetailAssignmentPage = () => {
       token,
       assignmentId: data.assignment_id,
       code,
-      language: "python",
+      language,
     });
     testCodeMutation.mutate(
       {
         token,
         assignmentId: data.assignment_id,
         code,
-        language: "python",
+        language,
       },
       {
         onSuccess: (response) => {
@@ -284,6 +295,16 @@ const MenteeDetailAssignmentPage = () => {
               style={{ width: "30px", height: "30px", color: "#FF6E6E" }}
             />
           </button>
+          {/* 언어 선택 드롭다운 */}
+          <select
+            className="px-3 py-1 border border-gray-300 rounded-md text-sm"
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+          >
+            <option value="python">Python</option>
+            <option value="java">Java</option>
+            <option value="c">C</option>
+          </select>
 
           {/* 실행 및 제출 버튼 */}
           <div className="flex space-x-2">
