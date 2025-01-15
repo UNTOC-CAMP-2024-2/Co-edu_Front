@@ -96,3 +96,20 @@ export const AmIbelongtoClassroom = async ({ token, class_code }) => {
   });
   return response.data;
 };
+
+export const leaveClassroom = async ({ token, class_code }) => {
+  try {
+    const response = await axiosInstance.delete("/classroom/leave", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        class_code,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("스터디룸 탈퇴 실패", error.response?.data || error.message);
+    throw error;
+  }
+};

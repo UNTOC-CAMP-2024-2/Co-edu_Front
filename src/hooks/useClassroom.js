@@ -5,6 +5,7 @@ import {
   getMyClassroom,
   searchClassroom,
   submitClassroomCode,
+  leaveClassroom,
 } from "../api/classroom";
 import { useNavigate } from "react-router-dom";
 
@@ -71,6 +72,20 @@ export const useAmIbelongtoClassroom = () => {
     },
     onError: (error) => {
       console.log("스터디룸 소속 확인 혹은 가입신청 실패", error);
+    },
+  });
+};
+
+export const useLeaveClassroom = () => {
+  const navigate = useNavigate();
+  return useMutation({
+    mutationFn: leaveClassroom,
+    onSuccess: (data) => {
+      console.log("스터디룸 탈퇴 성공", data);
+      navigate("/");
+    },
+    onError: (error) => {
+      console.log("스터디룸 탈퇴 실패", error);
     },
   });
 };
