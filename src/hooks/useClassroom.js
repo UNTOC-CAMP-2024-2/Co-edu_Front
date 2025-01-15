@@ -19,7 +19,7 @@ export const useCreateClassroom = () => {
     mutationFn: createClassroom,
     onSuccess: (data) => {
       console.log("스터디룸 생성 성공", data);
-      navigate("/mentor");
+      navigate("/mentor", { state: data });
     },
     onError: (error) => {
       console.log("스터디룸 생성 실패", error);
