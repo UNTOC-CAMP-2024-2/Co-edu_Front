@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import CommonMainComponent from "../../components/CommonMainTitle";
+import CommonMainComponent from "../../components/CommonMainComponent";
 import MainPageAssignment from "../../components/MainPageAssignment";
 import CommonComponent from "../../components/CommonComponent";
 import { useLocation } from "react-router-dom";

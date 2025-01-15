@@ -1,11 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
+import { Context } from "../../../../AppProvider";
 
 const MenteeStudyRoomPage = () => {
+  const { token } = useContext(Context);
+  const userId = token;
   const roomId = 1111;
   const localVideoRef = useRef(null);
   const signalingServerRef = useRef(null);
   const peerConnectionRef = useRef(null);
-  let remoteDescriptionSet = false;
 
   const config = {
     iceServers: [
@@ -19,7 +21,7 @@ const MenteeStudyRoomPage = () => {
 
   useEffect(() => {
     const signalingServer = new WebSocket(
-      `ws://211.213.193.67:7777/live_classroom/${roomId}/student/ws`
+      `ws://211.213.193.67:7777/live_classroom/${roomId}/student/ws?user_id=${userId}`
     );
     signalingServerRef.current = signalingServer;
     const pc = new RTCPeerConnection(config);
@@ -48,29 +50,19 @@ const MenteeStudyRoomPage = () => {
 
     signalingServer.onmessage = async (event) => {
       const data = JSON.parse(event.data);
+      const { answer, candidate } = data;
 
-      if (data.answer && !remoteDescriptionSet) {
+      if (answer) {
         console.log("[INFO] Student received WebRTC answer.");
         try {
-          if (pc.signalingState === "have-local-offer") {
-            await pc.setRemoteDescription(
-              new RTCSessionDescription(data.answer)
-            );
-            remoteDescriptionSet = true;
-            console.log("[INFO] Remote description set successfully.");
-          } else {
-            console.warn(
-              "[WARNING] Invalid signaling state for setRemoteDescription:",
-              pc.signalingState
-            );
-          }
+          await pc.setRemoteDescription(new RTCSessionDescription(answer));
         } catch (err) {
           console.error("[ERROR] Failed to set remote description:", err);
         }
-      } else if (data.candidate) {
+      } else if (candidate) {
         console.log("[INFO] Student received ICE candidate.");
         try {
-          await pc.addIceCandidate(new RTCIceCandidate(data.candidate));
+          await pc.addIceCandidate(new RTCIceCandidate(candidate));
         } catch (err) {
           console.error("[ERROR] Failed to add ICE candidate:", err);
         }
@@ -87,7 +79,7 @@ const MenteeStudyRoomPage = () => {
       pc.close();
       signalingServer.close();
     };
-  }, [roomId]);
+  }, [roomId, userId]);
 
   return (
     <div>

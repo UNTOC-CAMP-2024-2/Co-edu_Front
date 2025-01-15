@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaArrowCircleRight, FaRegQuestionCircle } from "react-icons/fa";
 import MenteeModalOpen from "./ModalOpen/MenteeModalOpen";
 import MentorModalOpen from "./ModalOpen/MentorModalOpen";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const CommonMainComponent = ({ classroomData }) => {
   const {
@@ -18,6 +18,8 @@ const CommonMainComponent = ({ classroomData }) => {
   const location = useLocation();
   const isMentor = location.pathname.includes("/mentor");
   const isMentee = location.pathname.includes("/mentee");
+
+  const who = isMentor ? "/mentor" : "/mentee";
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -56,9 +58,12 @@ const CommonMainComponent = ({ classroomData }) => {
                 </div>
               </div>
               <button className="flex gap-3 border-3 border-lightMint rounded-full px-4 py-3">
-                <div className="text-darkMint tracking-tighter text-xl font-semibold">
+                <Link
+                  to={`${who}/study`}
+                  className="text-darkMint tracking-tighter text-xl font-semibold"
+                >
                   스터디 방으로 이동
-                </div>
+                </Link>
                 <FaArrowCircleRight color="#54CEA6" size={30} />
               </button>
             </div>

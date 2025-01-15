@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const MentorStudyRoomPage = () => {
   const roomId = 1111;
-  const remoteVideoRef = useRef(null);
   const signalingServerRef = useRef(null);
-  const peerConnectionRef = useRef(null);
+  const peerConnectionsRef = useRef({}); // Stores peer connections by user ID
+  const [studentStreams, setStudentStreams] = useState([]); // Tracks student streams
 
   const config = {
     iceServers: [
@@ -21,57 +21,105 @@ const MentorStudyRoomPage = () => {
       `ws://211.213.193.67:7777/live_classroom/${roomId}/host/ws`
     );
     signalingServerRef.current = signalingServer;
-    const pc = new RTCPeerConnection(config);
-    peerConnectionRef.current = pc;
 
     signalingServer.onopen = () => {
       console.log("[INFO] Host WebSocket connection opened.");
     };
 
     signalingServer.onmessage = async (event) => {
+      console.log(event);
       const data = JSON.parse(event.data);
-      if (data.offer) {
-        console.log("[INFO] Host received WebRTC offer.");
-        await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
+      const { userId, offer, candidate } = data;
+      console.log(userId);
+      console.log(offer);
+      console.log(candidate);
+
+      if (offer) {
+        console.log(`[INFO] Host received WebRTC offer from user ${userId}.`);
+        const pc = createPeerConnection(userId);
+        await pc.setRemoteDescription(new RTCSessionDescription(offer));
         const answer = await pc.createAnswer();
         await pc.setLocalDescription(answer);
-        signalingServer.send(JSON.stringify({ answer }));
-      } else if (data.candidate) {
-        console.log("[INFO] Host received ICE candidate.");
-        try {
-          await pc.addIceCandidate(new RTCIceCandidate(data.candidate));
-        } catch (err) {
-          console.error("[ERROR] Host failed to add ICE candidate:", err);
+        signalingServer.send(JSON.stringify({ userId, answer }));
+      } else if (candidate) {
+        console.log(`[INFO] Host received ICE candidate from user ${userId}.`);
+        const pc = peerConnectionsRef.current[userId];
+        if (pc) {
+          try {
+            await pc.addIceCandidate(new RTCIceCandidate(candidate));
+          } catch (err) {
+            console.error(
+              `[ERROR] Host failed to add ICE candidate for user ${userId}:`,
+              err
+            );
+          }
         }
       }
     };
 
-    pc.onicecandidate = (event) => {
-      if (event.candidate) {
-        signalingServer.send(JSON.stringify({ candidate: event.candidate }));
-      }
-    };
-
-    pc.ontrack = (event) => {
-      const remoteStream = event.streams[0];
-      if (
-        remoteVideoRef.current &&
-        remoteVideoRef.current.srcObject !== remoteStream
-      ) {
-        remoteVideoRef.current.srcObject = remoteStream;
-      }
-    };
-
     return () => {
-      pc.close();
+      Object.values(peerConnectionsRef.current).forEach((pc) => pc.close());
       signalingServer.close();
     };
   }, [roomId]);
 
+  const createPeerConnection = (userId) => {
+    const pc = new RTCPeerConnection(config);
+    peerConnectionsRef.current[userId] = pc;
+
+    pc.onicecandidate = (event) => {
+      if (event.candidate) {
+        signalingServerRef.current.send(
+          JSON.stringify({ userId, candidate: event.candidate })
+        );
+      }
+    };
+
+    pc.ontrack = (event) => {
+      console.log(`[INFO] Host received track from user ${userId}.`);
+      const remoteStream = event.streams[0];
+      setStudentStreams((prevStreams) => {
+        const updatedStreams = prevStreams.filter(
+          (stream) => stream.userId !== userId
+        );
+        return [...updatedStreams, { userId, stream: remoteStream }];
+      });
+    };
+
+    pc.onconnectionstatechange = () => {
+      console.log(
+        `[INFO] Connection state with user ${userId}: ${pc.connectionState}`
+      );
+      if (
+        pc.connectionState === "disconnected" ||
+        pc.connectionState === "failed"
+      ) {
+        setStudentStreams((prevStreams) =>
+          prevStreams.filter((s) => s.userId !== userId)
+        );
+      }
+    };
+
+    return pc;
+  };
+
   return (
     <div>
-      <h2>Remote Video (Student's Stream)</h2>
-      <video ref={remoteVideoRef} autoPlay playsInline></video>
+      <h2>Student Streams</h2>
+      {studentStreams.map(({ userId, stream }) => (
+        <div key={userId}>
+          <h3>Student {userId}</h3>
+          <video
+            autoPlay
+            playsInline
+            ref={(video) => {
+              if (video && video.srcObject !== stream) {
+                video.srcObject = stream;
+              }
+            }}
+          ></video>
+        </div>
+      ))}
     </div>
   );
 };
