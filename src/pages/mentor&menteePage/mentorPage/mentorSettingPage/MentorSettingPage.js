@@ -63,32 +63,32 @@ const MentorSettingPage = () => {
           onSuccess: (data) => {
             console.log("스터디룸 설정 정보 조회 성공", data);
             const when =
-              data.클래스룸정보.day?.split(",").map((day) => day.trim()) || [];
+              data.class_info.day?.split(",").map((day) => day.trim()) || [];
 
             // 멤버와 가입 요청 데이터 설정
 
             setMembers(data.user_info || []);
             setJoinRequests(data.approval || []);
-            console.log("클래스 정보 요일 데이터:", data.클래스룸정보.day);
+            console.log("클래스 정보 요일 데이터:", data.class_info.day);
 
             // 스터디룸 설정 정보 설정
             setState({
-              studyName: data.클래스룸정보.class_name || "",
-              introduction: data.클래스룸정보.description || "",
+              studyName: data.class_info.class_name || "",
+              introduction: data.class_info.description || "",
               selectedDay: days.reduce((acc, day) => {
                 acc[day] = when.includes(day); // 요일 데이터를 상태와 매핑
                 return acc;
               }, {}),
               time: {
-                start: data.클래스룸정보.start_time || "",
-                end: data.클래스룸정보.end_time || "",
+                start: data.class_info.start_time || "",
+                end: data.class_info.end_time || "",
               },
-              visibility: data.클래스룸정보.is_access ? "public" : "private",
-              joinType: data.클래스룸정보.is_free ? "free" : "approval",
-              link: data.클래스룸정보.link || "",
-              studyNumber: data.클래스룸정보.max_member || "",
-              createdBy: data.클래스룸정보.created_by || "",
-              currentMember: data.클래스룸정보.current_member || 0,
+              visibility: data.class_info.is_access ? "public" : "private",
+              joinType: data.class_info.is_free ? "free" : "approval",
+              link: data.class_info.link || "",
+              studyNumber: data.class_info.max_member || "",
+              createdBy: data.class_info.created_by || "",
+              currentMember: data.class_info.current_member || 0,
             });
 
             setLoading(false);
