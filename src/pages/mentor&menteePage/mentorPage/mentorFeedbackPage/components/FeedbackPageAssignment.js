@@ -125,7 +125,7 @@ const FeedbackPageAssignment = ({
                   <MenteeSubmitList
                     key={menteeFeedback.user_id}
                     name={menteeFeedback.user_id}
-                    date={menteeFeedback.updated_at || "날짜정보없음"}
+                    date={menteeFeedback.submitted_at || ""}
                     isSubmitted={isSubmitted}
                     score={score} // 점수 전달
                     code={menteeFeedback.code || ""}

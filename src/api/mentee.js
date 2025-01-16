@@ -21,12 +21,13 @@ export const getAssignmentDetail = async ({ assignmentId }) => {
   return response.data;
 };
 
-export const submitCode = async ({ token, assignmentId, code }) => {
+export const submitCode = async ({ token, assignmentId, code, language }) => {
   const response = await axiosInstance.post(
     "/assign/submit",
     {
       assignment_id: assignmentId,
       code: code,
+      language: language,
     },
     {
       headers: {
