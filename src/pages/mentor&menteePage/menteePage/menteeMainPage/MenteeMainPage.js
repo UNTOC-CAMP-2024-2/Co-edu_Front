@@ -32,7 +32,7 @@ const MenteeMainPage = () => {
 
   const assignments = topThreeData?.["상위 3개 과제"] || [];
 
-  const feedbacks = topThreeData?.["상위 3개 과제 및 피드백 상태"] || [];
+  const feedbacks = topThreeData?.["상위 3개 피드백"] || [];
 
   const submits = topThreeData?.["제출한 상위 3개 과제"] || [];
 
@@ -49,7 +49,6 @@ const MenteeMainPage = () => {
             </div>
           ) : (
             assignments.map((assignment, index) => {
-              console.log(assignment);
               return (
                 <MainPageAssignment
                   key={index}
@@ -90,7 +89,11 @@ const MenteeMainPage = () => {
             feedbacks.map((feedback, index) => (
               <MainPageAssignment
                 key={index}
-                type={feedback.status}
+                type={
+                  feedback.status === "getFeedback"
+                    ? "gotFeedback"
+                    : feedback.status
+                }
                 title={feedback.title}
                 assignmentId={feedback.assignment_id}
               />

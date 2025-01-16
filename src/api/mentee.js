@@ -108,3 +108,16 @@ export const getMenteeAssignmentStatus = async ({ token, assignmentId }) => {
 
   return response.data;
 };
+
+export const leave = async ({ token, classCode }) => {
+  const response = await axiosInstance.delete("/classroom/leave", {
+    data: {
+      class_code: classCode,
+    },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};

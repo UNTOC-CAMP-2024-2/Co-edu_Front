@@ -10,12 +10,12 @@ const MentorAssignmentsListPage = () => {
   const getAssignmentListMutation = useGetAssignmentList();
   const [assignmentList, setAssignmentList] = useState();
 
-  const { classCode } = useContext(Context);
+  const { classCode, token } = useContext(Context);
 
   useEffect(() => {
     console.log(classCode);
     getAssignmentListMutation.mutate(
-      { classCode },
+      { token, classCode },
       {
         onSuccess: (data) => {
           setAssignmentList(data);
@@ -33,7 +33,7 @@ const MentorAssignmentsListPage = () => {
             console.log(assignment);
             return (
               <AssignmentsListPageAssignment
-                type={"done"}
+                type={assignment.assignment_status}
                 assignmentTitle={assignment.title}
                 description={assignment.description}
                 assignmentId={assignment.assignment_id}
