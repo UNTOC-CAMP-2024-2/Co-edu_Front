@@ -7,6 +7,7 @@ import {
   getSubmittedList,
   submitCode,
   testCode,
+  getMenteeAssignmentStatus,
 } from "../api/mentee";
 
 export const useGetAssignmentList = () => {
@@ -89,6 +90,18 @@ export const useGetSubmittedList = () => {
     },
     onError: (error) => {
       console.log("제출한 과제 조회 실패", error);
+    },
+  });
+};
+
+export const useGetMenteeAssignmentStatus = () => {
+  return useMutation({
+    mutationFn: getMenteeAssignmentStatus,
+    onSuccess: (data) => {
+      console.log("멘티 과제 상태 조회 성공", data);
+    },
+    onError: (error) => {
+      console.log("멘티 과제 상태 조회 실패", error);
     },
   });
 };

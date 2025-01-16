@@ -94,3 +94,16 @@ export const getSubmittedList = async ({ token, classCode }) => {
 
   return response.data;
 };
+
+export const getMenteeAssignmentStatus = async ({ token, assignmentId }) => {
+  const response = await axiosInstance.get("/assign/status/maker", {
+    params: {
+      assignment_id: assignmentId,
+    },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
