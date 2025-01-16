@@ -8,6 +8,7 @@ import {
   submitCode,
   testCode,
   getMenteeAssignmentStatus,
+  leave,
 } from "../api/mentee";
 
 export const useGetAssignmentList = () => {
@@ -102,6 +103,18 @@ export const useGetMenteeAssignmentStatus = () => {
     },
     onError: (error) => {
       console.log("멘티 과제 상태 조회 실패", error);
+    },
+  });
+};
+
+export const useLeave = () => {
+  return useMutation({
+    mutationFn: leave,
+    onSuccess: (data) => {
+      console.log("스터디방 탈퇴 성공", data);
+    },
+    onError: (error) => {
+      console.log("스터디방 탈퇴 실패", error);
     },
   });
 };

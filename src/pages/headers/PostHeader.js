@@ -1,13 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { FaEllipsisH } from "react-icons/fa";
 import logoImg from "../../images/logoImg.png";
 import { IoClose } from "react-icons/io5";
+import { useAmIbelongtoClassroom } from "../../hooks/useClassroom";
+import { Context } from "../../AppProvider";
+import { useLeave } from "../../hooks/useMentee";
 
 const PostHeader = () => {
+  const { token, classCode } = useContext(Context);
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const pathname = useLocation().pathname.split("/")[1];
   const navigate = useNavigate();
+  const useLeaveMutation = useLeave();
+
+  const handleLeave = () => {
+    useLeaveMutation.mutate({ token, class_code: classCode });
+  };
+
+  const AmIbelongtoClassroomMutation = useAmIbelongtoClassroom();
+
+  const handleAmIbelongtoClassroom = () => {
+    AmIbelongtoClassroomMutation.mutate(
+      {
+        token,
+        class_code: classCode,
+      },
+      {
+        onSuccess: (data) => {
+          console.log(data[0]);
+          data[1]
+            ? navigate("/mentor", { state: data[0] })
+            : navigate("/mentee", { state: data[0] });
+        },
+      }
+    );
+  };
 
   useEffect(() => {
     if (isSideBarOpen) {
@@ -44,14 +72,20 @@ const PostHeader = () => {
             <hr className="bg-[#D9D9D9] h-[2px]" />
             <div className="flex flex-col gap-7 px-3 pt-8">
               <div>
-                <button className="text-[#525252] font-semibold text-[1.2rem]">
+                <button
+                  onClick={() => {
+                    handleAmIbelongtoClassroom();
+                    setIsSideBarOpen((prev) => !prev);
+                  }}
+                  className="text-[#525252] font-semibold text-[1.2rem]"
+                >
                   🏠메인
                 </button>
               </div>
               <div>
                 <button
                   onClick={() => {
-                    navigate("/mentor/assignments");
+                    navigate(`/${pathname}/assignments`);
                     setIsSideBarOpen((prev) => !prev);
                   }}
                   className="text-[#525252] font-semibold text-[1.2rem]"
@@ -61,7 +95,13 @@ const PostHeader = () => {
               </div>
               <div>
                 {pathname === "mentee" ? (
-                  <button className="text-[#525252] font-semibold text-[1.2rem]">
+                  <button
+                    onClick={() => {
+                      navigate("/mentee/submitted");
+                      setIsSideBarOpen((prev) => !prev);
+                    }}
+                    className="text-[#525252] font-semibold text-[1.2rem]"
+                  >
                     🔍내가 제출한 과제 확인하기
                   </button>
                 ) : (
@@ -88,7 +128,13 @@ const PostHeader = () => {
                     🔖제출된 과제 피드백하기
                   </button>
                 ) : (
-                  <button className="text-[#525252] font-semibold text-[1.2rem]">
+                  <button
+                    onClick={() => {
+                      navigate("/mentee/feedback");
+                      setIsSideBarOpen((prev) => !prev);
+                    }}
+                    className="text-[#525252] font-semibold text-[1.2rem]"
+                  >
                     🔖피드백 모아보기
                   </button>
                 )}
@@ -105,7 +151,13 @@ const PostHeader = () => {
                     ⚙️설정
                   </button>
                 ) : (
-                  <button className="text-[#525252] font-semibold text-[1.2rem]">
+                  <button
+                    onClick={() => {
+                      handleLeave();
+                      navigate("/");
+                    }}
+                    className="text-[#525252] font-semibold text-[1.2rem]"
+                  >
                     🚪탈퇴하기
                   </button>
                 )}

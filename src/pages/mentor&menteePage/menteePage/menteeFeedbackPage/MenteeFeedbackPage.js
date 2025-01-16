@@ -15,7 +15,9 @@ const MenteeFeedbackPage = () => {
       { token, classCode },
       {
         onSuccess: (data) => {
-          setAssignmentList(data);
+          data === "받은 피드백이 없습니다."
+            ? setAssignmentList([])
+            : setAssignmentList(data);
         },
       }
     );
