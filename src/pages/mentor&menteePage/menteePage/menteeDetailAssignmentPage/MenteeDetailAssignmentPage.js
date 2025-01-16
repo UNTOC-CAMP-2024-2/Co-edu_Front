@@ -68,6 +68,7 @@ const MenteeDetailAssignmentPage = () => {
       token,
       assignmentId: data.assignment_id,
       code,
+      language,
     });
   };
 
