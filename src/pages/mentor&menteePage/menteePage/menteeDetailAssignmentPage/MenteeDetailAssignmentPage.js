@@ -43,7 +43,7 @@ const MenteeDetailAssignmentPage = () => {
     score: 0,
   });
   const [feedbackData, setFeedbackData] = useState({ feedback: "" });
-  const { feedback } = feedbackData;
+  // const { feedback } = feedbackData;/
 
   const submitCodeMutatation = useSubmitCode();
   const testCodeMutation = useTestCode();
@@ -57,7 +57,7 @@ const MenteeDetailAssignmentPage = () => {
       },
       {
         onSuccess: (data) => {
-          setFeedbackData(data.feedback);
+          setFeedbackData(data?.feedback || "");
         },
       }
     );
@@ -171,7 +171,7 @@ const MenteeDetailAssignmentPage = () => {
 
     // Cleanup
     return () => observer.disconnect();
-  }, [feedback, showFeedback]);
+  }, [feedbackData.feedback, showFeedback]);
 
   // Disable global scrolling
   useEffect(() => {
@@ -211,7 +211,7 @@ const MenteeDetailAssignmentPage = () => {
             <textarea
               ref={feedbackTextareaRef}
               readOnly
-              value={feedback}
+              value={feedbackData.feedback}
               className="w-[calc(100%-40px)] px-[15px] py-[10px] border-[2px] border-[#54CEA6] bg-[#F8FFF9] rounded-[10px] text-[16px] text-[#525252] leading-[24px] resize-none focus:outline-none"
               style={{
                 height: feedbackTextareaRef.current?.scrollHeight

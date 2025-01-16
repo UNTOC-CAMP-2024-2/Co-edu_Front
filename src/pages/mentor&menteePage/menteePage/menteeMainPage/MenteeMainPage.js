@@ -1,10 +1,10 @@
 import React, { useContext, useEffect } from "react";
 import CommonMainComponent from "../../components/CommonMainComponent";
 import CommonComponent from "../../components/CommonComponent";
-import MainPageAssignment from "../../components/MainPageAssignment";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Context } from "../../../../AppProvider";
 import { useFetchMenteeTopThreeAssignments } from "../../../../hooks/useMentor";
+import MainPageAssignment from "../../components/MainPageAssignment";
 
 // 멘티 페이지에서의 Assignment컴포넌트의 type
 // 전체 과제 -> done / undone
@@ -42,45 +42,57 @@ const MenteeMainPage = () => {
       <div className="flex gap-5 mt-3">
         <CommonComponent componentTitle={"전체 과제"}>
           {isLoading ? (
-            <div>로딩 중...</div>
+            <div className="font-semibold text-darkMint">로딩 중...</div>
           ) : assignments.length === 0 ? (
-            <div>최근 과제가 없습니다.</div>
+            <div className="font-semibold text-darkMint">
+              최근 과제가 없습니다.
+            </div>
           ) : (
-            assignments.map((assignment, index) => (
-              <MainPageAssignment
-                key={index}
-                type={assignment.status}
-                title={assignment.title}
-              />
-            ))
+            assignments.map((assignment, index) => {
+              console.log(assignment);
+              return (
+                <MainPageAssignment
+                  key={index}
+                  type={assignment.status}
+                  title={assignment.title}
+                  assignmentId={assignment.assignment_id}
+                />
+              );
+            })
           )}
         </CommonComponent>
         <CommonComponent componentTitle={"내가 제출한 과제"}>
           {isLoading ? (
-            <div>로딩 중...</div>
+            <div className="font-semibold text-darkMint">로딩 중...</div>
           ) : submits.length === 0 ? (
-            <div>제출한 과제가 없습니다.</div>
+            <div className="font-semibold text-darkMint">
+              제출한 과제가 없습니다.
+            </div>
           ) : (
             submits.map((submit, index) => (
               <MainPageAssignment
                 key={index}
                 type={submit.status}
                 title={submit.title}
+                assignmentId={submit.assignment_id}
               />
             ))
           )}
         </CommonComponent>
         <CommonComponent componentTitle={"과제 피드백"}>
           {isLoading ? (
-            <div>로딩 중...</div>
+            <div className="font-semibold text-darkMint">로딩 중...</div>
           ) : feedbacks.length === 0 ? (
-            <div>피드백 받은 과제가 없습니다.</div>
+            <div className="font-semibold text-darkMint">
+              피드백 받은 과제가 없습니다.
+            </div>
           ) : (
             feedbacks.map((feedback, index) => (
               <MainPageAssignment
                 key={index}
                 type={feedback.status}
                 title={feedback.title}
+                assignmentId={feedback.assignment_id}
               />
             ))
           )}

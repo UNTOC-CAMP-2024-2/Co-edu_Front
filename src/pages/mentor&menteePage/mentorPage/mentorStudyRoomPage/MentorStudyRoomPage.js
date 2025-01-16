@@ -20,7 +20,7 @@ const MentorStudyRoomPage = () => {
 
   useEffect(() => {
     const signalingServer = new WebSocket(
-      `ws://211.213.193.67:7777/live_classroom/${roomId}/host/ws`
+      `wss://coedu.site:7777/live_classroom/${roomId}/host/ws`
     );
     signalingServerRef.current = signalingServer;
 

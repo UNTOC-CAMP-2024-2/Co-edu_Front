@@ -46,15 +46,18 @@ const MentorMainPage = () => {
       <div className="flex gap-5 mt-3">
         <CommonComponent componentTitle={"전체 과제"}>
           {isLoading ? (
-            <div>로딩 중...</div>
+            <div className="font-semibold text-darkMint">로딩 중...</div>
           ) : assignments.length === 0 ? (
-            <div>최근 과제가 없습니다.</div>
+            <div className="font-semibold text-darkMint">
+              최근 과제가 없습니다.
+            </div>
           ) : (
             assignments.map((assignment, index) => (
               <MainPageAssignment
                 key={index}
                 type={assignment.assignment_status}
                 title={assignment.title}
+                assignmentId={assignment.assignment_id}
               />
             ))
           )}
@@ -62,15 +65,18 @@ const MentorMainPage = () => {
         <CommonComponent componentTitle={"과제 생성"} />
         <CommonComponent componentTitle={"과제 피드백"}>
           {isLoading ? (
-            <div>로딩 중...</div>
+            <div className="font-semibold text-darkMint">로딩 중...</div>
           ) : feedbacks.length === 0 ? (
-            <div>최근 과제가 없습니다.</div>
+            <div className="font-semibold text-darkMint">
+              최근 과제가 없습니다.
+            </div>
           ) : (
             feedbacks.map((feedback, index) => (
               <MainPageAssignment
                 key={index}
                 type={feedback.feedback_status}
                 title={feedback.title}
+                assignmentId={feedback.assignment_id}
               />
             ))
           )}

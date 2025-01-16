@@ -13,7 +13,7 @@ const MenteeStudyRoomPage = () => {
   const config = {
     iceServers: [
       {
-        urls: "turn:211.213.193.67:3478",
+        urls: "turns:211.213.193.67:3478",
         username: "coedu",
         credential: "pwd394",
       },
@@ -22,7 +22,7 @@ const MenteeStudyRoomPage = () => {
 
   useEffect(() => {
     const signalingServer = new WebSocket(
-      `ws://211.213.193.67:7777/live_classroom/${roomId}/student/ws?user_id=${userId}`
+      `wss://coedu.site:7777/live_classroom/${roomId}/student/ws?user_id=${userId}`
     );
     signalingServerRef.current = signalingServer;
     const pc = new RTCPeerConnection(config);
