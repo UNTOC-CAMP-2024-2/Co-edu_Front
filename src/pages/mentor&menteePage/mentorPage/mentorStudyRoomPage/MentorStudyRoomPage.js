@@ -32,10 +32,23 @@ const MentorStudyRoomPage = () => {
     signalingServer.onmessage = async (event) => {
       console.log(event);
       const data = JSON.parse(event.data);
-      const { userId, offer, candidate } = data;
-      console.log(userId);
-      console.log(offer);
-      console.log(candidate);
+      const { userId, offer, candidate, screenSharingEnded } = data;
+
+      if (screenSharingEnded) {
+        console.log(`[INFO] Screen sharing ended for user ${userId}`);
+        setStudentStreams((prevStreams) =>
+          prevStreams.filter((stream) => stream.userId !== userId)
+        );
+        if (selectedUserId === userId) {
+          setSelectedUserId(null);
+        }
+        // PeerConnection 정리
+        if (peerConnectionsRef.current[userId]) {
+          peerConnectionsRef.current[userId].close();
+          delete peerConnectionsRef.current[userId];
+        }
+        return;
+      }
 
       if (offer) {
         console.log(`[INFO] Host received WebRTC offer from user ${userId}.`);
@@ -81,6 +94,18 @@ const MentorStudyRoomPage = () => {
     pc.ontrack = (event) => {
       console.log(`[INFO] Host received track from user ${userId}.`);
       const remoteStream = event.streams[0];
+
+      // track ended 이벤트 리스너 추가
+      event.track.onended = () => {
+        console.log(`[INFO] Track from user ${userId} ended.`);
+        setStudentStreams((prevStreams) =>
+          prevStreams.filter((stream) => stream.userId !== userId)
+        );
+        if (selectedUserId === userId) {
+          setSelectedUserId(null);
+        }
+      };
+
       setStudentStreams((prevStreams) => {
         const updatedStreams = prevStreams.filter(
           (stream) => stream.userId !== userId
@@ -90,18 +115,28 @@ const MentorStudyRoomPage = () => {
     };
 
     pc.onconnectionstatechange = () => {
-      console.log(
-        `[INFO] Connection state with user ${userId}: ${pc.connectionState}`
-      );
+      const state = pc.connectionState;
+      console.log(`[INFO] Connection state with user ${userId}: ${state}`);
+
       if (
-        pc.connectionState === "disconnected" ||
-        pc.connectionState === "failed"
+        state === "disconnected" ||
+        state === "failed" ||
+        state === "closed"
       ) {
+        console.log(
+          `[INFO] Removing stream for user ${userId} due to ${state} connection`
+        );
         setStudentStreams((prevStreams) =>
           prevStreams.filter((s) => s.userId !== userId)
         );
         if (selectedUserId === userId) {
           setSelectedUserId(null);
+        }
+
+        // PeerConnection 정리
+        if (peerConnectionsRef.current[userId]) {
+          peerConnectionsRef.current[userId].close();
+          delete peerConnectionsRef.current[userId];
         }
       }
     };
@@ -155,7 +190,7 @@ const MentorStudyRoomPage = () => {
               {userId}
             </div>
             <video
-              className="h-full w-full object-contain bg-gray-900"
+              className="h-full w-full object-cover bg-gray-900"
               autoPlay
               playsInline
               ref={(video) => {

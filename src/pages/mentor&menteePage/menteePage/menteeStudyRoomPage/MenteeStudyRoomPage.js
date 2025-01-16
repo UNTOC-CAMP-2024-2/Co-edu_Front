@@ -33,7 +33,36 @@ const MenteeStudyRoomPage = () => {
         const stream = await navigator.mediaDevices.getDisplayMedia({
           video: true,
         });
-        // if (localVideoRef.current) localVideoRef.current.srcObject = stream;
+
+        // 스트림의 트랙이 종료되었을 때 처리
+        stream.getTracks().forEach((track) => {
+          track.onended = () => {
+            console.log("[INFO] Screen sharing stopped");
+            // 기존 트랙들을 제거
+            pc.getSenders().forEach((sender) => {
+              pc.removeTrack(sender);
+            });
+            // PeerConnection 종료
+            pc.close();
+            // 새로운 PeerConnection 생성 및 시그널링
+            const newPc = new RTCPeerConnection(config);
+            peerConnectionRef.current = newPc;
+
+            // ICE candidate 이벤트 핸들러 재설정
+            newPc.onicecandidate = (event) => {
+              if (event.candidate) {
+                signalingServerRef.current.send(
+                  JSON.stringify({ candidate: event.candidate })
+                );
+              }
+            };
+
+            // 종료 신호를 멘토에게 전송
+            signalingServerRef.current.send(
+              JSON.stringify({ screenSharingEnded: true })
+            );
+          };
+        });
 
         stream.getTracks().forEach((track) => pc.addTrack(track, stream));
         const offer = await pc.createOffer();
