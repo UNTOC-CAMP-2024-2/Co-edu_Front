@@ -4,7 +4,7 @@ import { FaCheck } from "react-icons/fa";
 import { PiHashBold } from "react-icons/pi";
 import StudyOpenModal from "./Components/StudyOpenModal";
 import StudyComponent from "./Components/StudyComponent";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import StudyDetailModal from "./Components/StudyDetailModal";
 import { Context } from "../../AppProvider";
 import {
@@ -14,6 +14,7 @@ import {
 } from "../../hooks/useClassroom";
 import { useQuery } from "@tanstack/react-query";
 import { searchClassroom, getMyClassroom } from "../../api/classroom";
+import { IoCloseSharp } from "react-icons/io5";
 
 // Link 태그들 to 속성 값에 맞게 경로 설정 필요
 
@@ -26,6 +27,8 @@ const Main = () => {
   const submitClassroomCodeMutation = useSubmitClassroomCode();
   const searchClassroomMutation = useSearchClassroom();
   const getMyClassroomMutation = useGetMyClassroom();
+  const [message, setMessage] = useState();
+  const navigate = useNavigate();
 
   const {
     data: allClassrooms = [],
@@ -49,7 +52,19 @@ const Main = () => {
 
   const handleSubmitClassroomCode = (e) => {
     e.preventDefault();
-    submitClassroomCodeMutation.mutate({ token, class_code: classroomCode });
+    submitClassroomCodeMutation.mutate(
+      { token, class_code: classroomCode },
+      {
+        onSuccess: (data) => {
+          data[0]
+            ? navigate("/mentee", { state: data[1] })
+            : setMessage("가입 승인 대기 중입니다.");
+        },
+        onError: (error) => {
+          setMessage(error.response.data.detail);
+        },
+      }
+    );
   }; //메인 화면에서 코드 입력하여 스터디방 입장장
 
   const handleSearchAllClassroom = () => {
@@ -212,6 +227,25 @@ const Main = () => {
           isStudyDetailModalOpen={isStudyDetailModalOpen}
           setIsStudyDetailModalOpen={setIsStudyDetailModalOpen}
         />
+      )}
+      {message && (
+        <div className="z-30 bg-black bg-opacity-45 fixed top-0 left-0 w-full h-full flex justify-center items-center">
+          <div className="rounded-2xl bg-white shadow-lg shadow-[#575757] h-[11rem] w-[30rem] flex flex-col">
+            <div className="rounded-t-2xl h-[2.5rem] bg-lightMint flex justify-start items-center px-2 gap-1 mb-[1rem]">
+              <button
+                className="bg-[#FF9780] rounded-full flex justify-center items-center p-1"
+                onClick={() => setMessage()}
+              >
+                <IoCloseSharp color="white" size="16" />
+              </button>
+            </div>
+            <ul className="pt-[26px] px-[10px] flex flex-col items-center">
+              <p className="text-[20px] text-[#686868] font-bold">
+                <span className="text-[#FF6E6E]">{message}</span>
+              </p>
+            </ul>
+          </div>
+        </div>
       )}
     </div>
   );
