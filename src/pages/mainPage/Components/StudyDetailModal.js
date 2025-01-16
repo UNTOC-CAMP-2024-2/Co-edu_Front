@@ -6,6 +6,7 @@ import {
   useSubmitClassroomCode,
 } from "../../../hooks/useClassroom";
 import { useNavigate } from "react-router-dom";
+import untocImg from "../../../images/untocImg.png";
 
 const StudyDetailModal = ({
   isStudyDetailModalOpen,
@@ -70,7 +71,13 @@ const StudyDetailModal = ({
         </div>
         <div className="flex-grow px-3 flex flex-col gap-[0.5rem]">
           <div className="flex-[4.5] flex gap-[1rem]">
-            <div className="flex-[4] bg-black">사진</div>
+            <div className="flex-[4] bg-black rounded-lg">
+              <img
+                src={untocImg}
+                alt="untocImg"
+                className="object-cover h-full w-full rounded-lg"
+              />
+            </div>
             <div className="flex-[6] bg-white flex flex-col gap-3">
               <div className="text-lightBlack text-xl font-semibold">
                 {title}
