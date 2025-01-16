@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { FaEllipsisH } from "react-icons/fa";
 import logoImg from "../../images/logoImg.png";
 import { IoClose } from "react-icons/io5";
 
 const PostHeader = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const pathname = useLocation().pathname;
+  const pathname = useLocation().pathname.split("/")[1];
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isSideBarOpen) {
@@ -48,35 +49,59 @@ const PostHeader = () => {
                 </button>
               </div>
               <div>
-                <button className="text-[#525252] font-semibold text-[1.2rem]">
+                <button
+                  onClick={() => {
+                    navigate("/mentor/assignments");
+                    setIsSideBarOpen((prev) => !prev);
+                  }}
+                  className="text-[#525252] font-semibold text-[1.2rem]"
+                >
                   📖과제 목록 확인하기
                 </button>
               </div>
               <div>
-                {pathname === "/mentee" ? (
+                {pathname === "mentee" ? (
                   <button className="text-[#525252] font-semibold text-[1.2rem]">
                     🔍내가 제출한 과제 확인하기
                   </button>
                 ) : (
-                  <button className="text-[#525252] font-semibold text-[1.2rem]">
+                  <button
+                    onClick={() => {
+                      navigate("/mentor/make");
+                      setIsSideBarOpen((prev) => !prev);
+                    }}
+                    className="text-[#525252] font-semibold text-[1.2rem]"
+                  >
                     ➕과제 생성하기
                   </button>
                 )}
               </div>
               <div>
-                {pathname === "/mentor" ? (
-                  <button className="text-[#525252] font-semibold text-[1.2rem]">
-                    🔖피드백 모아보기
+                {pathname === "mentor" ? (
+                  <button
+                    onClick={() => {
+                      navigate("/mentor/feedback");
+                      setIsSideBarOpen((prev) => !prev);
+                    }}
+                    className="text-[#525252] font-semibold text-[1.2rem]"
+                  >
+                    🔖제출된 과제 피드백하기
                   </button>
                 ) : (
                   <button className="text-[#525252] font-semibold text-[1.2rem]">
-                    🔖제출된 과제 피드백하기
+                    🔖피드백 모아보기
                   </button>
                 )}
               </div>
               <div>
-                {pathname === "/mentor" ? (
-                  <button className="text-[#525252] font-semibold text-[1.2rem]">
+                {pathname === "mentor" ? (
+                  <button
+                    onClick={() => {
+                      navigate("/mentor/setting");
+                      setIsSideBarOpen((prev) => !prev);
+                    }}
+                    className="text-[#525252] font-semibold text-[1.2rem]"
+                  >
                     ⚙️설정
                   </button>
                 ) : (

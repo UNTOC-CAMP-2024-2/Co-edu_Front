@@ -30,7 +30,7 @@ export const useCreateAssignment = () => {
 
 export const useGetAssignmentList = () => {
   return useMutation({
-    mutationFn: getAssignmentList,
+    mutationFn: getMentorFeedbackList,
     onSuccess: (data) => {
       console.log("과제 리스트 조회 성공", data);
     },
