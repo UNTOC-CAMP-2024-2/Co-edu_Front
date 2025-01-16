@@ -1,7 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Context } from "../../../../AppProvider";
 
 const MentorStudyRoomPage = () => {
-  const roomId = 1111;
+  const { classCode } = useContext(Context);
+  const roomId = classCode;
   const signalingServerRef = useRef(null);
   const peerConnectionsRef = useRef({}); // Stores peer connections by user ID
   const [studentStreams, setStudentStreams] = useState([]); // Tracks student streams
@@ -104,22 +106,28 @@ const MentorStudyRoomPage = () => {
   };
 
   return (
-    <div>
-      <h2>Student Streams</h2>
-      {studentStreams.map(({ userId, stream }) => (
-        <div key={userId}>
-          <h3>Student {userId}</h3>
-          <video
-            autoPlay
-            playsInline
-            ref={(video) => {
-              if (video && video.srcObject !== stream) {
-                video.srcObject = stream;
-              }
-            }}
-          ></video>
-        </div>
-      ))}
+    <div className="bg-black min-h-screen py-10">
+      <div className="flex flex-wrap justify-center gap-y-2 gap-x-3">
+        {studentStreams.map(({ userId, stream }) => (
+          <div
+            key={userId}
+            className="w-[48%] h-[20rem] border border-white relative"
+          >
+            <div className="absolute top-2 right-3 text-darkMint font-semibold px-6 py-1 rounded-lg border-2 border-darkMint">
+              {userId}
+            </div>
+            <video
+              autoPlay
+              playsInline
+              ref={(video) => {
+                if (video && video.srcObject !== stream) {
+                  video.srcObject = stream;
+                }
+              }}
+            ></video>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

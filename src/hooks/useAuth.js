@@ -10,13 +10,14 @@ import { Context } from "../AppProvider";
 import { useNavigate } from "react-router-dom";
 
 export const useLogin = () => {
-  const { setToken } = useContext(Context);
+  const { setToken, setUsername } = useContext(Context);
   const navigate = useNavigate();
   return useMutation({
     mutationFn: login,
     onSuccess: (data) => {
       console.log("로그인 성공", data);
       setToken(data.access_token);
+      setUsername(data.name);
       navigate("/");
     },
     onError: (error) => {
