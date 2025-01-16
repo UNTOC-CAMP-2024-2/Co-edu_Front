@@ -1,11 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Context } from "../../../../AppProvider";
+import Highlight from "react-highlight";
 
 const MenteeStudyRoomPage = () => {
-  const roomId = 1111;
-  const localVideoRef = useRef(null);
+  const { username, classCode } = useContext(Context);
+  const userId = username;
+  const roomId = classCode;
+  // const localVideoRef = useRef(null);
   const signalingServerRef = useRef(null);
   const peerConnectionRef = useRef(null);
-  let remoteDescriptionSet = false;
 
   const config = {
     iceServers: [
@@ -19,7 +22,7 @@ const MenteeStudyRoomPage = () => {
 
   useEffect(() => {
     const signalingServer = new WebSocket(
-      `ws://211.213.193.67:7777/live_classroom/${roomId}/student/ws`
+      `ws://211.213.193.67:7777/live_classroom/${roomId}/student/ws?user_id=${userId}`
     );
     signalingServerRef.current = signalingServer;
     const pc = new RTCPeerConnection(config);
@@ -30,7 +33,7 @@ const MenteeStudyRoomPage = () => {
         const stream = await navigator.mediaDevices.getDisplayMedia({
           video: true,
         });
-        if (localVideoRef.current) localVideoRef.current.srcObject = stream;
+        // if (localVideoRef.current) localVideoRef.current.srcObject = stream;
 
         stream.getTracks().forEach((track) => pc.addTrack(track, stream));
         const offer = await pc.createOffer();
@@ -48,29 +51,19 @@ const MenteeStudyRoomPage = () => {
 
     signalingServer.onmessage = async (event) => {
       const data = JSON.parse(event.data);
+      const { answer, candidate } = data;
 
-      if (data.answer && !remoteDescriptionSet) {
+      if (answer) {
         console.log("[INFO] Student received WebRTC answer.");
         try {
-          if (pc.signalingState === "have-local-offer") {
-            await pc.setRemoteDescription(
-              new RTCSessionDescription(data.answer)
-            );
-            remoteDescriptionSet = true;
-            console.log("[INFO] Remote description set successfully.");
-          } else {
-            console.warn(
-              "[WARNING] Invalid signaling state for setRemoteDescription:",
-              pc.signalingState
-            );
-          }
+          await pc.setRemoteDescription(new RTCSessionDescription(answer));
         } catch (err) {
           console.error("[ERROR] Failed to set remote description:", err);
         }
-      } else if (data.candidate) {
+      } else if (candidate) {
         console.log("[INFO] Student received ICE candidate.");
         try {
-          await pc.addIceCandidate(new RTCIceCandidate(data.candidate));
+          await pc.addIceCandidate(new RTCIceCandidate(candidate));
         } catch (err) {
           console.error("[ERROR] Failed to add ICE candidate:", err);
         }
@@ -87,12 +80,54 @@ const MenteeStudyRoomPage = () => {
       pc.close();
       signalingServer.close();
     };
-  }, [roomId]);
+  }, [roomId, userId]);
 
+  const [code, setCode] = useState('print("hello world")');
+  const textareaRef = useRef(null);
+  const highlightRef = useRef(null);
+
+  const handleScroll = (e) => {
+    if (highlightRef.current) {
+      highlightRef.current.scrollTop = e.target.scrollTop;
+      // highlightRef.current.scrollLeft = e.target.scrollLeft;
+    }
+  };
   return (
-    <div>
-      <h2>Local Video (Your Preview)</h2>
-      <video ref={localVideoRef} autoPlay muted playsInline></video>
+    <div className="flex flex-col min-h-screen">
+      <div className="flex-1 h-full flex relative items-center justify-center overflow-y-auto">
+        <textarea
+          onKeyDown={(event) => {
+            if (event.key === "Tab") {
+              event.preventDefault();
+              setCode(code + "\t");
+            }
+          }}
+          value={code}
+          onScroll={handleScroll}
+          ref={textareaRef}
+          className="h-full w-full absolute inset-0 p-4 text-transparent font-mono resize-none bg-transparent z-10 focus:outline-none selection:bg-blue-500/50 leading-[1.5] text-[1rem]"
+          style={{
+            caretColor: "white",
+            fontFamily: "Monaco, Consolas, monospace", // 동일한 폰트 패밀리 사용
+          }}
+          onChange={(e) => setCode(e.target.value)}
+          spellCheck={false}
+        />
+        <div
+          ref={highlightRef}
+          className="bg-[#2B2B2B] absolute w-full h-full inset-0 overflow-auto pointer-events-none"
+        >
+          <Highlight
+            className="h-full python text-[1rem] leading-[1.5] p-4"
+            style={{
+              fontFamily: "Monaco, Consolas, monospace",
+              whiteSpace: "pre",
+            }}
+          >
+            {code}
+          </Highlight>
+        </div>
+      </div>
     </div>
   );
 };
