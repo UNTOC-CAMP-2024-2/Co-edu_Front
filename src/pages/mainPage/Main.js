@@ -128,9 +128,13 @@ const Main = () => {
         <div className="flex-grow items-center flex gap-[2rem] overflow-x-scroll">
           {wannaAllClassroom ? (
             isAllLoading ? (
-              <p>전체 스터디룸을 불러오는 중...</p>
+              <p className="font-semibold text-darkMint">
+                전체 스터디룸을 불러오는 중...
+              </p>
             ) : isAllError ? (
-              <p>전체 스터디룸 로드 실패</p>
+              <p className="font-semibold text-darkMint">
+                전체 스터디룸 로드 실패
+              </p>
             ) : (
               allClassrooms.map((classroom, index) => {
                 return (
@@ -163,9 +167,13 @@ const Main = () => {
               })
             )
           ) : isMyLoading ? (
-            <p>나의 스터디룸을 불러오는 중...</p>
+            <p className="font-semibold text-darkMint">
+              나의 스터디룸을 불러오는 중...
+            </p>
           ) : isMyError ? (
-            <p>나의 스터디룸 로드 실패</p>
+            <p className="font-semibold text-darkMint">
+              나의 스터디룸 로드 실패
+            </p>
           ) : (
             myClassrooms.map((classroom, index) => (
               <StudyComponent
