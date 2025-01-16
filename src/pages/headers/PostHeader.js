@@ -6,11 +6,14 @@ import { IoClose } from "react-icons/io5";
 import { useAmIbelongtoClassroom } from "../../hooks/useClassroom";
 import { Context } from "../../AppProvider";
 import { useLeave } from "../../hooks/useMentee";
+import untocImg from "../../images/untocImg.png";
+import { FaDoorOpen } from "react-icons/fa";
 
 const PostHeader = () => {
   const { token, classCode } = useContext(Context);
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const pathname = useLocation().pathname.split("/")[1];
+  const isStudy = useLocation().pathname.split("/")[2];
   const navigate = useNavigate();
   const useLeaveMutation = useLeave();
 
@@ -56,16 +59,33 @@ const PostHeader = () => {
           <FaEllipsisH color="white" size="35" />
         </button>
         <img src={logoImg} width="110" alt="logo" />
-        <Link to="/">
-          <IoClose color="white" size="40" />
-        </Link>
+        {isStudy === "study" ? (
+          <div
+            onClick={() => {
+              handleAmIbelongtoClassroom();
+            }}
+            className="font-semibold text-white cursor-pointer"
+          >
+            <FaDoorOpen color="white" size="40" />
+          </div>
+        ) : (
+          <Link to="/">
+            <IoClose color="white" size="40" />
+          </Link>
+        )}
       </div>
       <Outlet />
       {isSideBarOpen && (
         <div className="z-0">
           <div className="bg-black opacity-40 fixed top-[4rem] left-0 w-full h-full"></div>
           <div className="fixed top-[4rem] left-0 w-[28rem] h-full bg-white py-5 px-7 shadow-lg shadow-[#373737]">
-            <div className="bg-slate-500 h-[13rem] rounded-lg">image</div>
+            <div className="h-[13rem] rounded-lg">
+              <img
+                src={untocImg}
+                alt="untocImg"
+                className="object-cover h-full w-full rounded-lg"
+              />
+            </div>
             <div className="text-[#525252] font-semibold text-[1.3rem] px-3 pt-2 pb-5 max-w-[26rem] overflow-auto max-h-[6rem]">
               이것은 스터디인가 토크쇼인가 C++ 이해하기
             </div>
