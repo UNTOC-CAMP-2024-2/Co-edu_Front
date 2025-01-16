@@ -90,3 +90,25 @@ export const getMentorFeedbackList = async ({ token, classCode }) => {
 
   return response.data;
 };
+
+export const sendFeedback = async ({
+  token,
+  assignmentId,
+  menteeId,
+  feedback,
+}) => {
+  const response = await axiosInstance.post(
+    "/assign/feedback",
+    {
+      assignment_id: assignmentId,
+      mentee_id: menteeId,
+      feedback,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};

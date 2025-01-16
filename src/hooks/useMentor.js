@@ -7,6 +7,7 @@ import {
   fetchMentorTopThreeAssignments,
   fetchMenteeTopThreeAssignments,
   getMentorFeedbackList,
+  sendFeedback,
 } from "../api/mentor";
 
 export const useCreateAssignment = () => {
@@ -89,6 +90,20 @@ export const useGetMentorFeedbackList = () => {
     },
     onError: (error) => {
       console.log("멘토 피드백 리스트 조회 실패", error);
+    },
+  });
+};
+
+export const useSendFeedback = () => {
+  return useMutation({
+    mutationFn: sendFeedback,
+    onSuccess: (data) => {
+      console.log("피드백 전송 성공", data);
+      alert("피드백이 전송되었습니다.");
+    },
+    onError: (error) => {
+      console.log("피드백 전송 실패", error);
+      alert("피드백 전송에 실패했습니다.");
     },
   });
 };

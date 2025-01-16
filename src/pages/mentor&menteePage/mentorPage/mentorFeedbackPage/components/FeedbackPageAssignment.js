@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { VscTriangleDown } from "react-icons/vsc";
 import { VscTriangleUp } from "react-icons/vsc";
 import { FaRegCircle } from "react-icons/fa";
@@ -7,9 +7,44 @@ import { IoClose } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
 import MenteeSubmitList from "./MenteeSubmitList";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useGetMenteeAssignmentStatus } from "../../../../../hooks/useMentee";
+import { useContext } from "react";
+import { Context } from "../../../../../AppProvider";
 
-const FeedbackPageAssignment = ({ type }) => {
+const FeedbackPageAssignment = ({
+  type,
+  assignmentTitle = "",
+  description = "",
+  assignmentId,
+}) => {
+  const { token } = useContext(Context);
   const [showDescription, setShowDescription] = useState(false);
+  const navigate = useNavigate();
+  const pathname = useLocation().pathname.split("/")[1];
+  const getMenteeAssignmentStatusMutation = useGetMenteeAssignmentStatus();
+  const [menteeFeedbackData, setMenteeFeedbackData] = useState([]);
+
+  useEffect(() => {
+    getMenteeAssignmentStatusMutation.mutate(
+      { token, assignmentId },
+      {
+        onSuccess: (data) => {
+          console.log("멘티 피드백 리스트 연결해야함!!!", data);
+          setMenteeFeedbackData(data);
+        },
+      }
+    );
+  }, []);
+
+  const calculateScore = (detailedResult) => {
+    if (!Array.isArray(detailedResult) || detailedResult.length === 0) return 0; // 배열이 아니거나 항목이 없으면 0점
+    const totalCases = detailedResult.length; // 전체 항목 수
+    const passedCases = detailedResult.filter(
+      (item) => item.result === "Pass"
+    ).length; // Pass된 항목 수
+    return Math.round((passedCases / totalCases) * 100); // 100점 만점으로 계산
+  };
 
   const dct = {
     done: <FaRegCircle color="#54CEA6" size={20} />,
@@ -32,11 +67,17 @@ const FeedbackPageAssignment = ({ type }) => {
           ? "border-lightMint bg-white"
           : "border-gray bg-[#F5F5F5]"
       }`}
+      onClick={(e) => {
+        if (!e.defaultPrevented) {
+          // 이벤트가 preventDefault로 막히지 않은 경우에만 navigate 실행
+          navigate(`/${pathname}/read`, { state: { assignmentId } });
+        }
+      }}
     >
       <div className="flex items-center gap-3">
         <div className="w-8 flex justify-center">{icon}</div>
         <div className="text-lightBlack font-semibold text-lg">
-          별 찍기 과제
+          {assignmentTitle}
         </div>
         <div className="flex-grow flex justify-end items-center">
           <button
@@ -61,31 +102,44 @@ const FeedbackPageAssignment = ({ type }) => {
       </div>
       {showDescription && (
         <>
-          <div className="text-lightBlack pt-3 pb-1 px-3">
-            Answer the frequently asked question in s simple sentences, a
-            longish aragraph, or even in a list.asdf asdfasd fasdf fadds
+          <div className="text-lightBlack pt-3 pb-1 px-3 line-clamp-2">
+            {description}
           </div>
           <div className="flex flex-col gap-3 pt-3 pb-6">
-            <MenteeSubmitList
+            {/* <MenteeSubmitList
               name={"김효정"}
               date={"2024.01.09"}
               isSubmitted={true}
-            />
-            <MenteeSubmitList
-              name={"김효정"}
-              date={"2024.01.09"}
-              isSubmitted={false}
-            />
-            <MenteeSubmitList
-              name={"김효정"}
-              date={"2024.01.09"}
-              isSubmitted={false}
-            />
-            <MenteeSubmitList
-              name={"김효정"}
-              date={"2024.01.09"}
-              isSubmitted={true}
-            />
+            /> */}
+            {menteeFeedbackData && menteeFeedbackData.submissions.length > 0 ? (
+              menteeFeedbackData.submissions.map((menteeFeedback) => {
+                const score = calculateScore(menteeFeedback.detailed_result); // 점수 계산
+
+                // isSubmitted 값 계산
+                const isSubmitted =
+                  menteeFeedback.status === false
+                    ? false
+                    : menteeFeedback.status !== false;
+
+                return (
+                  <MenteeSubmitList
+                    key={menteeFeedback.user_id}
+                    name={menteeFeedback.user_id}
+                    date={menteeFeedback.updated_at || "날짜정보없음"}
+                    isSubmitted={isSubmitted}
+                    score={score} // 점수 전달
+                    code={menteeFeedback.code || ""}
+                    assignmentId={assignmentId}
+                  />
+                );
+              })
+            ) : (
+              <div className="flex items-center justify-center h-[35px]">
+                <div className="text-[#D9D9D9] font-semibold text-[16px]">
+                  멘티 없음
+                </div>
+              </div>
+            )}
           </div>
         </>
       )}
