@@ -48,7 +48,6 @@ export const createClassroom = async ({ token, isButtonPressed }) => {
 };
 
 export const submitClassroomCode = async ({ token, class_code }) => {
-  console.log(class_code);
   const response = await axiosInstance.put(
     "/classroom/join",
     {

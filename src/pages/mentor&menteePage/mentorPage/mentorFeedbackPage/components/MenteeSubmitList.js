@@ -10,7 +10,6 @@ const MenteeSubmitList = ({
   assignmentId,
   code,
 }) => {
-  console.log(name, date, isSubmitted, score, assignmentId, code);
   const navigate = useNavigate();
   const handleFeedbackClick = (e) => {
     e.preventDefault(); // 부모 컴포넌트의 onClick 이벤트 방지

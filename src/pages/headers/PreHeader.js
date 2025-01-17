@@ -13,7 +13,6 @@ const PreHeader = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const { token, setToken, username } = useContext(Context);
-  console.log(token);
   const navigate = useNavigate();
 
   const searchClassroomMutation = useSearchClassroom();

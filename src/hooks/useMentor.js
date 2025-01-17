@@ -14,11 +14,9 @@ export const useCreateAssignment = () => {
   return useMutation({
     mutationFn: createAssignment,
     onSuccess: (data) => {
-      console.log("과제 생성 성공", data);
       alert("과제가 생성되었습니다.");
     },
     onError: (error) => {
-      console.log("과제 생성 실패", error);
       alert(
         `과제 생성에 실패했습니다: ${
           error.response?.data?.detail || error.message
@@ -31,24 +29,16 @@ export const useCreateAssignment = () => {
 export const useGetAssignmentList = () => {
   return useMutation({
     mutationFn: getMentorFeedbackList,
-    onSuccess: (data) => {
-      console.log("과제 리스트 조회 성공", data);
-    },
-    onError: (error) => {
-      console.log("과제 리스트 조회 실패", error);
-    },
+    onSuccess: (data) => {},
+    onError: (error) => {},
   });
 };
 
 export const useGetAssignmentDetail = () => {
   return useMutation({
     mutationFn: getAssignmentDetail,
-    onSuccess: (data) => {
-      console.log("과제 상세 조회 성공", data);
-    },
-    onError: (error) => {
-      console.log("과제 상세 조회 실패", error);
-    },
+    onSuccess: (data) => {},
+    onError: (error) => {},
   });
 };
 
@@ -56,11 +46,9 @@ export const useEditAssignment = () => {
   return useMutation({
     mutationFn: editAssignment,
     onSuccess: (data) => {
-      console.log("과제 수정 성공", data);
       alert("과제 수정이 완료되었습니다.");
     },
     onError: (error) => {
-      console.log("과제 수정 실패", error);
       alert("과제 수정에 실패했습니다.");
     },
   });
@@ -85,12 +73,8 @@ export const useFetchMenteeTopThreeAssignments = (class_id, token) => {
 export const useGetMentorFeedbackList = () => {
   return useMutation({
     mutationFn: getMentorFeedbackList,
-    onSuccess: (data) => {
-      console.log("멘토 피드백 리스트 조회 성공", data);
-    },
-    onError: (error) => {
-      console.log("멘토 피드백 리스트 조회 실패", error);
-    },
+    onSuccess: (data) => {},
+    onError: (error) => {},
   });
 };
 
@@ -98,11 +82,9 @@ export const useSendFeedback = () => {
   return useMutation({
     mutationFn: sendFeedback,
     onSuccess: (data) => {
-      console.log("피드백 전송 성공", data);
       alert("피드백이 전송되었습니다.");
     },
     onError: (error) => {
-      console.log("피드백 전송 실패", error);
       alert("피드백 전송에 실패했습니다.");
     },
   });

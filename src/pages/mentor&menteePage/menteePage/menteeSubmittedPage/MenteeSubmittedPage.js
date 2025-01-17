@@ -10,7 +10,6 @@ const MenteeSubmittedPage = () => {
   const { token, classCode } = useContext(Context);
 
   useEffect(() => {
-    console.log(classCode);
     getSubmittedListMutation.mutate(
       { token, classCode },
       {
@@ -27,7 +26,6 @@ const MenteeSubmittedPage = () => {
       <div className="flex flex-col gap-5">
         {assignmentList &&
           assignmentList.map((assignment) => {
-            console.log(assignment);
             return (
               <AssignmentsListPageAssignment
                 type={assignment.feedback ? "gotFeedback" : "done"}

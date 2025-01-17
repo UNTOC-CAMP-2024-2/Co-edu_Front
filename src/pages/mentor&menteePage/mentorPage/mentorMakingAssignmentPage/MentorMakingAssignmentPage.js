@@ -62,13 +62,6 @@ const MentorMakingAssignmentPage = () => {
       expected_output: example.output,
     }));
 
-    console.log("Request Data:", {
-      class_id: classCode,
-      title,
-      description,
-      testcase: testcases,
-    });
-
     createAssignmentMutations.mutate(
       {
         token,

@@ -54,14 +54,11 @@ const MentorSettingPage = () => {
   };
 
   useEffect(() => {
-    console.log("사용 중인 token:", token); // 디버깅용 로그
-    console.log("사용 중인 classCode:", classCode);
     if (classCode && token) {
       getClassroomInfoMutation.mutate(
         { token, class_code: classCode },
         {
           onSuccess: (data) => {
-            console.log("스터디룸 설정 정보 조회 성공", data);
             const when =
               data.class_info.day?.split(",").map((day) => day.trim()) || [];
 
@@ -69,7 +66,6 @@ const MentorSettingPage = () => {
 
             setMembers(data.user_info || []);
             setJoinRequests(data.approval || []);
-            console.log("클래스 정보 요일 데이터:", data.class_info.day);
 
             // 스터디룸 설정 정보 설정
             setState({
@@ -94,7 +90,6 @@ const MentorSettingPage = () => {
             setLoading(false);
           },
           onError: (error) => {
-            console.error("스터디룸 설정 정보 조회 실패", error);
             setLoading(false);
           },
         }
@@ -121,8 +116,6 @@ const MentorSettingPage = () => {
           alert("회원 승인이 완료되었습니다.");
         },
         onError: (error) => {
-          console.error("회원 승인 실패:", error);
-
           // 상태 롤백
           setJoinRequests((prev) => [...prev, approvedUser]);
           setMembers((prev) => prev.filter((user) => user.user_id !== userId));
@@ -146,8 +139,6 @@ const MentorSettingPage = () => {
           alert("회원 거절이 완료되었습니다.");
         },
         onError: (error) => {
-          console.error("회원 거절 실패:", error);
-
           // 상태 롤백
           setJoinRequests((prev) => [...prev, deniedUser]);
 
@@ -174,8 +165,6 @@ const MentorSettingPage = () => {
           alert(`${userId} 멤버가 강퇴되었습니다.`);
         },
         onError: (error) => {
-          console.error("강퇴 실패:", error);
-
           // 상태 롤백 (강퇴 취소)
           setMembers((prev) => [...prev, kickedUser]);
 
@@ -208,7 +197,6 @@ const MentorSettingPage = () => {
           alert("클래스 정보가 성공적으로 수정되었습니다.");
         },
         onError: (error) => {
-          console.error("수정 중 오류 발생:", error);
           alert("클래스 정보를 수정하는 데 문제가 발생했습니다.");
         },
       }

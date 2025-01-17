@@ -17,7 +17,6 @@ const MentorEditAssignmentPage = () => {
 
   useEffect(() => {
     if (!assignmentId) {
-      console.error("Assignment ID가 존재하지 않습니다.");
       alert("과제 ID가 없습니다. 다시 시도해주세요.");
       navigate(-1); // 이전 페이지로 이동
       return;
@@ -28,7 +27,6 @@ const MentorEditAssignmentPage = () => {
         { assignmentId },
         {
           onSuccess: (data) => {
-            console.log("EditPage API 응답 데이터:", data);
             setAssignment({
               title: data.title,
               description: data.description,
@@ -39,7 +37,6 @@ const MentorEditAssignmentPage = () => {
             });
           },
           onError: (error) => {
-            console.error("과제 데이터를 불러오는 중 오류 발생:", error);
             alert("과제 데이터를 불러오는 데 실패했습니다.");
           },
         }
@@ -84,13 +81,6 @@ const MentorEditAssignmentPage = () => {
       expected_output: example.output,
     }));
 
-    console.log("전송 데이터:", {
-      assignment_id: String(assignmentId),
-      description: assignment.description,
-      title: assignment.title,
-      testcase: testcases,
-    });
-
     editAssignmentMutation.mutate(
       {
         token,
@@ -103,13 +93,10 @@ const MentorEditAssignmentPage = () => {
       },
       {
         onSuccess: (updatedData) => {
-          console.log("수정 성공 데이터:", updatedData);
-
           // 수정된 데이터와 함께 이전 페이지로 이동
           navigate(-1, { state: { updatedAssignment: updatedData } });
         },
         onError: (error) => {
-          console.error("수정 실패:", error);
           alert("수정에 실패했습니다.");
         },
       }

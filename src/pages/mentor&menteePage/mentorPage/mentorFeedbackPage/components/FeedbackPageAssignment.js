@@ -30,7 +30,6 @@ const FeedbackPageAssignment = ({
       { token, assignmentId },
       {
         onSuccess: (data) => {
-          console.log("멘티 피드백 리스트 연결해야함!!!", data);
           setMenteeFeedbackData(data);
         },
       }

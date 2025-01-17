@@ -20,7 +20,6 @@ const SearchClassroom = () => {
   });
 
   useEffect(() => {
-    console.log(searchedData); // 검색 결과 확인
     if (searchedData) {
       queryClient.setQueryData(["searchedClassrooms"], searchedData);
     }

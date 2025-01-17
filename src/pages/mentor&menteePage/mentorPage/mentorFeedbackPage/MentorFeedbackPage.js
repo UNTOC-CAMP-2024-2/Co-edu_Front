@@ -13,7 +13,6 @@ const MentorFeedbackPage = () => {
       { token, classCode },
       {
         onSuccess: (data) => {
-          console.log("피드백 리스트", data);
           setFeedbackData(data);
         },
       }
@@ -30,7 +29,6 @@ const MentorFeedbackPage = () => {
         <FeedbackPageAssignment type={"gaveFeedbackAll"} /> */}
         {feedbackData &&
           feedbackData.map((feedback) => {
-            console.log(feedback);
             return (
               <FeedbackPageAssignment
                 type={feedback.assignment_status}

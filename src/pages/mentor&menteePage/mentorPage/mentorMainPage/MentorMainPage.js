@@ -13,7 +13,6 @@ import { useFetchMentorTopThreeAssignments } from "../../../../hooks/useMentor";
 
 const MentorMainPage = () => {
   const data = useLocation().state;
-  console.log(data);
 
   const { token, setClassCode } = useContext(Context);
   const {
@@ -26,19 +25,12 @@ const MentorMainPage = () => {
     setClassCode(data.class_code);
   }, []);
 
-  useEffect(() => {
-    if (topThreeData) {
-      console.log("Top 3 Data:", topThreeData); // 데이터 출력
-    }
-  }, [topThreeData]);
-
   if (isLoading) return <div>로딩 중...</div>;
   if (isError) return <div>데이터를 가져오는 데 실패했습니다.</div>;
 
   const assignments = topThreeData?.["상위 3개 과제"] || [];
 
   const feedbacks = topThreeData?.["상위 3개 과제 및 피드백 상태"] || [];
-  console.log("Feedbacks:", feedbacks);
 
   return (
     <div className="mx-14 mb-10">
