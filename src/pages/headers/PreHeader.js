@@ -12,7 +12,8 @@ import { useSearchClassroom } from "../../hooks/useClassroom";
 const PreHeader = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
-  const { token } = useContext(Context);
+  const { token, setToken, username } = useContext(Context);
+  console.log(token);
   const navigate = useNavigate();
 
   const searchClassroomMutation = useSearchClassroom();
@@ -35,7 +36,22 @@ const PreHeader = () => {
         <div className="pt-6 mx-2">
           <div className="flex justify-end">
             <div className="text-[0.8rem] text-[#C4C4C4] font-semibold">
-              <Link to="login">로그인</Link> / <Link to="signup">회원가입</Link>
+              {token ? (
+                <div className="flex gap-4">
+                  <div>반갑습니다 {username}님!</div>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => setToken(null)}
+                  >
+                    로그아웃
+                  </div>
+                </div>
+              ) : (
+                <span>
+                  <Link to="login">로그인</Link>/
+                  <Link to="signup">회원가입</Link>
+                </span>
+              )}
             </div>
           </div>
           <div className="flex justify-between items-end">

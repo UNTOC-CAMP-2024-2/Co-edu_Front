@@ -7,6 +7,7 @@ import { CTimePicker } from "@coreui/react-pro";
 import { useCreateClassroom } from "../../../hooks/useClassroom";
 import { Context } from "../../../AppProvider";
 import { useNavigate } from "react-router-dom";
+import untocImg from "../../../images/untocImg.png";
 
 const StudyOpenModal = ({ setIsModalOpen }) => {
   const { token } = useContext(Context);
@@ -77,7 +78,9 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
         </div>
         <div className="flex-grow px-3 flex flex-col gap-[0.5rem]">
           <div className="flex-[4.5] flex gap-[1rem]">
-            <div className="flex-[4] bg-black">사진</div>
+            <div className="flex-[4]">
+              <img src={untocImg} alt="untocImg" />
+            </div>
             <div className="flex-[6] bg-white flex flex-col gap-3">
               <div className="flex flex-col gap-1">
                 <div className="text-lightBlack font-semibold">스터디 명</div>

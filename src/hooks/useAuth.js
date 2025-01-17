@@ -22,6 +22,7 @@ export const useLogin = () => {
     },
     onError: (error) => {
       console.log("로그인 실패", error);
+      alert("아이디와 비밀번호를 확인해주세요.");
     },
   });
 };
