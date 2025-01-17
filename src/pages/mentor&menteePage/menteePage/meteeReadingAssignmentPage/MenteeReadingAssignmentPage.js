@@ -50,7 +50,7 @@ const MenteeReadingAssignmentPage = () => {
 
       <div className="grid grid-cols-2 gap-x-[40px] gap-y-[30px]">
         {problem &&
-          problem.testcases.map((example, index) => (
+          problem.testcases.slice(0, 3).map((example, index) => (
             <React.Fragment key={index}>
               {/* 예제 입력 */}
               <div>

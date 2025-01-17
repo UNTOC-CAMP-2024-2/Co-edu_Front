@@ -121,3 +121,16 @@ export const leave = async ({ token, class_code }) => {
 
   return response.data;
 };
+
+export const getMenteeCodeData = async ({ token, assignmentId }) => {
+  const response = await axiosInstance.get(
+    `/assign/code_data/${assignmentId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+};
