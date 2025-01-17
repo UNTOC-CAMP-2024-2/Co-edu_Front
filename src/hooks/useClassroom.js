@@ -12,6 +12,8 @@ import {
   editClassInfo,
 } from "../api/classroom";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { Context } from "../AppProvider";
 
 export const useCreateClassroom = () => {
   const navigate = useNavigate();
@@ -65,10 +67,12 @@ export const useGetMyClassroom = () => {
 };
 
 export const useAmIbelongtoClassroom = () => {
+  const { setClassName } = useContext(Context);
   return useMutation({
     mutationFn: AmIbelongtoClassroom,
     onSuccess: (data) => {
       console.log("스터디룸 소속 확인 혹은 가입신청 성공", data);
+      setClassName(data[0].class_name);
       return data;
     },
     onError: (error) => {

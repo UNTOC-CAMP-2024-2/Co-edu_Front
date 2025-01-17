@@ -41,6 +41,7 @@ export const useSubmitCode = () => {
     mutationFn: submitCode,
     onSuccess: (data) => {
       console.log("코드 제출 성공", data);
+      alert(data.status);
     },
     onError: (error) => {
       console.log("코드 제출 실패", error);

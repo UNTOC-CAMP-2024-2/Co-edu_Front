@@ -41,7 +41,10 @@ const PreHeader = () => {
                   <div>반갑습니다 {username}님!</div>
                   <div
                     className="cursor-pointer"
-                    onClick={() => setToken(null)}
+                    onClick={() => {
+                      setToken(null);
+                      window.location.reload();
+                    }}
                   >
                     로그아웃
                   </div>
