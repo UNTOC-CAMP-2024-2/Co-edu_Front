@@ -48,9 +48,19 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
     일: "Sun",
   };
   const [isButtonPressed, setIsButtonPressed] = useState(initialState);
+  const [message, setMessage] = useState("");
   const createClassroomMutation = useCreateClassroom();
   const handleCreateClassroom = () => {
-    createClassroomMutation.mutate({ token, isButtonPressed });
+    createClassroomMutation.mutate(
+      { token, isButtonPressed },
+      {
+        onError: (error) => {
+          setMessage(
+            "채팅방 링크를 제외한\n모든 항목은 빠짐없이 입력해주세요."
+          );
+        },
+      }
+    );
   };
 
   return (
@@ -316,6 +326,25 @@ const StudyOpenModal = ({ setIsModalOpen }) => {
           </div>
         </div>
       </div>
+      {message && (
+        <div className="z-30 bg-black bg-opacity-45 fixed top-0 left-0 w-full h-full flex justify-center items-center">
+          <div className="rounded-2xl bg-white shadow-lg shadow-[#575757] h-[11rem] w-[30rem] flex flex-col">
+            <div className="rounded-t-2xl h-[2.5rem] bg-lightMint flex justify-start items-center px-2 gap-1 mb-[1rem]">
+              <button
+                className="bg-[#FF9780] rounded-full flex justify-center items-center p-1"
+                onClick={() => setMessage()}
+              >
+                <IoCloseSharp color="white" size="16" />
+              </button>
+            </div>
+            <ul className="pt-[26px] px-[10px] flex flex-col items-center">
+              <p className="text-[20px] text-[#686868] font-bold">
+                <span className="text-[#FF6E6E]">{message}</span>
+              </p>
+            </ul>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

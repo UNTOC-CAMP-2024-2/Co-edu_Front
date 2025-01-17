@@ -28,30 +28,108 @@ const Signup = () => {
   const watchEmail = watch("email");
   const watchEmailVerification = watch("emailVerification");
   const [selectedRole, setSelectedRole] = useState(true);
+  const [button1, setButton1] = useState(true);
+  const [button2, setButton2] = useState(false);
+  const [message1, setMessage1] = useState("");
+  const [message2, setMessage2] = useState("");
 
   const sendEmailVertificationCodeMutation = useSendEmailVertificationCode();
   const checkEmailVertificationCodeMutation = useCheckEmailVertificationCode();
   const registerMutation = useRegister();
 
+  useEffect(() => {
+    if (!errors.email) {
+      setButton1(false);
+    }
+  }, [errors.email]);
+
   const handleSendEmailVertificationCode = (e) => {
     e.preventDefault();
-    sendEmailVertificationCodeMutation.mutate({
-      user_id: watchId,
-      email: watchEmail,
-    });
+    setButton1(true);
+    sendEmailVertificationCodeMutation.mutate(
+      {
+        user_id: watchId,
+        email: watchEmail,
+      },
+      {
+        onSuccess: (data) => {
+          setMessage1(data.여부);
+
+          setTimeout(() => {
+            setMessage1("");
+          }, 3000);
+        },
+        onError: (error) => {
+          setMessage1(error.response.data.detail);
+
+          setTimeout(() => {
+            setMessage1("");
+          }, 3000);
+        },
+      }
+    );
+
+    setTimeout(() => {
+      setButton1(false);
+    }, 4000);
   };
 
   const handleCheckEmailVertificationCode = (e) => {
     e.preventDefault();
-    checkEmailVertificationCodeMutation.mutate({
-      user_id: watchId,
-      email: watchEmail,
-      code: watchEmailVerification,
-    });
+    setButton2(true);
+    checkEmailVertificationCodeMutation.mutate(
+      {
+        user_id: watchId,
+        email: watchEmail,
+        code: watchEmailVerification,
+      },
+      {
+        onSuccess: (data) => {
+          setMessage2(data.여부);
+
+          setTimeout(() => {
+            setMessage2("");
+          }, 3000);
+        },
+        onError: (error) => {
+          setMessage2(error.response.data.detail);
+
+          setTimeout(() => {
+            setMessage2("");
+          }, 3000);
+        },
+      }
+    );
+
+    setTimeout(() => {
+      setButton2(false);
+    }, 2000);
   };
 
   const handleRegister = (e) => {
     e.preventDefault();
+
+    // 모든 필수 항목 확인
+    if (
+      !watchId ||
+      !watchPassword ||
+      !watchConfirmPassword ||
+      !watchName ||
+      !watchEmail ||
+      !watchEmailVerification
+    ) {
+      alert("모든 항목을 입력해주세요.");
+      return;
+    }
+
+    // 이메일 인증 확인이 되었는지도 체크하고 싶다면
+    // message2 상태를 활용해서 체크할 수 있습니다
+    if (!message2 || !message2.includes("인증이 완료되었습니다")) {
+      // 성공 메시지 문구에 맞게 수정 필요
+      alert("이메일 인증을 완료해주세요.");
+      return;
+    }
+
     registerMutation.mutate({
       user_id: watchId,
       password: watchPassword,
@@ -204,18 +282,32 @@ const Signup = () => {
                 <input
                   type="email"
                   id="email"
-                  placeholder="이메일을 입력해주세요 ex) coedu@gmail.com"
+                  placeholder="이메일을 입력해주세요 ex) coedu@pusan.ac.kr"
                   className="text-[16px] px-[10px] w-full py-[8px] border-[1.7px] border-[#CED4DA] rounded-lg focus:outline-none focus:border-lightMint"
-                  {...register("email")}
+                  {...register("email", {
+                    pattern: {
+                      value: /^[a-zA-Z0-9]+@pusan\.ac\.kr$/,
+                      message: "이메일 형식에 맞게 입력해주세요",
+                    },
+                  })}
                 />
                 <button
+                  disabled={errors.email || button1}
                   onClick={handleSendEmailVertificationCode}
-                  className="hover:bg-darkMint absolute right-[6px] top-1/2 transform -translate-y-1/2 px-4 py-1 bg-lightMint text-white font-semibold rounded-lg"
+                  className={`${
+                    errors.email || button1 ? "bg-lightMint" : "bg-darkMint"
+                  } absolute right-[6px] top-1/2 transform -translate-y-1/2 px-4 py-1 text-white font-semibold rounded-lg`}
                 >
                   인증
                 </button>
               </div>
             </div>
+            <span className="text-notSubmittedRed">
+              {errors.email && errors.email.message}
+            </span>
+            <div></div>
+            <span className="text-notSubmittedRed">{message1 && message1}</span>
+
             <div className="flex justify-between items-center">
               <label
                 htmlFor="emailVerification"
@@ -232,14 +324,18 @@ const Signup = () => {
                   {...register("emailVerification")}
                 />
                 <button
+                  disabled={button2}
                   onClick={handleCheckEmailVertificationCode}
-                  className="hover:bg-darkMint absolute right-[6px] top-1/2 transform -translate-y-1/2 px-4 py-1 bg-lightMint text-white font-semibold rounded-lg"
+                  className={`${
+                    button2 ? "bg-lightMint" : "bg-darkMint"
+                  } absolute right-[6px] top-1/2 transform -translate-y-1/2 px-4 py-1 text-white font-semibold rounded-lg`}
                 >
                   확인
                 </button>
               </div>
             </div>
-            <div className="flex justify-between items-center">
+            <span className="text-notSubmittedRed">{message2 && message2}</span>
+            {/* <div className="flex justify-between items-center">
               <span className="text-[18px] w-[115px]">회원 유형</span>
               <div className="flex w-[450px] justify-center space-x-[100px]">
                 <button
@@ -265,13 +361,13 @@ const Signup = () => {
                   멘티
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <Link className="block w-full">
           <button
             type="button"
-            className="w-full py-[13px] bg-lightMint text-white font-bold text-[18px] rounded-lg hover:bg-darkMint"
+            className="w-full py-[13px] text-white font-bold text-[18px] rounded-lg bg-darkMint"
             onClick={handleRegister}
           >
             가입하기

@@ -10,12 +10,14 @@ import untocImg from "../../images/untocImg.png";
 import { FaDoorOpen } from "react-icons/fa";
 
 const PostHeader = () => {
-  const { token, classCode } = useContext(Context);
+  const { token, classCode, className } = useContext(Context);
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const pathname = useLocation().pathname.split("/")[1];
   const isStudy = useLocation().pathname.split("/")[2];
   const navigate = useNavigate();
   const useLeaveMutation = useLeave();
+
+  useEffect(() => console.log(className), [className]);
 
   const handleLeave = () => {
     useLeaveMutation.mutate({ token, class_code: classCode });
@@ -87,7 +89,7 @@ const PostHeader = () => {
               />
             </div>
             <div className="text-[#525252] font-semibold text-[1.3rem] px-3 pt-2 pb-5 max-w-[26rem] overflow-auto max-h-[6rem]">
-              이것은 스터디인가 토크쇼인가 C++ 이해하기
+              {className}
             </div>
             <hr className="bg-[#D9D9D9] h-[2px]" />
             <div className="flex flex-col gap-7 px-3 pt-8">
