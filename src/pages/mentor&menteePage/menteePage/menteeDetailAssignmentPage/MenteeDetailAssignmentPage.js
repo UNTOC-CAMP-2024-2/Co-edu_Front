@@ -8,6 +8,7 @@ import {
   useGetFeedback,
   useSubmitCode,
   useTestCode,
+  useGetMenteeCodeData,
 } from "../../../../hooks/useMentee";
 import { Context } from "../../../../AppProvider";
 import TestResultModal from "./TestResultModal";
@@ -15,24 +16,58 @@ import TestResultModal from "./TestResultModal";
 const MenteeDetailAssignmentPage = () => {
   const [language, setLanguage] = useState("python");
   const data = useLocation().state.problem;
-  console.log(data);
 
   const { title, description, testcases } = data;
 
   const textareaRef = useRef(null);
   const highlightRef = useRef(null);
   const { token } = useContext(Context);
+  const [menteeSubmitCode, setMenteeSubmitCode] = useState("");
 
   const [code, setCode] = useState('print("hello world")');
 
+  const getMenteeCodeDataMutation = useGetMenteeCodeData();
   useEffect(() => {
-    const helloWorldExamples = {
-      python: 'print("Hello, World!")',
-      java: `public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}`,
-      c: `#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}`,
-    };
-    setCode(helloWorldExamples[language]);
-  }, [language]);
+    // 제출된 코드 가져오기
+    getMenteeCodeDataMutation.mutate(
+      {
+        token,
+        assignmentId: data.assignment_id,
+      },
+      {
+        onSuccess: (response) => {
+          if (response.code && response.code.trim() !== "") {
+            // 제출된 코드가 있는 경우
+            setMenteeSubmitCode(response.code);
+            setCode(response.code);
+            setLanguage(response.language || "python");
+          } else {
+            // 제출된 코드가 없는 경우
+            setCode(defaultCodes[language]);
+          }
+        },
+      }
+    );
+  }, [data.assignment_id, token]);
+
+  const defaultCodes = {
+    python: 'print("Hello, World!")',
+    java: `public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}`,
+    c: `#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}`,
+  };
+
+  useEffect(() => {
+    if (menteeSubmitCode === "") {
+      setCode(defaultCodes[language]);
+    }
+  }, [language, menteeSubmitCode]);
+  const handleLanguageChange = (newLanguage) => {
+    setLanguage(newLanguage);
+
+    // 언어 변경 시 기본 코드로 설정
+    setMenteeSubmitCode(""); // 제출된 코드 초기화
+    setCode(defaultCodes[newLanguage]); // 선택된 언어의 기본 코드로 초기화
+  };
 
   const [showResult, setShowResult] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
@@ -300,7 +335,7 @@ const MenteeDetailAssignmentPage = () => {
           <select
             className="px-3 py-1 border border-gray-300 rounded-md text-sm"
             value={language}
-            onChange={(e) => setLanguage(e.target.value)}
+            onChange={(e) => handleLanguageChange(e.target.value)}
           >
             <option value="python">Python</option>
             <option value="java">Java</option>
