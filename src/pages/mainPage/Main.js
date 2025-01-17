@@ -61,7 +61,9 @@ const Main = () => {
             : setMessage("가입 승인 대기 중입니다.");
         },
         onError: (error) => {
-          setMessage(error.response.data.detail);
+          error.response.data.detail === "토큰이 타당하지 않습니다."
+            ? setMessage("로그인이 필요합니다.")
+            : setMessage(error.response.data.detail);
         },
       }
     );
@@ -79,9 +81,9 @@ const Main = () => {
     console.log(token);
   }, [token]);
 
-  useEffect(() => {
-    wannaAllClassroom ? handleSearchAllClassroom() : handleGetMyClassroom();
-  }, [wannaAllClassroom]);
+  // useEffect(() => {
+  //   wannaAllClassroom ? handleSearchAllClassroom() : handleGetMyClassroom();
+  // }, [wannaAllClassroom]);
 
   return (
     <div className="mx-20 min-h-[calc(100vh-110px)] flex flex-col">
