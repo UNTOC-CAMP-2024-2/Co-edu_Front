@@ -17,8 +17,6 @@ const PostHeader = () => {
   const navigate = useNavigate();
   const useLeaveMutation = useLeave();
 
-  useEffect(() => console.log(className), [className]);
-
   const handleLeave = () => {
     useLeaveMutation.mutate({ token, class_code: classCode });
   };
@@ -33,7 +31,6 @@ const PostHeader = () => {
       },
       {
         onSuccess: (data) => {
-          console.log(data[0]);
           data[1]
             ? navigate("/mentor", { state: data[0] })
             : navigate("/mentee", { state: data[0] });

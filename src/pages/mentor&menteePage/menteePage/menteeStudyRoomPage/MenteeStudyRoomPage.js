@@ -13,7 +13,7 @@ const MenteeStudyRoomPage = () => {
   const config = {
     iceServers: [
       {
-        urls: "turns:211.213.193.67:3478",
+        urls: "turn:211.213.193.67:3478",
         username: "coedu",
         credential: "pwd394",
       },
@@ -37,7 +37,6 @@ const MenteeStudyRoomPage = () => {
         // 스트림의 트랙이 종료되었을 때 처리
         stream.getTracks().forEach((track) => {
           track.onended = () => {
-            console.log("[INFO] Screen sharing stopped");
             // 기존 트랙들을 제거
             pc.getSenders().forEach((sender) => {
               pc.removeTrack(sender);
@@ -69,12 +68,11 @@ const MenteeStudyRoomPage = () => {
         await pc.setLocalDescription(offer);
         signalingServer.send(JSON.stringify({ offer }));
       } catch (error) {
-        console.error("[ERROR] Student failed to get display media:", error);
+        // console.error("[ERROR] Student failed to get display media:", error);
       }
     };
 
     signalingServer.onopen = () => {
-      console.log("[INFO] Student WebSocket connection opened.");
       startLocalStream();
     };
 
@@ -83,18 +81,16 @@ const MenteeStudyRoomPage = () => {
       const { answer, candidate } = data;
 
       if (answer) {
-        console.log("[INFO] Student received WebRTC answer.");
         try {
           await pc.setRemoteDescription(new RTCSessionDescription(answer));
         } catch (err) {
-          console.error("[ERROR] Failed to set remote description:", err);
+          // console.error("[ERROR] Failed to set remote description:", err);
         }
       } else if (candidate) {
-        console.log("[INFO] Student received ICE candidate.");
         try {
           await pc.addIceCandidate(new RTCIceCandidate(candidate));
         } catch (err) {
-          console.error("[ERROR] Failed to add ICE candidate:", err);
+          // console.error("[ERROR] Failed to add ICE candidate:", err);
         }
       }
     };

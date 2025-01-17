@@ -5,7 +5,6 @@ import { useGetAssignmentDetail } from "../../../../hooks/useMentor";
 const MentorReadingAssignmentsPage = () => {
   const [problem, setProblem] = useState(null);
   const assignmentId = useLocation().state.assignmentId;
-  console.log(assignmentId);
 
   const getAssignmentDetailMutation = useGetAssignmentDetail();
 
@@ -14,7 +13,6 @@ const MentorReadingAssignmentsPage = () => {
       { assignmentId },
       {
         onSuccess: (data) => {
-          console.log("성공", data);
           setProblem(data);
         },
       }

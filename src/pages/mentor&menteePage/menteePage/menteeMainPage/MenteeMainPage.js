@@ -13,7 +13,6 @@ import MainPageAssignment from "../../components/MainPageAssignment";
 
 const MenteeMainPage = () => {
   const data = useLocation().state;
-  console.log(data);
 
   const { token, setClassCode } = useContext(Context);
   const {
@@ -27,8 +26,6 @@ const MenteeMainPage = () => {
   }, []);
   if (isLoading) return <div>로딩 중...</div>;
   if (isError) return <div>데이터를 가져오는 데 실패했습니다.</div>;
-
-  console.log("Top 3 Data:", topThreeData); // 데이터 출력
 
   const assignments = topThreeData?.["상위 3개 과제"] || [];
 

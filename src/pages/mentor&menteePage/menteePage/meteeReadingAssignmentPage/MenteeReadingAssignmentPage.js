@@ -8,7 +8,6 @@ const MenteeReadingAssignmentPage = () => {
   const { token } = useContext(Context);
   const [problem, setProblem] = useState(null);
   const assignmentId = useLocation().state.assignmentId;
-  console.log("Assignment ID:", assignmentId);
 
   const getAssignmentDetailMutation = useGetAssignmentDetail();
 

@@ -108,12 +108,6 @@ const MenteeDetailAssignmentPage = () => {
   };
 
   const handleTestCode = () => {
-    console.log({
-      token,
-      assignmentId: data.assignment_id,
-      code,
-      language,
-    });
     testCodeMutation.mutate(
       {
         token,
@@ -123,8 +117,6 @@ const MenteeDetailAssignmentPage = () => {
       },
       {
         onSuccess: (response) => {
-          console.log("API Response:", response);
-
           const passedCount = response.results.filter(
             (test) => test.result === "Pass"
           ).length;
@@ -143,10 +135,6 @@ const MenteeDetailAssignmentPage = () => {
     );
     setShowResult(true);
   };
-
-  useEffect(() => {
-    console.log(feedbackData);
-  }, [feedbackData]);
 
   // Ref for the left panel
   const leftPanelRef = useRef(null);

@@ -50,7 +50,6 @@ const MentorDoFeedbackPage = () => {
         { token, assignmentId },
         {
           onSuccess: (data) => {
-            console.log("멘티 피드백 리스트 연결함!!!", data);
             setAllMenteeFeedbackData(data);
 
             const menteeData = data.submissions.find(
@@ -87,11 +86,9 @@ const MentorDoFeedbackPage = () => {
       },
       {
         onSuccess: (response) => {
-          console.log("피드백 전송 성공:", response);
           alert("피드백이 성공적으로 저장되었습니다!");
         },
         onError: (error) => {
-          console.error("피드백 전송 실패:", error);
           alert("피드백 전송 중 오류가 발생했습니다.");
         },
       }

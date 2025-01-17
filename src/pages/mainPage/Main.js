@@ -77,10 +77,6 @@ const Main = () => {
     getMyClassroomMutation.mutate({ token });
   };
 
-  useEffect(() => {
-    console.log(token);
-  }, [token]);
-
   // useEffect(() => {
   //   wannaAllClassroom ? handleSearchAllClassroom() : handleGetMyClassroom();
   // }, [wannaAllClassroom]);

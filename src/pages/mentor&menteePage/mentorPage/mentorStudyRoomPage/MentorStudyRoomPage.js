@@ -25,17 +25,15 @@ const MentorStudyRoomPage = () => {
     );
     signalingServerRef.current = signalingServer;
 
-    signalingServer.onopen = () => {
-      console.log("[INFO] Host WebSocket connection opened.");
-    };
+    // signalingServer.onopen = () => {
+    //   console.log("[INFO] Host WebSocket connection opened.");
+    // };
 
     signalingServer.onmessage = async (event) => {
-      console.log(event);
       const data = JSON.parse(event.data);
       const { userId, offer, candidate, screenSharingEnded } = data;
 
       if (screenSharingEnded) {
-        console.log(`[INFO] Screen sharing ended for user ${userId}`);
         setStudentStreams((prevStreams) =>
           prevStreams.filter((stream) => stream.userId !== userId)
         );
@@ -51,23 +49,21 @@ const MentorStudyRoomPage = () => {
       }
 
       if (offer) {
-        console.log(`[INFO] Host received WebRTC offer from user ${userId}.`);
         const pc = createPeerConnection(userId);
         await pc.setRemoteDescription(new RTCSessionDescription(offer));
         const answer = await pc.createAnswer();
         await pc.setLocalDescription(answer);
         signalingServer.send(JSON.stringify({ userId, answer }));
       } else if (candidate) {
-        console.log(`[INFO] Host received ICE candidate from user ${userId}.`);
         const pc = peerConnectionsRef.current[userId];
         if (pc) {
           try {
             await pc.addIceCandidate(new RTCIceCandidate(candidate));
           } catch (err) {
-            console.error(
-              `[ERROR] Host failed to add ICE candidate for user ${userId}:`,
-              err
-            );
+            // console.error(
+            //   `[ERROR] Host failed to add ICE candidate for user ${userId}:`,
+            //   err
+            // );
           }
         }
       }
@@ -92,12 +88,10 @@ const MentorStudyRoomPage = () => {
     };
 
     pc.ontrack = (event) => {
-      console.log(`[INFO] Host received track from user ${userId}.`);
       const remoteStream = event.streams[0];
 
       // track ended 이벤트 리스너 추가
       event.track.onended = () => {
-        console.log(`[INFO] Track from user ${userId} ended.`);
         setStudentStreams((prevStreams) =>
           prevStreams.filter((stream) => stream.userId !== userId)
         );
@@ -116,16 +110,12 @@ const MentorStudyRoomPage = () => {
 
     pc.onconnectionstatechange = () => {
       const state = pc.connectionState;
-      console.log(`[INFO] Connection state with user ${userId}: ${state}`);
 
       if (
         state === "disconnected" ||
         state === "failed" ||
         state === "closed"
       ) {
-        console.log(
-          `[INFO] Removing stream for user ${userId} due to ${state} connection`
-        );
         setStudentStreams((prevStreams) =>
           prevStreams.filter((s) => s.userId !== userId)
         );

@@ -13,7 +13,6 @@ const MentorAssignmentsListPage = () => {
   const { classCode, token } = useContext(Context);
 
   useEffect(() => {
-    console.log(classCode);
     getAssignmentListMutation.mutate(
       { token, classCode },
       {
@@ -30,7 +29,6 @@ const MentorAssignmentsListPage = () => {
       <div className="flex flex-col gap-5">
         {assignmentList &&
           assignmentList.map((assignment) => {
-            console.log(assignment);
             return (
               <AssignmentsListPageAssignment
                 type={assignment.assignment_status}
