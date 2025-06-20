@@ -187,6 +187,7 @@ const MentorEditAssignmentPage = () => {
         <textarea
           id="assignmentDescription"
           value={assignment.description}
+          rows={Math.max(3, assignment.description.split("\n").length)}
           onChange={(e) => handleChange("description", e.target.value)}
           className="w-full px-[15px] py-[12px] border-[3px] bg-[#E3F7EF] border-[#E3F7EF] rounded-3xl focus:outline-none focus:ring-2 focus:ring-[#A8E6CF] placeholder:font-bold placeholder:text-[14px] placeholder-[#9C9C9C] text-[#525252] text-[18px] resize-none overflow-hidden"
           style={{ lineHeight: "30px", minHeight: "120px" }}

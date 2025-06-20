@@ -220,7 +220,7 @@ const MenteeDetailAssignmentPage = () => {
         </h1>
 
         {/* Assignment Description */}
-        <p className="px-[25px] text-[18px] text-[#525252] mb-[25px] leading-relaxed">
+        <p className="px-[25px] text-[18px] text-[#525252] mb-[25px] whitespace-pre-wrap break-words">
           {description}
         </p>
 
