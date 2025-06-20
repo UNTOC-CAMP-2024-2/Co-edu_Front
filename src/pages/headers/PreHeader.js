@@ -12,7 +12,7 @@ import { useSearchClassroom } from "../../hooks/useClassroom";
 const PreHeader = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
-  const { token, setToken, username } = useContext(Context);
+  const { token, setToken, username, setUsername } = useContext(Context);
   const navigate = useNavigate();
 
   const searchClassroomMutation = useSearchClassroom();
@@ -42,6 +42,7 @@ const PreHeader = () => {
                     className="cursor-pointer"
                     onClick={() => {
                       setToken(null);
+                      setUsername(null);
                       window.location.reload();
                     }}
                   >
