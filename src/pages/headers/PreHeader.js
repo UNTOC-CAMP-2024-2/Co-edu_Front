@@ -28,6 +28,23 @@ const PreHeader = () => {
       }
     );
   };
+  useEffect(() => {
+    const verifyToken = async () => {
+      if (!token) return;
+
+      try {
+        const res = await axios.post("/token/verify", { token });
+        if (res.data.user) {
+          setUsername(res.data.user);
+        }
+      } catch {
+        setToken(null);
+        setUsername(null);
+      }
+    };
+
+    verifyToken();
+  }, [token, setToken, setUsername]);
 
   return (
     <>
