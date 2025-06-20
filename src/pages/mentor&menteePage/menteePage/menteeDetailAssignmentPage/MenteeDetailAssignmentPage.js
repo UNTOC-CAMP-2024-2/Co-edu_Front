@@ -161,6 +161,7 @@ const MenteeDetailAssignmentPage = () => {
           const score = response.total_score;
 
           setTestResult({
+            ...response,
             passed: passedCount,
             total: totalCount,
             score,
