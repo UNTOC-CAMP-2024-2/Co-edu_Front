@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import logoImg from "../../images/logoImg.png";
 import mainImg from "../../images/mainImg.png";
 import { FaCheck } from "react-icons/fa";
@@ -7,7 +7,7 @@ import { PiHashBold } from "react-icons/pi";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Context } from "../../AppProvider";
 import { useSearchClassroom } from "../../hooks/useClassroom";
-
+import axios from "axios";
 // 스터디 참여 전 헤더
 const PreHeader = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
