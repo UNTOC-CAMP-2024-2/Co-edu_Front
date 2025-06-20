@@ -13,6 +13,40 @@ import {
 import { Context } from "../../../../AppProvider";
 import TestResultModal from "./TestResultModal";
 
+// 테스트 중 모달 컴포넌트
+const TestingModal = ({ isOpen }) => {
+  if (!isOpen) return null;
+  return (
+    <div className="z-40 bg-black bg-opacity-45 fixed top-0 left-0 w-full h-full flex justify-center items-center">
+      <div className="rounded-2xl bg-white shadow-lg shadow-[#575757] h-[10rem] w-[22rem] flex flex-col justify-center items-center">
+        <div className="text-[22px] text-[#54CEA6] font-bold mb-4">테스트 중...</div>
+        <div
+          className="mb-2"
+          style={{
+            width: "40px",
+            height: "40px",
+            borderWidth: "4px",
+            borderStyle: "solid",
+            borderRadius: "50%",
+            borderColor: "#e0e0e0",
+            borderTopColor: "#54CEA6",
+            animationName: "spin",
+            animationDuration: "1s",
+            animationTimingFunction: "linear",
+            animationIterationCount: "infinite",
+          }}
+        />
+        <div className="text-[16px] text-[#686868]">잠시만 기다려주세요</div>
+      </div>
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+    </div>
+  );
+};
+
 const MenteeDetailAssignmentPage = () => {
   const [language, setLanguage] = useState("python");
   const data = useLocation().state.problem;
@@ -107,7 +141,10 @@ const MenteeDetailAssignmentPage = () => {
     });
   };
 
+  const [isTesting, setIsTesting] = useState(false);
+
   const handleTestCode = () => {
+    setIsTesting(true);
     testCodeMutation.mutate(
       {
         token,
@@ -130,6 +167,10 @@ const MenteeDetailAssignmentPage = () => {
           });
 
           setIsModalOpen(true);
+          setIsTesting(false);
+        },
+        onError: () => {
+          setIsTesting(false);
         },
       }
     );
@@ -314,6 +355,7 @@ const MenteeDetailAssignmentPage = () => {
               !showFeedback && handleGetFeedback();
               setShowFeedback(!showFeedback);
             }}
+            disabled={isTesting}
           >
             <HiSpeakerphone
               style={{ width: "30px", height: "30px", color: "#FF6E6E" }}
@@ -324,6 +366,7 @@ const MenteeDetailAssignmentPage = () => {
             className="px-3 py-1 border border-gray-300 rounded-md text-sm"
             value={language}
             onChange={(e) => handleLanguageChange(e.target.value)}
+            disabled={isTesting}
           >
             <option value="python">Python</option>
             <option value="java">Java</option>
@@ -336,6 +379,7 @@ const MenteeDetailAssignmentPage = () => {
             <button
               className="px-[15px] py-[4px] border-3 border-[#54CEA6] text-[#54CEA6] rounded-full text-[16px] font-extrabold hover:bg-[#e6f8f2] hover:border-[#43A484] hover:text-[#43A484]"
               onClick={handleTestCode}
+              disabled={isTesting}
             >
               테스트
             </button>
@@ -344,6 +388,7 @@ const MenteeDetailAssignmentPage = () => {
             <button
               className="px-[15px] py-[4px] border-3 border-[#54CEA6] text-[#54CEA6] rounded-full text-[16px] font-extrabold hover:bg-[#e6f8f2] hover:border-[#43A484] hover:text-[#43A484]"
               onClick={handleSubmitCode}
+              disabled={isTesting}
             >
               제출
             </button>
@@ -396,6 +441,7 @@ const MenteeDetailAssignmentPage = () => {
         onClose={() => setIsModalOpen(false)}
         result={testResult}
       />
+      <TestingModal isOpen={isTesting} />
     </div>
   );
 };
