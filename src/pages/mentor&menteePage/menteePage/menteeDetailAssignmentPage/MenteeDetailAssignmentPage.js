@@ -250,7 +250,7 @@ const MenteeDetailAssignmentPage = () => {
           </div>
         ) : (
           /* Examples Section */
-          testcases.map((example, index) => (
+          testcases.slice(0, 3).map((example, index) => (
             <div key={index} className="mb-3">
               <div className="mb-4 mx-[28px]">
                 <h2 className="mx-[5px] text-[20px] text-black mb-2 pl-[5px]">
