@@ -33,6 +33,7 @@ export const submitCode = async ({ token, assignmentId, code, language }) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      timeout: 0,
     }
   );
 
@@ -51,6 +52,7 @@ export const testCode = async ({ token, assignmentId, code, language }) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      timeout: 0,
     }
   );
 
