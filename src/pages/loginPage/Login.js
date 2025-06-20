@@ -18,7 +18,7 @@ const Login = () => {
   return (
     <div className="flex flex-col items-center mt-[90px]">
       <h2 className="text-3xl font-bold mb-8">로그인</h2>
-      <form className="w-[350px]">
+      <form className="w-[350px]" onSubmit={handleLogin}>
         <div className="mb-[20px]">
           <label
             htmlFor="id"
@@ -52,8 +52,7 @@ const Login = () => {
           />
         </div>
         <button
-          type="button"
-          onClick={handleLogin}
+          type="submit"
           className="w-full py-[13px] bg-lightMint text-white font-bold text-[18px] rounded-lg hover:bg-darkMint"
         >
           로그인

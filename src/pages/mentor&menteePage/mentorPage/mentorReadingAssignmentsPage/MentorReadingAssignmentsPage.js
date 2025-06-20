@@ -34,7 +34,7 @@ const MentorReadingAssignmentsPage = () => {
         </Link>
       </div>
 
-      <p className="text-[#525252] mx-[5px] mb-[70px] text-[21px]">
+      <p className="text-[#525252] mx-[5px] mb-[70px] text-[21px] whitespace-pre-wrap break-words">
         {problem && problem.description}
       </p>
 
