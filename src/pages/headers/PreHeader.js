@@ -7,7 +7,7 @@ import { PiHashBold } from "react-icons/pi";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Context } from "../../AppProvider";
 import { useSearchClassroom } from "../../hooks/useClassroom";
-import axios from "axios";
+import axiosInstance from "./index";
 // 스터디 참여 전 헤더
 const PreHeader = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,7 +33,7 @@ const PreHeader = () => {
       if (!token) return;
 
       try {
-        const res = await axios.post("/token/verify", { token });
+        const res = await axiosInstance.post("user/token/verify", { token });
         if (res.data.user) {
           setUsername(res.data.user);
         }
