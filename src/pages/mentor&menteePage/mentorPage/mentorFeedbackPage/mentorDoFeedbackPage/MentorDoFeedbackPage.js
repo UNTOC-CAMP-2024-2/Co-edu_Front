@@ -59,6 +59,20 @@ const MentorDoFeedbackPage = () => {
             if (menteeData) {
               setSelectedMenteeData(menteeData); // 선택된 멘티 데이터 저장
             }
+
+            // 피드백 존재 확인
+            let feedbackEntry = null;
+            if (Array.isArray(data.feedbacks)) {
+              feedbackEntry = data.feedbacks.find(
+                (f) => f.user_id === menteeName
+              );
+            }
+            if (feedbackEntry && feedbackEntry.feedback !== false) {
+              setFeedback(feedbackEntry.feedback);
+            } else {
+              setFeedback("");
+            }
+
             // menteeName을 제외한 나머지 user_id들 필터링
             const filteredMentees = data.submissions
               .filter(
