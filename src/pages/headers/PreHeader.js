@@ -7,7 +7,7 @@ import { PiHashBold } from "react-icons/pi";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Context } from "../../AppProvider";
 import { useSearchClassroom } from "../../hooks/useClassroom";
-import axiosInstance from "./index";
+import axiosInstance from "../../api/index";
 // 스터디 참여 전 헤더
 const PreHeader = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
