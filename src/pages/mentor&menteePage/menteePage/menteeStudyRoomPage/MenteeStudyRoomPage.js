@@ -36,16 +36,17 @@ const MenteeStudyRoomPage = () => {
   const config = {
     iceServers: [
       {
-        urls: "turn:211.213.193.67:3478",
-        username: "coedu",
-        credential: "pwd394",
+        urls: process.env.REACT_APP_TURN_URL, 
+        username: process.env.REACT_APP_TURN_USERNAME, 
+        credential: process.env.REACT_APP_TURN_CREDENTIAL, 
       },
     ],
   };
 
   useEffect(() => {
+    const wsBase = process.env.REACT_APP_SIGNALING_WS_BASE; 
     const signalingServer = new WebSocket(
-      `wss://coedu.site:7777/live_classroom/${roomId}/student/ws?user_id=${userId}`
+      `${wsBase}/live_classroom/${roomId}/student/ws?user_id=${userId}`
     );
     signalingServerRef.current = signalingServer;
     const pc = new RTCPeerConnection(config);
