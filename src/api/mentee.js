@@ -136,3 +136,20 @@ export const getMenteeCodeData = async ({ token, assignmentId }) => {
 
   return response.data;
 };
+
+export const runCodeAPI = async ({ token, code, language, input }) => {
+  const response = await axiosInstance.post(
+    "/live_classroom/runcode",
+    {
+      code,
+      language,
+      input,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
