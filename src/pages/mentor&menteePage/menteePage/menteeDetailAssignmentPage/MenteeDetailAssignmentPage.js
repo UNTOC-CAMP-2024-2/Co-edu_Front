@@ -307,10 +307,8 @@ const MenteeDetailAssignmentPage = () => {
           </div>
         </div>
 
-        {/* Divider */}
         <div className="absolute top-[50px] left-0 w-full h-[1px] bg-[#D9D9D9]"></div>
 
-        {/* Monaco Editor */}
         <div className="flex flex-col h-full mt-[50px]">
           <Editor
             height="100%"

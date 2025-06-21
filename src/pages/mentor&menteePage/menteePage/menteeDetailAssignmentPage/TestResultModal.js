@@ -47,10 +47,17 @@ const TestResultModal = ({ isOpen, onClose, result }) => {
               <tbody>
                 {result.results && result.results.map((test, idx) => {
                   const status = getCaseStatus(test);
+                  const isPass = test.result === "Pass";
+                  const timeText = isPass && test.execution_time_ms !== undefined
+                    ? ` (${test.execution_time_ms}s)`
+                    : "";
+
                   return (
                     <tr key={idx} className="bg-[#F8FFF9] rounded">
                       <td className="py-1 font-semibold">#{test.case_number}</td>
-                      <td className="py-1 font-bold" style={{ color: status.color }}>{status.label}</td>
+                      <td className="py-1 font-bold" style={{ color: status.color }}>
+                        {status.label}{timeText}
+                      </td>
                     </tr>
                   );
                 })}
