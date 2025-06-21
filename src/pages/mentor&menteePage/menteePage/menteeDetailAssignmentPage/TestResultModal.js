@@ -15,6 +15,11 @@ const TestResultModal = ({ isOpen, onClose, result }) => {
     ) {
       return { label: "시간초과", color: "#FFB800" };
     }
+    if (test.result === "Error" && test.details) {
+      if (test.details.includes("IndexError")) {
+        return { label: "Out of index", color: "#A066D3" };
+      }
+    }
     return { label: "틀렸습니다.", color: "#FF6E6E" };
   };
 
