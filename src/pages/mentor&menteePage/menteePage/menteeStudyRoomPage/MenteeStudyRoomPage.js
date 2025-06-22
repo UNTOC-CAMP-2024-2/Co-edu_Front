@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../../../../AppProvider";
-import Editor from "@monaco-editor/react";
+import Editor, { loader } from "@monaco-editor/react";
 import { runCodeAPI } from "../../../../api/mentee";
+import { setupMonacoEditorDesign } from "../../components/EditorDesign";
+
 
 const codeTemplates = {
   python: 'print("hello world")',
@@ -16,6 +18,12 @@ int main() {
     public static void main(String[] args) {
         System.out.println("hello world");
     }
+}`,
+  c: `#include <stdio.h>
+
+int main() {
+    printf("hello world\\n");
+    return 0;
 }`,
 };
 
@@ -36,15 +44,19 @@ const MenteeStudyRoomPage = () => {
   const config = {
     iceServers: [
       {
-        urls: process.env.REACT_APP_TURN_URL, 
-        username: process.env.REACT_APP_TURN_USERNAME, 
-        credential: process.env.REACT_APP_TURN_CREDENTIAL, 
+        urls: process.env.REACT_APP_TURN_URL,
+        username: process.env.REACT_APP_TURN_USERNAME,
+        credential: process.env.REACT_APP_TURN_CREDENTIAL,
       },
     ],
   };
 
   useEffect(() => {
-    const wsBase = process.env.REACT_APP_SIGNALING_WS_BASE; 
+    setupMonacoEditorDesign();
+  }, []);
+
+  useEffect(() => {
+    const wsBase = process.env.REACT_APP_SIGNALING_WS_BASE;
     const signalingServer = new WebSocket(
       `${wsBase}/live_classroom/${roomId}/student/ws?user_id=${userId}`
     );
@@ -156,6 +168,7 @@ const MenteeStudyRoomPage = () => {
           >
             <option value="python">Python</option>
             <option value="cpp">C++</option>
+            <option value="c">C</option> 
             <option value="java">Java</option>
           </select>
         </div>
@@ -167,23 +180,25 @@ const MenteeStudyRoomPage = () => {
         </button>
       </div>
 
-      {/* 코드 에디터 (어두운 테마 유지) */}
+      {/* 코드 에디터 */}
       <div className="flex-1">
         <Editor
           height="100%"
           language={language}
           value={code}
           onChange={(value) => setCode(value || "")}
-          theme="vs-dark" // 코드 에디터는 어두운 테마 유지
+          theme="myDarkTheme"
           options={{
-            fontSize: 14,
+            fontSize: 18,
             minimap: { enabled: false },
             fontFamily: "Monaco, Consolas, monospace",
+            scrollBeyondLastLine: false,
+            tabSize: 4,
           }}
         />
       </div>
 
-      {/* 모달 */}
+      {/* 테스트 모달 */}
       {modalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
           <div className="bg-white w-full max-w-2xl p-6 rounded-lg shadow-lg relative text-black">

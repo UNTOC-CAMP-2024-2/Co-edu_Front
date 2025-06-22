@@ -10,7 +10,7 @@ import {
 } from "../../../../hooks/useMentee";
 import { Context } from "../../../../AppProvider";
 import TestResultModal from "./TestResultModal";
-
+import { setupMonacoEditorDesign } from "../../components/EditorDesign";
 // 테스트 중 모달
 const TestingModal = ({ isOpen }) => {
   if (!isOpen) return null;
@@ -67,8 +67,12 @@ const MenteeDetailAssignmentPage = () => {
     python: 'print("Hello, World!")',
     java: `public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}`,
     c: `#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}`,
+    cpp: `#include <iostream>\n\nint main() {\n    std::cout << "Hello, World!" << std::endl;\n    return 0;\n}`,
   };
-
+  useEffect(() => {
+    setupMonacoEditorDesign();
+  }, []);
+  
   useEffect(() => {
     getMenteeCodeDataMutation.mutate(
       { token, assignmentId: data.assignment_id },
@@ -287,6 +291,7 @@ const MenteeDetailAssignmentPage = () => {
             <option value="python">Python</option>
             <option value="java">Java</option>
             <option value="c">C</option>
+            <option value="cpp">C++</option>
           </select>
 
           <div className="flex space-x-2">
@@ -316,9 +321,9 @@ const MenteeDetailAssignmentPage = () => {
             language={language}
             value={code}
             onChange={(value) => setCode(value || "")}
-            theme="vs-dark"
+            theme="myDarkTheme"
             options={{
-              fontSize: 15,
+              fontSize: 18,
               minimap: { enabled: false },
               automaticLayout: true,
               scrollBeyondLastLine: false,
