@@ -3,17 +3,21 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   useEditAssignment,
   useGetAssignmentDetail,
+  useGetCategoryList,
 } from "../../../../hooks/useMentor";
 import { Context } from "../../../../AppProvider";
 import { FiPlus, FiMinus } from "react-icons/fi";
 
 const MentorEditAssignmentPage = () => {
-  const { token } = useContext(Context);
+  const { token, classCode } = useContext(Context);
   const { assignmentId } = useLocation().state;
   const navigate = useNavigate();
   const [assignment, setAssignment] = useState(null);
   const getAssignmentDetailMutation = useGetAssignmentDetail();
   const editAssignmentMutation = useEditAssignment();
+  const getCategoryListMutation = useGetCategoryList();
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     if (!assignmentId) {
@@ -34,7 +38,9 @@ const MentorEditAssignmentPage = () => {
                 input: testcase.input || "",
                 output: testcase.expected_output,
               })),
+              category_id: String(data.category_id || ""),
             });
+            setSelectedCategory(String(data.category_id || ""));
           },
           onError: (error) => {
             alert("과제 데이터를 불러오는 데 실패했습니다.");
@@ -43,6 +49,33 @@ const MentorEditAssignmentPage = () => {
       );
     }
   }, [assignmentId, token, navigate]);
+
+  useEffect(() => {
+    if (!token || !classCode) return;
+    getCategoryListMutation.mutate(
+      { token, classCode },
+      {
+        onSuccess: (data) => {
+          setCategories(data);
+        },
+      }
+    );
+  }, [token, classCode]);
+
+  // 카테고리 목록이나 assignment가 바뀔 때 드롭다운을 현재 과제 카테고리로 맞춤
+  useEffect(() => {
+    if (categories.length > 0) {
+      if (assignment && assignment.category_id) {
+        const found = categories.find(cat => String(cat.id) === String(assignment.category_id));
+        if (found) {
+          setSelectedCategory(String(found.id));
+          return;
+        }
+      }
+      // assignment.category_id가 없거나 목록에 없으면 첫 번째 카테고리로 자동 선택
+      setSelectedCategory(String(categories[0].id));
+    }
+  }, [categories, assignment]);
 
   // 데이터 업데이트 핸들러
   const handleChange = (field, value) => {
@@ -69,6 +102,11 @@ const MentorEditAssignmentPage = () => {
       return;
     }
 
+    if (!selectedCategory) {
+      alert("카테고리를 선택해주세요.");
+      return;
+    }
+
     if (
       assignment.examples.some((example) => !example.input || !example.output)
     ) {
@@ -89,6 +127,7 @@ const MentorEditAssignmentPage = () => {
           description: assignment.description,
           title: assignment.title,
           testcase: testcases,
+          category_id: selectedCategory ? Number(selectedCategory) : undefined,
         },
       },
       {
@@ -138,6 +177,36 @@ const MentorEditAssignmentPage = () => {
         <h1 className="text-[35px]">과제 수정</h1>
       </div>
 
+      {/* 취소/저장 버튼 - 카테고리 선택 위로 이동 */}
+      <div className="flex items-center justify-end gap-4 mb-[35px]">
+        <button
+          className="h-[45px] px-[25px] border-2 border-[#54CEA6] text-[#54CEA6] text-[20px] font-bold rounded-lg hover:shadow-lg hover:shadow-[#43A484]/50 transition-shadow duration-200"
+          onClick={() => navigate(-1)}
+        >
+          취소 하기
+        </button>
+        <button
+          className="h-[45px] px-[25px] bg-[#54CEA6] text-white text-[20px] font-bold rounded-lg hover:bg-[#43A484]"
+          onClick={handleSave}
+        >
+          저장 하기
+        </button>
+      </div>
+
+      {/* 카테고리 선택 */}
+      <div className="mb-[35px]">
+        <label className="block text-[20px] ml-[15px] mb-[8px] text-[#525252]">카테고리(주차) 선택</label>
+        <select
+          className="w-full h-[45px] px-[20px] border-[3px] border-[#E3F7EF] rounded-full focus:outline-none focus:ring-2 focus:ring-[#A8E6CF] text-[#525252] text-[18px] mb-2"
+          value={selectedCategory}
+          onChange={e => setSelectedCategory(String(e.target.value))}
+        >
+          {categories.map(cat => (
+            <option key={cat.id} value={String(cat.id)}>{cat.name}</option>
+          ))}
+        </select>
+      </div>
+
       {/* 과제 명 */}
       <div className="mb-[35px]">
         <div className="flex items-end justify-between mb-[8px]">
@@ -148,24 +217,6 @@ const MentorEditAssignmentPage = () => {
           >
             과제 명
           </label>
-
-          <div className="flex items-center justify-end gap-4 mb-[35px]">
-            {/* 취소하기 버튼 */}
-            <button
-              className="h-[45px] px-[25px] border-2 border-[#54CEA6] text-[#54CEA6] text-[20px] font-bold rounded-lg hover:shadow-lg hover:shadow-[#43A484]/50 transition-shadow duration-200"
-              onClick={() => navigate(-1)}
-            >
-              취소 하기
-            </button>
-
-            {/* 수정하기 버튼 */}
-            <button
-              className="h-[45px] px-[25px] bg-[#54CEA6] text-white text-[20px] font-bold rounded-lg hover:bg-[#43A484]"
-              onClick={handleSave}
-            >
-              저장 하기
-            </button>
-          </div>
         </div>
         <input
           type="text"

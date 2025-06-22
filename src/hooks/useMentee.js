@@ -10,6 +10,8 @@ import {
   getMenteeAssignmentStatus,
   leave,
   getMenteeCodeData,
+  getCategoryList,
+  getAssignmentsByCategory,
 } from "../api/mentee";
 
 export const useGetAssignmentList = () => {
@@ -89,6 +91,22 @@ export const useLeave = () => {
 export const useGetMenteeCodeData = () => {
   return useMutation({
     mutationFn: getMenteeCodeData,
+    onSuccess: (data) => {},
+    onError: (error) => {},
+  });
+};
+
+export const useGetCategoryList = () => {
+  return useMutation({
+    mutationFn: getCategoryList,
+    onSuccess: (data) => {},
+    onError: (error) => {},
+  });
+};
+
+export const useGetAssignmentsByCategory = () => {
+  return useMutation({
+    mutationFn: getAssignmentsByCategory,
     onSuccess: (data) => {},
     onError: (error) => {},
   });

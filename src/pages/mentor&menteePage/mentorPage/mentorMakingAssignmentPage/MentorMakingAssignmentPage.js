@@ -1,15 +1,16 @@
 import { type } from "@testing-library/user-event/dist/type";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { FiPlus } from "react-icons/fi";
 import { FiMinus } from "react-icons/fi";
 import { Context } from "../../../../AppProvider";
-import { useCreateAssignment } from "../../../../hooks/useMentor";
+import { useCreateAssignment, useGetCategoryList } from "../../../../hooks/useMentor";
 import { useNavigate } from "react-router-dom";
 
 const MentorMakingAssignmentPage = () => {
   const navigate = useNavigate();
   const { token, classCode } = useContext(Context);
   const createAssignmentMutations = useCreateAssignment();
+  const getCategoryListMutation = useGetCategoryList();
 
   const [title, setTitle] = useState(""); //과제 제목목
   const [description, setDescription] = useState(""); //과제 설명명
@@ -18,6 +19,21 @@ const MentorMakingAssignmentPage = () => {
     { input: "", output: "" },
     { input: "", output: "" },
   ]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  useEffect(() => {
+    if (!token || !classCode) return;
+    getCategoryListMutation.mutate(
+      { token, classCode },
+      {
+        onSuccess: (data) => {
+          setCategories(data);
+          if (data.length > 0) setSelectedCategory(data[0].id);
+        },
+      }
+    );
+  }, [token, classCode]);
 
   const addExample = () => {
     if (examples.length < 10) {
@@ -37,7 +53,7 @@ const MentorMakingAssignmentPage = () => {
 
   const handleInputChange = (index, value, type) => {
     const newExamples = [...examples];
-    newExamples[index] = { ...newExamples[index], [type]: value || "" }; // 빈 문자열로 초기화 보장
+    newExamples[index] = { ...newExamples[index], [type]: value || "" };
     setsExamples(newExamples);
   };
 
@@ -49,6 +65,11 @@ const MentorMakingAssignmentPage = () => {
 
     if (!title || !description) {
       alert("과제 명과 설명을 입력해주세요.");
+      return;
+    }
+
+    if (!selectedCategory) {
+      alert("카테고리를 선택해주세요.");
       return;
     }
 
@@ -67,6 +88,7 @@ const MentorMakingAssignmentPage = () => {
         token,
         assignment: {
           class_id: classCode,
+          category_id: selectedCategory,
           title,
           description,
           testcase: testcases,
@@ -87,6 +109,30 @@ const MentorMakingAssignmentPage = () => {
         <h1 className="text-[35px]">과제 생성</h1>
       </div>
 
+      {/* 업로드하기 버튼 - 카테고리 선택 위로 이동 */}
+      <div className="flex justify-end mb-4">
+        <button
+          className="h-[45px] px-[25px] bg-[#54CEA6] text-white text-[20px] font-bold rounded-lg hover:bg-[#43A484]"
+          onClick={handleUpload}
+        >
+          업로드 하기
+        </button>
+      </div>
+
+      {/* 카테고리 선택 */}
+      <div className="mb-[35px]">
+        <label className="block text-[20px] ml-[15px] mb-[8px] text-[#525252]">카테고리(주차) 선택</label>
+        <select
+          className="w-full h-[45px] px-[20px] border-[3px] border-[#E3F7EF] rounded-full focus:outline-none focus:ring-2 focus:ring-[#A8E6CF] text-[#525252] text-[18px] mb-2"
+          value={selectedCategory}
+          onChange={e => setSelectedCategory(e.target.value)}
+        >
+          {categories.map(cat => (
+            <option key={cat.id} value={cat.id}>{cat.name}</option>
+          ))}
+        </select>
+      </div>
+
       {/* 과제 명 */}
       <div className="mb-[35px]">
         <div className="flex items-end justify-between mb-[8px]">
@@ -97,14 +143,6 @@ const MentorMakingAssignmentPage = () => {
           >
             과제 명
           </label>
-
-          {/* 업로드하기 버튼 */}
-          <button
-            className="h-[45px] px-[25px] bg-[#54CEA6] text-white text-[20px] font-bold rounded-lg hover:bg-[#43A484]"
-            onClick={handleUpload}
-          >
-            업로드 하기
-          </button>
         </div>
         <input
           type="text"

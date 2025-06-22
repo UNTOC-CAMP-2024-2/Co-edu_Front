@@ -1,9 +1,10 @@
 import axiosInstance from ".";
 
-export const getAssignmentList = async ({ token, classCode }) => {
+export const getAssignmentList = async ({ token, classCode, categoryId }) => {
   const response = await axiosInstance.get("/assign/status/mentee/all", {
     params: {
       class_id: classCode,
+      ...(categoryId ? { category_id: categoryId } : {}),
     },
     headers: {
       Authorization: `Bearer ${token}`,
@@ -151,5 +152,26 @@ export const runCodeAPI = async ({ token, code, language, input }) => {
       },
     }
   );
+  return response.data;
+};
+
+export const getCategoryList = async ({ token, classCode }) => {
+  const response = await axiosInstance.get("/assign/categories", {
+    params: {
+      class_id: classCode,
+    },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+export const getAssignmentsByCategory = async ({ token, categoryId }) => {
+  const response = await axiosInstance.get(`assign/status/mentee/category/${categoryId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response.data;
 };

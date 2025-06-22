@@ -8,6 +8,9 @@ import {
   fetchMenteeTopThreeAssignments,
   getMentorFeedbackList,
   sendFeedback,
+  createCategory,
+  getCategoryList,
+  getAssignmentsByCategory,
 } from "../api/mentor";
 
 export const useCreateAssignment = () => {
@@ -87,5 +90,37 @@ export const useSendFeedback = () => {
     onError: (error) => {
       alert("피드백 전송에 실패했습니다.");
     },
+  });
+};
+
+export const useCreateCategory = () => {
+  return useMutation({
+    mutationFn: createCategory,
+    onSuccess: (data) => {
+      alert("카테고리가 생성되었습니다.");
+    },
+    onError: (error) => {
+      alert(
+        `카테고리 생성에 실패했습니다: ${
+          error.response?.data?.detail || error.message
+        }`
+      );
+    },
+  });
+};
+
+export const useGetCategoryList = () => {
+  return useMutation({
+    mutationFn: getCategoryList,
+    onSuccess: (data) => {},
+    onError: (error) => {},
+  });
+};
+
+export const useGetAssignmentsByCategory = () => {
+  return useMutation({
+    mutationFn: getAssignmentsByCategory,
+    onSuccess: (data) => {},
+    onError: (error) => {},
   });
 };
