@@ -14,7 +14,7 @@ export const getAssignmentList = async ({ token, classCode, categoryId }) => {
 };
 
 export const getAssignmentDetail = async ({ assignmentId }) => {
-  const response = await axiosInstance.get("/assign/info", {
+  const response = await axiosInstance.get("/assign/info_mentee", {
     params: {
       assignment_id: assignmentId,
     },
