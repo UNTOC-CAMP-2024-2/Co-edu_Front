@@ -31,9 +31,9 @@ const PostHeader = () => {
       },
       {
         onSuccess: (data) => {
-          data[1]
-            ? navigate("/mentor", { state: data[0] })
-            : navigate("/mentee", { state: data[0] });
+          data[2]
+            ? navigate("/mentor", { state: data})
+            : navigate("/mentee", { state: data});
         },
       }
     );
