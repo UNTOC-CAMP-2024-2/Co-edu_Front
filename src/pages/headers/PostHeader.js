@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { FaEllipsisH } from "react-icons/fa";
 import logoImg from "../../images/logoImg.png";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoArrowBackSharp } from "react-icons/io5";
 import { useAmIbelongtoClassroom } from "../../hooks/useClassroom";
 import { Context } from "../../AppProvider";
 import { useLeave } from "../../hooks/useMentee";
@@ -58,20 +58,19 @@ const PostHeader = () => {
           <FaEllipsisH color="white" size="35" />
         </button>
         <img src={logoImg} width="110" alt="logo" />
-        {isStudy === "study" ? (
-          <div
-            onClick={() => {
-              handleAmIbelongtoClassroom();
-            }}
-            className="font-semibold text-white cursor-pointer"
+        <div className="flex items-center gap-2">
+          <button
+            className="flex items-center justify-center"
+            onClick={() => navigate(-1)}
+            style={{ background: 'none', border: 'none', padding: 0 }}
+            aria-label="뒤로가기"
           >
-            <FaDoorOpen color="white" size="40" />
-          </div>
-        ) : (
+            <IoArrowBackSharp color="white" size="40" />
+          </button>
           <Link to="/">
             <IoClose color="white" size="40" />
           </Link>
-        )}
+        </div>
       </div>
       <Outlet />
       {isSideBarOpen && (

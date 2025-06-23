@@ -7,6 +7,7 @@ const AppProvider = ({ children }) => {
   const [username, setUsernameState] = useState(() => localStorage.getItem("username"));
   const [classCode, setClassCode] = useState(null);
   const [className, setClassName] = useState(null);
+  const [categories, setCategories] = useState([]);
 
   const setToken = (value) => {
     setTokenState(value);
@@ -42,6 +43,8 @@ const AppProvider = ({ children }) => {
         setUsername,
         className,
         setClassName,
+        categories,
+        setCategories,
       }}
     >
       {children}
