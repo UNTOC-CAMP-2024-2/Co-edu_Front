@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const MentorMakingAssignmentPage = () => {
   const navigate = useNavigate();
-  const { token, classCode } = useContext(Context);
+  const { token, classCode, categories: contextCategories } = useContext(Context);
   const createAssignmentMutations = useCreateAssignment();
   const getCategoryListMutation = useGetCategoryList();
 
@@ -21,8 +21,14 @@ const MentorMakingAssignmentPage = () => {
   ]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [showCategoryAlert, setShowCategoryAlert] = useState(false);
 
   useEffect(() => {
+    if (contextCategories && contextCategories.length > 0) {
+      setCategories(contextCategories);
+      setSelectedCategory(contextCategories[0].id);
+      return;
+    }
     if (!token || !classCode) return;
     getCategoryListMutation.mutate(
       { token, classCode },
@@ -33,7 +39,7 @@ const MentorMakingAssignmentPage = () => {
         },
       }
     );
-  }, [token, classCode]);
+  }, [token, classCode, contextCategories]);
 
   const addExample = () => {
     if (examples.length < 10) {
@@ -58,6 +64,12 @@ const MentorMakingAssignmentPage = () => {
   };
 
   const handleUpload = async () => {
+    if (categories.length === 0) {
+      setShowCategoryAlert(true);
+      return;
+    } else {
+      setShowCategoryAlert(false);
+    }
     if (!token) {
       alert("로그인이 필요합니다. 다시 로그인해주세요.");
       return;
@@ -109,11 +121,19 @@ const MentorMakingAssignmentPage = () => {
         <h1 className="text-[35px]">과제 생성</h1>
       </div>
 
+      {/* 카테고리 없을 때 안내 메시지 (버튼 눌렀을 때만) */}
+      {showCategoryAlert && (
+        <div className="mb-6 p-4 bg-red-100 text-red-600 rounded-lg text-center font-semibold text-lg">
+          카테고리가 존재하지 않습니다. 먼저 카테고리를 생성해주세요.
+        </div>
+      )}
+
       {/* 업로드하기 버튼 - 카테고리 선택 위로 이동 */}
       <div className="flex justify-end mb-4">
         <button
-          className="h-[45px] px-[25px] bg-[#54CEA6] text-white text-[20px] font-bold rounded-lg hover:bg-[#43A484]"
+          className={`h-[45px] px-[25px] bg-[#54CEA6] text-white text-[20px] font-bold rounded-lg hover:bg-[#43A484] ${categories.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
           onClick={handleUpload}
+          disabled={categories.length === 0}
         >
           업로드 하기
         </button>

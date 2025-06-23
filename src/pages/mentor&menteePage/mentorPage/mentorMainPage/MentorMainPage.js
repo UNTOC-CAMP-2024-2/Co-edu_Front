@@ -12,29 +12,31 @@ import { useFetchMentorTopThreeAssignments } from "../../../../hooks/useMentor";
 // 패드백 모아보기 -> gaveFeedbackAll / gaveFeedbackFew / notGaveFeedbackAll (모든 멘티에게 피드백을 주었는지에 따라)
 
 const MentorMainPage = () => {
-  const data = useLocation().state;
+  const [classroomInfo, categoryList, isMentor] = useLocation().state;
 
-  const { token, setClassCode } = useContext(Context);
+  const { token, setClassCode, setCategories } = useContext(Context);
   const {
     data: topThreeData,
     isLoading,
     isError,
-  } = useFetchMentorTopThreeAssignments(data.class_code, token);
+  } = useFetchMentorTopThreeAssignments(classroomInfo.class_code, token);
 
   useEffect(() => {
-    setClassCode(data.class_code);
+    setClassCode(classroomInfo.class_code);
+    if (categoryList) {
+      setCategories(categoryList);
+    }
   }, []);
 
   if (isLoading) return <div>로딩 중...</div>;
   if (isError) return <div>데이터를 가져오는 데 실패했습니다.</div>;
 
   const assignments = topThreeData?.["상위 3개 과제"] || [];
-
   const feedbacks = topThreeData?.["상위 3개 과제 및 피드백 상태"] || [];
 
   return (
     <div className="mx-14 mb-10">
-      <CommonMainComponent classroomData={data} />
+      <CommonMainComponent classroomData={classroomInfo} />
       <div className="flex gap-5 mt-3">
         <CommonComponent componentTitle={"전체 과제"}>
           {isLoading ? (

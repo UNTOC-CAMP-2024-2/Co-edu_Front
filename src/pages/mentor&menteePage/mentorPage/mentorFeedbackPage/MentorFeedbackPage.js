@@ -44,21 +44,21 @@ const MentorFeedbackPage = () => {
   return (
     <div className="flex flex-col items-center justify-center mt-5 mb-10">
       <div className="text-lightBlack text-3xl p-14">피드백 모아보기</div>
-      <div className="flex flex-col gap-4 w-full max-w-4xl">
+      <div className="flex flex-col gap-2 w-full max-w-4xl">
         {categories.map((cat) => (
-          <div key={cat.id} className="border rounded-xl bg-white shadow p-6 min-h-[90px] min-w-[600px] flex flex-col justify-center">
+          <div key={cat.id} className="border rounded-xl bg-white shadow p-3 min-h-[50px] min-w-[600px] flex flex-col justify-center">
             <div className="flex items-center justify-between cursor-pointer" onClick={() => handleToggleCategory(cat.id)}>
-              <div className="font-semibold text-xl text-gray-800">{cat.name}</div>
+              <div className="font-semibold text-lg text-gray-800">{cat.name}</div>
               <button className="ml-2 focus:outline-none">
                 {openCategoryIds.includes(cat.id) ? (
-                  <VscTriangleUp size={28} color="#54CEA6" />
+                  <VscTriangleUp size={24} color='#54CEA6' />
                 ) : (
-                  <VscTriangleDown size={28} color="#c4c4c4" />
+                  <VscTriangleDown size={24} color='#c4c4c4' />
                 )}
               </button>
             </div>
             {openCategoryIds.includes(cat.id) && (
-              <div className="flex flex-col gap-4 mt-5">
+              <div className="flex flex-col gap-2 mt-2">
                 {assignmentsByCategory[cat.id] && assignmentsByCategory[cat.id].length > 0 ? (
                   assignmentsByCategory[cat.id].map((assignment) => (
                     <FeedbackPageAssignment
@@ -70,7 +70,7 @@ const MentorFeedbackPage = () => {
                     />
                   ))
                 ) : (
-                  <div className="text-gray-400 text-center py-4">과제가 없습니다.</div>
+                  <div className="text-gray-400 text-center py-2 text-sm">과제가 없습니다.</div>
                 )}
               </div>
             )}
