@@ -12,30 +12,28 @@ import MainPageAssignment from "../../components/MainPageAssignment";
 // 패드백 모아보기 -> gotFeedback
 
 const MenteeMainPage = () => {
-  const data = useLocation().state;
+  const [classroomInfo, categoryList, isMentor] = useLocation().state;
 
   const { token, setClassCode } = useContext(Context);
   const {
     data: topThreeData,
     isLoading,
     isError,
-  } = useFetchMenteeTopThreeAssignments(data.class_code, token);
+  } = useFetchMenteeTopThreeAssignments(classroomInfo.class_code, token);
 
   useEffect(() => {
-    setClassCode(data.class_code);
+    setClassCode(classroomInfo.class_code);
   }, []);
   if (isLoading) return <div>로딩 중...</div>;
   if (isError) return <div>데이터를 가져오는 데 실패했습니다.</div>;
 
   const assignments = topThreeData?.["상위 3개 과제"] || [];
-
   const feedbacks = topThreeData?.["상위 3개 피드백"] || [];
-
   const submits = topThreeData?.["제출한 상위 3개 과제"] || [];
 
   return (
     <div className="mx-14 mb-10">
-      <CommonMainComponent classroomData={data} />
+      <CommonMainComponent classroomData={classroomInfo} />
       <div className="flex gap-5 mt-3">
         <CommonComponent componentTitle={"전체 과제"}>
           {isLoading ? (

@@ -45,10 +45,11 @@ const StudyDetailModal = ({
       },
       {
         onSuccess: (data) => {
-          console.log(data[0]);
-          data[1]
-            ? navigate("/mentor", { state: data[0] })
-            : navigate("/mentee", { state: data[0] });
+          if (data[2]) {
+            navigate("/mentor", { state: data });
+          } else {
+            navigate("/mentee", { state: data });
+          }
         },
         onError: () => {
           subtmitClassroomCode.mutate(
