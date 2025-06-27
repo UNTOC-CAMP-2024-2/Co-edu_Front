@@ -6,21 +6,25 @@ const TestResultModal = ({ isOpen, onClose, result }) => {
 
   // 각 케이스별 결과 해석 함수
   const getCaseStatus = (test) => {
-    if (test.result === "Pass") return { label: "정답", color: "#54CEA6" };
+    // 시간초과 케이스
     if (
       test.details && (
         test.details.includes("시간초과") ||
         test.details === "Execution timed out."
       )
     ) {
-      return { label: "시간초과", color: "#FFB800" };
+      return { label: "시간초과", color: "#FFB800", isTimeout: true };
     }
+    // 정답 케이스
+    if (test.result === "Pass") return { label: "정답", color: "#54CEA6", isTimeout: false };
+    // 인덱스 에러
     if (test.result === "Error" && test.details) {
       if (test.details.includes("IndexError")) {
-        return { label: "Out of index", color: "#A066D3" };
+        return { label: "Out of index", color: "#A066D3", isTimeout: false };
       }
     }
-    return { label: "틀렸습니다.", color: "#FF6E6E" };
+    // 그 외 오답
+    return { label: "틀렸습니다.", color: "#FF6E6E", isTimeout: false };
   };
 
   return (
@@ -52,11 +56,12 @@ const TestResultModal = ({ isOpen, onClose, result }) => {
               <tbody>
                 {result.results && result.results.map((test, idx) => {
                   const status = getCaseStatus(test);
-                  const isPass = test.result === "Pass";
-                  const timeText = isPass && test.execution_time_ms !== undefined
-                    ? ` (${test.execution_time_ms}s)`
-                    : "";
-
+                  // 시간초과면 시간 미표시, Pass면 시간 표시, 그 외 미표시
+                  let timeText = "";
+                  if (status.label === "정답" && test.execution_time_s !== undefined) {
+                    timeText = ` (${test.execution_time_s}s)`;
+                  }
+                  // 시간초과면 시간 미표시
                   return (
                     <tr key={idx} className="bg-[#F8FFF9] rounded">
                       <td className="py-1 font-semibold">#{test.case_number}</td>

@@ -131,7 +131,36 @@ const MenteeDetailAssignmentPage = () => {
           setIsModalOpen(true);
           setIsTesting(false);
         },
-        onError: () => setIsTesting(false),
+        onError: (error) => {
+          setIsTesting(false);
+          // 400에러 등에서 시간초과 메시지가 오면 모달에 시간초과 결과를 세팅
+          let errorData = error?.response?.data;
+          if (errorData && errorData.results) {
+            setTestResult({
+              ...errorData,
+              passed: 0,
+              total: errorData.results.length,
+              score: 0,
+            });
+            setIsModalOpen(true);
+          } else if (errorData && errorData.detail) {
+            // detail에 Execution timed out. 등 단일 메시지로 올 때
+            setTestResult({
+              results: [
+                {
+                  case_number: 1,
+                  result: "Error",
+                  details: errorData.detail,
+                  execution_time_s: null,
+                },
+              ],
+              passed: 0,
+              total: 1,
+              score: 0,
+            });
+            setIsModalOpen(true);
+          }
+        },
       }
     );
     setShowResult(true);
