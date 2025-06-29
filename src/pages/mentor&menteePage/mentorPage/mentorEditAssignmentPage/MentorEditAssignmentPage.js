@@ -18,6 +18,7 @@ const MentorEditAssignmentPage = () => {
   const getCategoryListMutation = useGetCategoryList();
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [timeLimit, setTimeLimit] = useState("");
 
   useEffect(() => {
     if (!assignmentId) {
@@ -41,6 +42,7 @@ const MentorEditAssignmentPage = () => {
               category_id: String(data.category_id || ""),
             });
             setSelectedCategory(String(data.category_id || ""));
+            setTimeLimit(data.time_limit ? String(data.time_limit) : "");
           },
           onError: (error) => {
             alert("과제 데이터를 불러오는 데 실패했습니다.");
@@ -114,6 +116,11 @@ const MentorEditAssignmentPage = () => {
       return;
     }
 
+    if (!timeLimit || isNaN(Number(timeLimit)) || Number(timeLimit) <= 0) {
+      alert("실행 시간 제한(초)을 올바르게 입력해주세요.");
+      return;
+    }
+
     const testcases = assignment.examples.map((example) => ({
       input_data: example.input,
       expected_output: example.output,
@@ -128,6 +135,7 @@ const MentorEditAssignmentPage = () => {
           title: assignment.title,
           testcase: testcases,
           category_id: selectedCategory ? Number(selectedCategory) : undefined,
+          time_limit: Number(timeLimit),
         },
       },
       {
@@ -243,6 +251,22 @@ const MentorEditAssignmentPage = () => {
           className="w-full px-[15px] py-[12px] border-[3px] bg-[#E3F7EF] border-[#E3F7EF] rounded-3xl focus:outline-none focus:ring-2 focus:ring-[#A8E6CF] placeholder:font-bold placeholder:text-[14px] placeholder-[#9C9C9C] text-[#525252] text-[18px] resize-none overflow-hidden"
           style={{ lineHeight: "30px", minHeight: "120px" }}
         ></textarea>
+      </div>
+
+      {/* 실행 시간 제한 입력 */}
+      <div className="mb-[35px]">
+        <label htmlFor="timeLimit" className="block text-[20px] ml-[15px] mb-[8px] text-[#525252]">
+          실행 시간 제한(초)
+        </label>
+        <input
+          type="number"
+          id="timeLimit"
+          min="0.01"
+          placeholder="예: 2"
+          value={timeLimit}
+          onChange={e => setTimeLimit(e.target.value)}
+          className="w-full h-[45px] px-[20px] border-[3px] border-[#E3F7EF] rounded-full focus:outline-none focus:ring-2 focus:ring-[#A8E6CF] placeholder:font-bold placeholder:text-[14px] placeholder-[#9C9C9C] text-[#525252] text-[18px]"
+        />
       </div>
 
       <div className="grid grid-cols-2 gap-x-[40px] gap-y-[30px]">

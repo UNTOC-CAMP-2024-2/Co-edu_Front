@@ -42,10 +42,14 @@ const MenteeReadingAssignmentPage = () => {
           바로 가기
         </Link>
       </div>
-
       <p className="text-[#525252] mx-[5px] mb-[70px] text-[21px] whitespace-pre-wrap break-words">
         {problem && problem.description}
       </p>
+      {problem && (problem.time_limit || problem.timelimit) && (
+        <div className="ml-[5px] mb-[20px] text-[18px] text-[#43A484] font-semibold">
+          실행 시간 제한: {problem.time_limit ?? problem.timelimit}초
+        </div>
+      )}
 
       <div className="grid grid-cols-2 gap-x-[40px] gap-y-[30px]">
         {problem &&

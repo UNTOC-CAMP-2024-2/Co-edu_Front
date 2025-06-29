@@ -323,7 +323,12 @@ const MenteeDetailAssignmentPage = () => {
             <option value="cpp">C++</option>
           </select>
 
-          <div className="flex space-x-2">
+          <div className="flex items-center space-x-4">
+            {(data.time_limit || data.timelimit) && (
+              <div className="text-[#43A484] font-semibold text-[16px] flex items-center">
+                <span className="mr-1"></span>실행 시간 제한: {data.time_limit ?? data.timelimit}초
+              </div>
+            )}
             <button
               className="px-[15px] py-[4px] border-3 border-[#54CEA6] text-[#54CEA6] rounded-full text-[16px] font-extrabold hover:bg-[#e6f8f2] hover:border-[#43A484] hover:text-[#43A484]"
               onClick={handleTestCode}

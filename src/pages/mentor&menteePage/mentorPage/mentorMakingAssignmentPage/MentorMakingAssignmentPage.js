@@ -22,6 +22,7 @@ const MentorMakingAssignmentPage = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [showCategoryAlert, setShowCategoryAlert] = useState(false);
+  const [timeLimit, setTimeLimit] = useState(""); // 실행 시간 제한(초)
 
   useEffect(() => {
     if (contextCategories && contextCategories.length > 0) {
@@ -90,6 +91,11 @@ const MentorMakingAssignmentPage = () => {
       return;
     }
 
+    if (!timeLimit || isNaN(Number(timeLimit)) || Number(timeLimit) <= 0) {
+      alert("실행 시간 제한(초)을 올바르게 입력해주세요.");
+      return;
+    }
+
     const testcases = examples.map((example) => ({
       input_data: example.input,
       expected_output: example.output,
@@ -104,6 +110,7 @@ const MentorMakingAssignmentPage = () => {
           title,
           description,
           testcase: testcases,
+          time_limit: Number(timeLimit),
         },
       },
       {
@@ -194,6 +201,22 @@ const MentorMakingAssignmentPage = () => {
             e.target.style.height = `${e.target.scrollHeight}px`; // 내용에 맞게 높이 조정
           }}
         ></textarea>
+      </div>
+
+      {/* 실행 시간 제한 입력 */}
+      <div className="mb-[35px]">
+        <label htmlFor="timeLimit" className="block text-[20px] ml-[15px] mb-[8px] text-[#525252]">
+          실행 시간 제한(초)
+        </label>
+        <input
+          type="number"
+          id="timeLimit"
+          min="0.01"
+          placeholder="예: 2"
+          value={timeLimit}
+          onChange={e => setTimeLimit(e.target.value)}
+          className="w-full h-[45px] px-[20px] border-[3px] border-[#E3F7EF] rounded-full focus:outline-none focus:ring-2 focus:ring-[#A8E6CF] placeholder:font-bold placeholder:text-[14px] placeholder-[#9C9C9C] text-[#525252] text-[18px]"
+        />
       </div>
 
       <div className="grid grid-cols-2 gap-x-[40px] gap-y-[30px]">

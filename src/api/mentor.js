@@ -1,7 +1,7 @@
 import axiosInstance from ".";
 
 export const createAssignment = async ({ token, assignment }) => {
-  const { class_id, category_id, title, description, testcase } = assignment;
+  const { class_id, category_id, title, description, testcase, time_limit } = assignment;
 
   const response = await axiosInstance.post(
     "/assign/create",
@@ -11,6 +11,7 @@ export const createAssignment = async ({ token, assignment }) => {
       title,
       description,
       testcase,
+      time_limit,
     },
     {
       headers: {
@@ -40,7 +41,7 @@ export const getAssignmentDetail = async ({ assignmentId }) => {
 };
 
 export const editAssignment = async ({ token, assignment }) => {
-  const { assignment_id, description, title, testcase, category_id } = assignment;
+  const { assignment_id, description, title, testcase, category_id, time_limit } = assignment;
 
   const response = await axiosInstance.post(
     "/assign/modify",
@@ -50,6 +51,7 @@ export const editAssignment = async ({ token, assignment }) => {
       title,
       testcase,
       category_id,
+      time_limit,
     },
     {
       headers: {
