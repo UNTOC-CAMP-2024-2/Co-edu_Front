@@ -11,6 +11,7 @@ import {
 import { Context } from "../../../../AppProvider";
 import TestResultModal from "./TestResultModal";
 import { setupMonacoEditorDesign } from "../../components/EditorDesign";
+import { runCodeAPI } from "../../../../api/mentee";
 // 테스트 중 모달
 const TestingModal = ({ isOpen }) => {
   if (!isOpen) return null;
@@ -52,6 +53,9 @@ const MenteeDetailAssignmentPage = () => {
   const [isTesting, setIsTesting] = useState(false);
   const [testResult, setTestResult] = useState({ passed: 0, total: 0, score: 0 });
   const [feedbackData, setFeedbackData] = useState({ feedback: "" });
+  const [runModalOpen, setRunModalOpen] = useState(false);
+  const [testInput, setTestInput] = useState("");
+  const [output, setOutput] = useState("");
 
   const data = useLocation().state.problem;
   const { title, description, testcases } = data;
@@ -173,6 +177,26 @@ const MenteeDetailAssignmentPage = () => {
         onSuccess: (data) => setFeedbackData(data?.feedback || ""),
       }
     );
+  };
+
+  const runCode = async () => {
+    setOutput("실행 중...");
+    try {
+      const data = await runCodeAPI({
+        token,
+        code,
+        language,
+        input: testInput,
+      });
+      if (data.status === "success") {
+        const [result, execTime] = data.details;
+        setOutput(`출력: ${result}\n실행 시간: ${execTime}s`);
+      } else {
+        setOutput(`❌ 오류: ${data.details}`);
+      }
+    } catch (err) {
+      setOutput("❌ 실행 실패. 서버 응답 없음.");
+    }
   };
 
   const leftPanelRef = useRef(null);
@@ -331,6 +355,13 @@ const MenteeDetailAssignmentPage = () => {
             )}
             <button
               className="px-[15px] py-[4px] border-3 border-[#54CEA6] text-[#54CEA6] rounded-full text-[16px] font-extrabold hover:bg-[#e6f8f2] hover:border-[#43A484] hover:text-[#43A484]"
+              onClick={() => setRunModalOpen(true)}
+              disabled={isTesting}
+            >
+              실행
+            </button>
+            <button
+              className="px-[15px] py-[4px] border-3 border-[#54CEA6] text-[#54CEA6] rounded-full text-[16px] font-extrabold hover:bg-[#e6f8f2] hover:border-[#43A484] hover:text-[#43A484]"
               onClick={handleTestCode}
               disabled={isTesting}
             >
@@ -369,6 +400,44 @@ const MenteeDetailAssignmentPage = () => {
 
       <TestResultModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} result={testResult} />
       <TestingModal isOpen={isTesting} />
+      
+      {/* 실행 모달 */}
+      {runModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+          <div className="bg-white w-full max-w-2xl p-6 rounded-lg shadow-lg relative text-black">
+            <button
+              onClick={() => setRunModalOpen(false)}
+              className="absolute top-2 right-4 text-black text-2xl"
+            >
+              &times;
+            </button>
+
+            <h2 className="text-xl font-semibold mb-4">테스트 케이스 입력</h2>
+            <textarea
+              value={testInput}
+              onChange={(e) => setTestInput(e.target.value)}
+              rows={6}
+              className="w-full p-3 mb-4 bg-gray-100 text-black placeholder-gray-500 rounded resize-none border border-gray-400 focus:ring-2 focus:ring-blue-400"
+              placeholder="입력값을 여기에 작성하세요"
+            />
+            <button
+              onClick={runCode}
+              className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-white"
+            >
+              ▶️ 실행
+            </button>
+
+            {output && (
+              <div className="mt-4">
+                <h3 className="font-semibold mb-1">출력 결과:</h3>
+                <pre className="bg-gray-100 text-black p-3 rounded text-sm max-h-64 overflow-auto whitespace-pre-wrap border border-gray-300">
+                  {output}
+                </pre>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
