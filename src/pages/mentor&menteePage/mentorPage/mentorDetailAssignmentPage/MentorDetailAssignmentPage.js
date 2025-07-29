@@ -54,6 +54,10 @@ const MentorDetailAssignmentPage = () => {
 
   const location = useLocation();
   const assignmentId = location.state?.assignmentId;
+  const menteeCode = location.state?.menteeCode;
+  const menteeName = location.state?.menteeName;
+  const isTestMode = location.state?.isTestMode;
+  
   const { token } = useContext(Context);
 
   const getAssignmentDetailMutation = useGetAssignmentDetail();
@@ -89,14 +93,51 @@ const MentorDetailAssignmentPage = () => {
       setIsLoading(false);
     }
   }, [assignmentId, token]);
+
+  // 코드에서 언어 자동 감지
+  const detectLanguage = (code) => {
+    if (!code) return "python";
+    
+    // Java 감지
+    if (code.includes("public class") || code.includes("System.out.println")) {
+      return "java";
+    }
+    // C++ 감지
+    if (code.includes("#include <iostream>") || code.includes("std::cout")) {
+      return "cpp";
+    }
+    // C 감지
+    if (code.includes("#include <stdio.h>") || code.includes("printf")) {
+      return "c";
+    }
+    // 기본값은 Python
+    return "python";
+  };
   
   useEffect(() => {
-    setCode(defaultCodes[language]);
-  }, [language]);
+    // 멘티 코드가 있으면 그것을 사용하고, 언어도 자동 감지
+    if (isTestMode && menteeCode) {
+      const detectedLanguage = detectLanguage(menteeCode);
+      setLanguage(detectedLanguage);
+      setCode(menteeCode);
+    } else {
+      setCode(defaultCodes[language]);
+    }
+  }, [menteeCode, isTestMode]);
+
+  useEffect(() => {
+    // 테스트 모드가 아닐 때만 언어 변경에 따른 기본 코드 설정
+    if (!isTestMode) {
+      setCode(defaultCodes[language]);
+    }
+  }, [language, isTestMode]);
 
   const handleLanguageChange = (newLanguage) => {
     setLanguage(newLanguage);
-    setCode(defaultCodes[newLanguage]);
+    // 테스트 모드가 아닐 때만 기본 코드로 초기화
+    if (!isTestMode) {
+      setCode(defaultCodes[newLanguage]);
+    }
   };
 
   const handleTestCode = () => {
@@ -232,6 +273,18 @@ const MentorDetailAssignmentPage = () => {
           {description}
         </p>
 
+        {/* 테스트 모드일 때 멘티 정보 표시 */}
+        {isTestMode && menteeName && (
+          <div className="mx-[30px] mb-[25px] p-[15px] bg-blue-50 border-2 border-blue-200 rounded-[10px]">
+            <div className="text-[16px] font-semibold text-blue-700 mb-1">
+              🧑‍🎓 {menteeName}님의 제출 코드
+            </div>
+            <div className="text-[14px] text-blue-600">
+              이 코드를 테스트하고 있습니다
+            </div>
+          </div>
+        )}
+
         {testcases && testcases.slice(0, 3).map((example, index) => (
           <div key={index} className="mb-3">
             <div className="mb-4 mx-[28px]">
@@ -278,7 +331,7 @@ const MentorDetailAssignmentPage = () => {
       <div className="flex-1 relative">
         <div className="absolute top-0 left-0 right-0 flex items-center justify-between h-[50px] px-4">
           <div className="text-[#FF6E6E] font-semibold text-[16px]">
-            멘토 코드에디터
+            {isTestMode ? `🔍 ${menteeName}님 코드 테스트` : "멘토 코드에디터"}
           </div>
 
           <select

@@ -32,8 +32,7 @@ const AssignmentsListPageAssignment = ({
   const icon = dct[type];
 
   const handleShortcut = (e) => {
-    e.stopPropagation(); // 이벤트 버블링 방지
-    // 멘토 코드 작성 페이지로 이동
+    e.stopPropagation(); 
     navigate(`/${pathname}/practice`, { state: { assignmentId } });
   };
 
