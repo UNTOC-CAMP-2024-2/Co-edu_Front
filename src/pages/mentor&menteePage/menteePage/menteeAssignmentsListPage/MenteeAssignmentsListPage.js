@@ -55,7 +55,21 @@ const MenteeAssignmentsListPage = () => {
         {categories.map((cat) => (
           <div key={cat.id} className="border rounded-xl bg-white shadow p-3 min-h-[50px] min-w-[600px] flex flex-col justify-center">
             <div className="flex items-center justify-between cursor-pointer" onClick={() => handleToggleCategory(cat.id)}>
-              <div className="font-semibold text-lg text-gray-800">{cat.name}</div>
+              <div className="flex items-center gap-4">
+                <div className="font-semibold text-lg text-gray-800">{cat.name}</div>
+                {cat.completion_stats && (
+                  <div className="flex gap-3 text-sm">
+                    <div className="flex items-center gap-1">
+                      <span className="text-gray-600">개인:</span>
+                      <span className="font-medium text-blue-600">{cat.completion_stats.personal_completion_rate}%</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-gray-600">전체:</span>
+                      <span className="font-medium text-green-600">{cat.completion_stats.total_completion_rate}%</span>
+                    </div>
+                  </div>
+                )}
+              </div>
               <button className="ml-2 focus:outline-none">
                 {openCategoryIds.includes(cat.id) ? (
                   <VscTriangleUp size={24} color='#54CEA6' />
