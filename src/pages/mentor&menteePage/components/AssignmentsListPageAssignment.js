@@ -6,6 +6,7 @@ import { PiTriangleBold } from "react-icons/pi";
 import { IoClose } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
+import { BiCodeAlt } from "react-icons/bi";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const AssignmentsListPageAssignment = ({
@@ -30,6 +31,12 @@ const AssignmentsListPageAssignment = ({
 
   const icon = dct[type];
 
+  const handleShortcut = (e) => {
+    e.stopPropagation(); // 이벤트 버블링 방지
+    // 멘토 코드 작성 페이지로 이동
+    navigate(`/${pathname}/practice`, { state: { assignmentId } });
+  };
+
   return (
     <div
       className={`border-2 rounded-xl w-[50rem] py-[0.7rem] px-3 cursor-pointer ${
@@ -46,7 +53,18 @@ const AssignmentsListPageAssignment = ({
         <div className="text-lightBlack font-semibold text-lg">
           {assignmentTitle}
         </div>
-        <div className="flex-grow flex justify-end items-center">
+        <div className="flex-grow flex justify-end items-center gap-2">
+          {/* 멘토인 경우에만 바로가기 버튼 표시 */}
+          {pathname === "mentor" && (
+            <button
+              onClick={handleShortcut}
+              className="flex items-center gap-1 px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm font-medium transition-colors"
+              title="코드 작성하기"
+            >
+              <BiCodeAlt size={16} />
+              바로가기
+            </button>
+          )}
           <button
             onClick={(e) => {
               e.stopPropagation(); // 이벤트 버블링 방지

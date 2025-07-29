@@ -22,6 +22,7 @@ import MentorDoFeedbackPage from "../pages/mentor&menteePage/mentorPage/mentorFe
 import MentorSettingPage from "../pages/mentor&menteePage/mentorPage/mentorSettingPage/MentorSettingPage";
 import MenteeStudyRoomPage from "../pages/mentor&menteePage/menteePage/menteeStudyRoomPage/MenteeStudyRoomPage";
 import MentorStudyRoomPage from "../pages/mentor&menteePage/mentorPage/mentorStudyRoomPage/MentorStudyRoomPage";
+import MentorDetailAssignmentPage from "../pages/mentor&menteePage/mentorPage/mentorDetailAssignmentPage/MentorDetailAssignmentPage";
 
 const AppRouter = () => {
   const router = createBrowserRouter([
@@ -88,6 +89,10 @@ const AppRouter = () => {
         {
           path: "study",
           element: <MentorStudyRoomPage />,
+        },
+        {
+          path: "practice",
+          element: <MentorDetailAssignmentPage />,
         },
       ],
     },
